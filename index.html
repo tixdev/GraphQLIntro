@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GraphQL — A Modern Approach to APIs</title>
+    <meta name="description" content="Interactive presentation about GraphQL fundamentals" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/src/styles.css" />
+</head>
+
+<body>
+    <div id="presentation">
+
+        <!-- SLIDE 0: Title -->
+        <section class="slide slide-title" data-steps="2">
+            <div class="slide-bg-pattern"></div>
+            <div class="title-code-snippets">
+                <pre class="snippet snippet-query" data-step="1"><code><span class="kw">query</span> {
+  <span class="fn">user</span>(<span class="arg">id</span>: <span class="num">123</span>) {
+    name
+    email
+    <span class="fn">posts</span> { title }
+  }
+}</code></pre>
+                <pre class="snippet snippet-type" data-step="2"><code><span class="kw">type</span> <span class="type">User</span> {
+  id: <span class="type">ID!</span>
+  name: <span class="type">String</span>
+  avatar: <span class="type">URL</span>
+}</code></pre>
+            </div>
+            <div class="title-content">
+                <div class="title-graphql-logo">
+                    <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+                        <g transform="translate(200,200)">
+                            <polygon points="0,-170 147.2,-85 147.2,85 0,170 -147.2,85 -147.2,-85" fill="none"
+                                stroke="#e535ab" stroke-width="8" opacity="0.3" />
+                            <line x1="0" y1="-170" x2="147.2" y2="85" stroke="#e535ab" stroke-width="4" opacity="0.2" />
+                            <line x1="0" y1="-170" x2="-147.2" y2="85" stroke="#e535ab" stroke-width="4"
+                                opacity="0.2" />
+                            <line x1="147.2" y1="-85" x2="-147.2" y2="85" stroke="#e535ab" stroke-width="4"
+                                opacity="0.2" />
+                            <line x1="-147.2" y1="-85" x2="147.2" y2="85" stroke="#e535ab" stroke-width="4"
+                                opacity="0.2" />
+                            <line x1="-147.2" y1="-85" x2="0" y2="170" stroke="#e535ab" stroke-width="4"
+                                opacity="0.2" />
+                            <line x1="147.2" y1="-85" x2="0" y2="170" stroke="#e535ab" stroke-width="4" opacity="0.2" />
+                            <circle cx="0" cy="-170" r="16" fill="#e535ab" />
+                            <circle cx="147.2" cy="-85" r="16" fill="#e535ab" />
+                            <circle cx="147.2" cy="85" r="16" fill="#e535ab" />
+                            <circle cx="0" cy="170" r="16" fill="#e535ab" />
+                            <circle cx="-147.2" cy="85" r="16" fill="#e535ab" />
+                            <circle cx="-147.2" cy="-85" r="16" fill="#e535ab" />
+                        </g>
+                    </svg>
+                </div>
+                <h1 class="title-main">Graph<span class="accent">QL</span></h1>
+                <p class="title-sub">A Modern Approach to APIs</p>
+            </div>
+        </section>
+
+        <!-- SLIDE 1: What is GraphQL? -->
+        <section class="slide slide-whatgql" data-steps="3">
+            <h2 class="slide-heading">What is <span class="accent">GraphQL</span>?</h2>
+            <p class="slide-subheading" data-step="0">A query language for APIs + a runtime to execute queries</p>
+
+            <div class="info-columns">
+                <div class="info-card" data-step="1">
+                    <div class="info-icon">📜</div>
+                    <h3 class="info-title">Origin</h3>
+                    <div class="timeline-mini">
+                        <div class="tl-item"><span class="tl-year">2012</span> Created at <strong>Facebook</strong> for
+                            mobile app needs</div>
+                        <div class="tl-item"><span class="tl-year">2015</span> <strong>Open-sourced</strong> to the
+                            community</div>
+                        <div class="tl-item"><span class="tl-year">2019</span> Moved to <strong>GraphQL
+                                Foundation</strong> (Linux Foundation)</div>
+                    </div>
+                </div>
+                <div class="info-card" data-step="2">
+                    <div class="info-icon">🎯</div>
+                    <h3 class="info-title">Definition</h3>
+                    <p class="info-text">A <strong>specification</strong> for how clients request data from a server.
+                        The client describes <em>exactly</em> what it needs, and gets back <em>exactly</em> that —
+                        nothing more, nothing less.</p>
+                    <pre
+                        class="code-block code-block-compact"><code><span class="cmt">// Client asks for exactly what it needs</span>
+{ <span class="fn">user</span>(<span class="arg">id</span>: <span class="num">1</span>) { name, email } }
+
+<span class="cmt">// Server returns exactly that</span>
+{ <span class="str">"user"</span>: { <span class="str">"name"</span>: <span class="str">"Alice"</span>, <span class="str">"email"</span>: <span class="str">"a@b.com"</span> } }</code></pre>
+                </div>
+                <div class="info-card" data-step="3">
+                    <div class="info-icon">🚫</div>
+                    <h3 class="info-title">What it is NOT</h3>
+                    <div class="not-list">
+                        <div class="not-item"><span class="not-x">✗</span> Not a database</div>
+                        <div class="not-item"><span class="not-x">✗</span> Not a replacement for REST everywhere</div>
+                        <div class="not-item"><span class="not-x">✗</span> Not an ORM</div>
+                        <div class="not-item not-item-yes"><span class="not-check">✓</span> A <strong>contract</strong>
+                            between client and server</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: How it Works -->
+        <section class="slide slide-howitworks" data-steps="3">
+            <h2 class="slide-heading">How it <span class="accent">Works</span></h2>
+            <p class="slide-subheading" data-step="0">Three pillars: Schema, Query, Resolvers</p>
+
+            <div class="flow-columns">
+                <div class="flow-card" data-step="1">
+                    <div class="flow-number">1</div>
+                    <h3 class="flow-title">Schema</h3>
+                    <p class="flow-desc">The contract — defines types and relationships</p>
+                    <pre class="code-block code-block-compact"><code><span class="kw">type</span> <span class="type">Query</span> {
+  <span class="fn">user</span>(<span class="arg">id</span>: <span class="type">ID!</span>): <span class="type">User</span>
+}
+
+<span class="kw">type</span> <span class="type">User</span> {
+  id: <span class="type">ID!</span>
+  name: <span class="type">String!</span>
+  posts: [<span class="type">Post!</span>]!
+}</code></pre>
+                </div>
+
+                <div class="flow-arrow" data-step="2">→</div>
+
+                <div class="flow-card" data-step="2">
+                    <div class="flow-number">2</div>
+                    <h3 class="flow-title">Query</h3>
+                    <p class="flow-desc">The request — client asks for specific fields</p>
+                    <pre class="code-block code-block-compact"><code><span class="kw">query</span> {
+  <span class="fn">user</span>(<span class="arg">id</span>: <span class="num">1</span>) {
+    name
+    posts {
+      title
+    }
+  }
+}</code></pre>
+                </div>
+
+                <div class="flow-arrow" data-step="3">→</div>
+
+                <div class="flow-card" data-step="3">
+                    <div class="flow-number">3</div>
+                    <h3 class="flow-title">Resolvers</h3>
+                    <p class="flow-desc">The execution — functions that fetch data</p>
+                    <pre class="code-block code-block-compact"><code><span class="cmt">// C# / HotChocolate</span>
+<span class="kw">public class</span> <span class="type">Query</span>
+{
+  <span class="kw">public</span> <span class="type">User</span> <span class="fn">GetUser</span>(
+    <span class="type">int</span> <span class="arg">id</span>,
+    <span class="type">UserService</span> <span class="arg">svc</span>)
+    => svc.<span class="fn">GetById</span>(id);
+}</code></pre>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: Over-fetching -->
+        <section class="slide slide-overfetch" data-steps="3">
+            <h2 class="slide-heading">Problem #1: <span class="accent">Over-fetching</span></h2>
+            <p class="slide-subheading" data-step="0">A dropdown autocomplete downloads entire product objects with
+                nested data</p>
+
+            <div class="comparison-grid">
+                <!-- REST side -->
+                <div class="comparison-panel rest-panel" data-step="1">
+                    <div class="panel-header rest-header">
+                        <span class="method-badge rest-badge">GET</span>
+                        <span class="panel-title">REST API</span>
+                    </div>
+                    <div class="network-bar">
+                        <div class="network-row">
+                            <span class="net-label">GET /api/products/search?q=laptop</span>
+                            <span class="net-status">200</span>
+                        </div>
+                        <div class="net-details">
+                            <span class="net-size warn">85.2 KB</span>
+                            <span class="net-time">245 ms</span>
+                        </div>
+                    </div>
+                    <pre class="code-block"><code>[
+  {
+    <span class="str">"id"</span>: <span class="num">123</span>,
+    <span class="str">"name"</span>: <span class="str">"Laptop Pro 15"</span>,
+    <span class="str">"description"</span>: <span class="str">"Lorem ipsum..."</span> <span class="cmt">// 2KB</span>
+    <span class="str">"specifications"</span>: {...}  <span class="cmt">// 15KB</span>
+    <span class="str">"images"</span>: [...]          <span class="cmt">// 20KB</span>
+    <span class="str">"reviews"</span>: [...]         <span class="cmt">// 35KB</span>
+  }
+  <span class="cmt">// ... 9 more products</span>
+]</code></pre>
+                    <div class="verdict verdict-bad">
+                        <span class="verdict-icon">⚠️</span>
+                        <span>Transferred <strong class="counter" data-target="85200" data-suffix=" bytes">85,200
+                                bytes</strong></span>
+                        <span class="verdict-detail">Used ~300 bytes</span>
+                    </div>
+                </div>
+
+                <!-- GraphQL side -->
+                <div class="comparison-panel graphql-panel" data-step="2">
+                    <div class="panel-header graphql-header">
+                        <span class="method-badge graphql-badge">POST</span>
+                        <span class="panel-title">GraphQL</span>
+                    </div>
+                    <div class="network-bar">
+                        <div class="network-row">
+                            <span class="net-label">POST /graphql</span>
+                            <span class="net-status">200</span>
+                        </div>
+                        <div class="net-details">
+                            <span class="net-size good">280 B</span>
+                            <span class="net-time">98 ms</span>
+                        </div>
+                    </div>
+                    <pre class="code-block"><code>{
+  <span class="fn">products</span>(<span class="arg">search</span>: <span class="str">"laptop"</span>) {
+    id
+    name
+  }
+}
+
+<span class="cmt">// Response:</span>
+{ <span class="str">"products"</span>: [
+  {<span class="str">"id"</span>: <span class="num">123</span>, <span class="str">"name"</span>: <span class="str">"Laptop Pro 15"</span>},
+  {<span class="str">"id"</span>: <span class="num">124</span>, <span class="str">"name"</span>: <span class="str">"Laptop Air 13"</span>}
+]}</code></pre>
+                    <div class="verdict verdict-good">
+                        <span class="verdict-icon">✅</span>
+                        <span>Transferred <strong>280 bytes</strong> — perfect match</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Animated comparison bar -->
+            <div class="data-comparison-bar" data-step="3">
+                <div class="bar-row">
+                    <span class="bar-label">REST</span>
+                    <div class="bar-track">
+                        <div class="bar-fill bar-fill-rest" data-width="100">85.2 KB</div>
+                    </div>
+                </div>
+                <div class="bar-row">
+                    <span class="bar-label">GraphQL</span>
+                    <div class="bar-track">
+                        <div class="bar-fill bar-fill-graphql" data-width="0.33">280 B</div>
+                    </div>
+                </div>
+                <div class="bar-caption"><strong>300×</strong> less data transferred</div>
+            </div>
+        </section>
+
+        <!-- SLIDE 2: Under-fetching -->
+        <section class="slide slide-underfetch" data-steps="3">
+            <h2 class="slide-heading">Problem #2: <span class="accent">Under-fetching</span></h2>
+            <p class="slide-subheading" data-step="0">Dashboard loads order details — multiple sequential requests
+                (waterfall)</p>
+
+            <div class="comparison-grid">
+                <!-- REST waterfall -->
+                <div class="comparison-panel rest-panel" data-step="1">
+                    <div class="panel-header rest-header">
+                        <span class="method-badge rest-badge">GET</span>
+                        <span class="panel-title">REST API — Sequential Waterfall</span>
+                    </div>
+                    <div class="waterfall-chart">
+                        <div class="waterfall-row" data-delay="0">
+                            <span class="wf-label">orders/456</span>
+                            <div class="wf-track">
+                                <div class="wf-bar wf-bar-rest" style="width:0%" data-width="14%"><span>120ms</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="waterfall-row" data-delay="1">
+                            <span class="wf-label">customers/789</span>
+                            <div class="wf-track">
+                                <div class="wf-bar wf-bar-rest" style="width:0%" data-width="15%"><span>130ms</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="waterfall-row" data-delay="2">
+                            <span class="wf-label">products?ids=1,2,3</span>
+                            <div class="wf-track">
+                                <div class="wf-bar wf-bar-rest" style="width:0%" data-width="16%"><span>140ms</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="waterfall-row" data-delay="3">
+                            <span class="wf-label">inventory?ids=1,2,3</span>
+                            <div class="wf-track">
+                                <div class="wf-bar wf-bar-rest" style="width:0%" data-width="14%"><span>125ms</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="waterfall-row" data-delay="4">
+                            <span class="wf-label">shipping/calc</span>
+                            <div class="wf-track">
+                                <div class="wf-bar wf-bar-rest" style="width:0%" data-width="16%"><span>135ms</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="waterfall-row" data-delay="5">
+                            <span class="wf-label">payments/456</span>
+                            <div class="wf-track">
+                                <div class="wf-bar wf-bar-rest" style="width:0%" data-width="13%"><span>115ms</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="verdict verdict-bad">
+                        <span class="verdict-icon">⚠️</span>
+                        <span>Total: <strong>~865ms</strong> (6 sequential requests)</span>
+                    </div>
+                </div>
+
+                <!-- GraphQL single -->
+                <div class="comparison-panel graphql-panel" data-step="2">
+                    <div class="panel-header graphql-header">
+                        <span class="method-badge graphql-badge">POST</span>
+                        <span class="panel-title">GraphQL — Single Request</span>
+                    </div>
+                    <pre class="code-block code-block-compact"><code>{
+  <span class="fn">order</span>(<span class="arg">id</span>: <span class="num">456</span>) {
+    id, total
+    <span class="fn">customer</span> { name, email }
+    <span class="fn">items</span> {
+      <span class="fn">product</span> { name, price }
+      <span class="fn">inventory</span> { available }
+    }
+    <span class="fn">shipping</span> { method, cost }
+    <span class="fn">payment</span> { status }
+  }
+}</code></pre>
+                    <div class="waterfall-chart waterfall-single">
+                        <div class="waterfall-row">
+                            <span class="wf-label">graphql (all data)</span>
+                            <div class="wf-track">
+                                <div class="wf-bar wf-bar-graphql" style="width:0%" data-width="16%"><span>140ms</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="verdict verdict-good">
+                        <span class="verdict-icon">✅</span>
+                        <span>Total: <strong>140ms</strong> — single parallel request</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="speed-badge" data-step="3">
+                <span class="speed-number">6×</span>
+                <span class="speed-text">faster</span>
+            </div>
+        </section>
+
+        <!-- SLIDE 3: Multiple Endpoints -->
+        <section class="slide slide-endpoints" data-steps="2">
+            <h2 class="slide-heading">Problem #3: <span class="accent">Multiple Endpoints</span></h2>
+            <p class="slide-subheading" data-step="0">Different views require different endpoints — API proliferation
+            </p>
+
+            <div class="comparison-grid">
+                <!-- REST endpoints -->
+                <div class="comparison-panel rest-panel" data-step="1">
+                    <div class="panel-header rest-header">
+                        <span class="method-badge rest-badge">GET</span>
+                        <span class="panel-title">REST API</span>
+                    </div>
+                    <div class="endpoints-list">
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products</div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/:id</div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/search</div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/autocomplete</div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/:id/reviews</div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/:id/inventory</div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/:id/pricing</div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/trending</div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/recommendations
+                        </div>
+                        <div class="endpoint-item endpoint-more">// ... 150+ more endpoints</div>
+                    </div>
+                    <div class="verdict verdict-bad">
+                        <span class="verdict-icon">⚠️</span>
+                        <span>Maintenance & versioning <strong>nightmare</strong></span>
+                    </div>
+                </div>
+
+                <!-- GraphQL single -->
+                <div class="comparison-panel graphql-panel" data-step="2">
+                    <div class="panel-header graphql-header">
+                        <span class="method-badge graphql-badge">POST</span>
+                        <span class="panel-title">GraphQL</span>
+                    </div>
+                    <pre class="code-block"><code><span class="cmt">// One flexible endpoint</span>
+<span class="cmt">// Clients compose queries:</span>
+
+<span class="kw">query</span> <span class="fn">Autocomplete</span> {
+  <span class="fn">products</span> { id, name }
+}
+
+<span class="kw">query</span> <span class="fn">DetailPage</span> {
+  <span class="fn">product</span>(<span class="arg">id</span>: <span class="num">123</span>) {
+    name, description, price
+    <span class="fn">reviews</span> { rating, text }
+    <span class="fn">inventory</span> { available }
+  }
+}
+
+<span class="kw">query</span> <span class="fn">Dashboard</span> {
+  <span class="fn">trending</span> { id, name, sales }
+  <span class="fn">recommendations</span> { id, name }
+}</code></pre>
+                    <div class="verdict verdict-good">
+                        <span class="verdict-icon">✅</span>
+                        <span>One endpoint — <strong>self-documenting</strong> via schema</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 6: Advantages -->
+        <section class="slide slide-advantages" data-steps="6">
+            <h2 class="slide-heading">The GraphQL <span class="accent">Advantage</span></h2>
+
+            <div class="advantages-grid">
+                <div class="advantage-card" data-step="1">
+                    <div class="adv-icon">⚡</div>
+                    <h3 class="adv-title">Efficiency</h3>
+                    <p class="adv-desc">300× less data transferred</p>
+                </div>
+                <div class="advantage-card" data-step="2">
+                    <div class="adv-icon">🚀</div>
+                    <h3 class="adv-title">Performance</h3>
+                    <p class="adv-desc">6× faster page loads</p>
+                </div>
+                <div class="advantage-card" data-step="3">
+                    <div class="adv-icon">🛠️</div>
+                    <h3 class="adv-title">Developer Experience</h3>
+                    <p class="adv-desc">Self-documenting APIs</p>
+                </div>
+                <div class="advantage-card" data-step="4">
+                    <div class="adv-icon">🎯</div>
+                    <h3 class="adv-title">Flexibility</h3>
+                    <p class="adv-desc">Clients define their data needs</p>
+                </div>
+                <div class="advantage-card" data-step="5">
+                    <div class="adv-icon">✅</div>
+                    <h3 class="adv-title">Type Safety</h3>
+                    <p class="adv-desc">Strongly typed schema</p>
+                </div>
+                <div class="advantage-card" data-step="6">
+                    <div class="adv-icon">♻️</div>
+                    <h3 class="adv-title">Evolution</h3>
+                    <p class="adv-desc">Add fields without versioning</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 7: N+1 Problem -->
+        <section class="slide slide-nplusone" data-steps="3">
+            <h2 class="slide-heading">The <span class="accent">N+1</span> Problem</h2>
+            <p class="slide-subheading" data-step="0">The most common GraphQL performance pitfall</p>
+
+            <div class="comparison-grid">
+                <!-- Problem -->
+                <div class="comparison-panel" data-step="1">
+                    <div class="panel-header">
+                        <span class="method-badge rest-badge">⚠️ PROBLEM</span>
+                        <span class="panel-title">Naive Implementation</span>
+                    </div>
+                    <pre class="code-block"><code><span class="cmt">// This innocent query...</span>
+{
+  <span class="fn">users</span> {
+    name
+    <span class="fn">posts</span> { title }
+  }
+}
+
+<span class="cmt">// ...generates N+1 SQL queries:</span>
+<span class="str">SELECT * FROM users</span>          <span class="cmt">// 1 query</span>
+<span class="str">SELECT * FROM posts WHERE user_id=1</span> <span class="cmt">// +N</span>
+<span class="str">SELECT * FROM posts WHERE user_id=2</span>
+<span class="str">SELECT * FROM posts WHERE user_id=3</span>
+<span class="cmt">// ... one per user!</span></code></pre>
+                    <div class="verdict verdict-bad">
+                        <span class="verdict-icon">⚠️</span>
+                        <span>100 users = <strong>101 queries</strong> to the database</span>
+                    </div>
+                </div>
+
+                <!-- Solution -->
+                <div class="comparison-panel" data-step="2">
+                    <div class="panel-header">
+                        <span class="method-badge graphql-badge">✅ SOLUTION</span>
+                        <span class="panel-title">DataLoader Pattern</span>
+                    </div>
+                    <pre class="code-block"><code><span class="cmt">// HotChocolate DataLoader</span>
+<span class="kw">public class</span> <span class="type">PostsByUserLoader</span>
+  : <span class="type">BatchDataLoader</span>&lt;<span class="type">int</span>, <span class="type">Post</span>[]&gt;
+{
+  <span class="kw">protected override async</span> <span class="type">Task</span>
+    <span class="fn">LoadBatchAsync</span>(
+      <span class="type">IReadOnlyList</span>&lt;<span class="type">int</span>&gt; <span class="arg">keys</span>)
+  {
+    <span class="cmt">// ONE query for ALL users:</span>
+    <span class="str">SELECT * FROM posts</span>
+    <span class="str">  WHERE user_id IN (1,2,3...)</span>
+  }
+}</code></pre>
+                    <div class="verdict verdict-good">
+                        <span class="verdict-icon">✅</span>
+                        <span>100 users = <strong>2 queries</strong> (batched)</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="nplusone-summary" data-step="3">
+                <div class="npo-badge">
+                    <span class="npo-from">101</span>
+                    <span class="npo-arrow">→</span>
+                    <span class="npo-to">2</span>
+                </div>
+                <span class="npo-label">queries with DataLoader batching</span>
+            </div>
+        </section>
+
+        <!-- SLIDE 8: Federation / Gateway -->
+        <section class="slide slide-federation" data-steps="3">
+            <h2 class="slide-heading">Schema <span class="accent">Federation</span></h2>
+            <p class="slide-subheading" data-step="0">Scaling GraphQL across microservices</p>
+
+            <div class="federation-layout">
+                <div class="fed-diagram" data-step="1">
+                    <div class="fed-client">🖥️ Client</div>
+                    <div class="fed-arrow-down">▼</div>
+                    <div class="fed-gateway">
+                        <span class="fed-gateway-icon">🌐</span>
+                        <span class="fed-gateway-label">Gateway</span>
+                        <span class="fed-gateway-desc">Composes schemas</span>
+                    </div>
+                    <div class="fed-arrow-spread">
+                        <span>▼</span><span>▼</span><span>▼</span>
+                    </div>
+                    <div class="fed-services">
+                        <div class="fed-service"><span class="fed-svc-icon">👤</span> Users</div>
+                        <div class="fed-service"><span class="fed-svc-icon">📦</span> Products</div>
+                        <div class="fed-service"><span class="fed-svc-icon">🛒</span> Orders</div>
+                    </div>
+                </div>
+
+                <div class="fed-details" data-step="2">
+                    <div class="fed-detail-card">
+                        <h3 class="info-title">How it works</h3>
+                        <div class="not-list">
+                            <div class="not-item not-item-yes"><span class="not-check">✓</span> Each service owns a
+                                <strong>subgraph</strong>
+                            </div>
+                            <div class="not-item not-item-yes"><span class="not-check">✓</span> Gateway
+                                <strong>composes</strong> all subgraphs
+                            </div>
+                            <div class="not-item not-item-yes"><span class="not-check">✓</span> Client sees <strong>one
+                                    unified schema</strong></div>
+                            <div class="not-item not-item-yes"><span class="not-check">✓</span> Teams work
+                                <strong>independently</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="fed-tech" data-step="3">
+                    <h3 class="info-title">Implementations</h3>
+                    <div class="tech-badges">
+                        <div class="tech-badge"><span class="tech-icon">🚀</span> Apollo Gateway</div>
+                        <div class="tech-badge"><span class="tech-icon">🌶️</span> Hot Chocolate Fusion</div>
+                        <div class="tech-badge"><span class="tech-icon">🔗</span> GraphQL Mesh</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- SLIDE 9: Interactive Poll -->
+        <section class="slide slide-poll" data-steps="1">
+            <h2 class="slide-heading">Quick <span class="accent">Poll</span></h2>
+            <p class="slide-subheading" data-step="0">What excites you most about GraphQL?</p>
+
+            <div class="poll-container" data-step="1">
+                <div class="poll-options">
+                    <button class="poll-option" data-option="a">
+                        <span class="poll-emoji">⚡</span>
+                        <span class="poll-label">Efficiency</span>
+                        <span class="poll-sublabel">Less data, faster loads</span>
+                    </button>
+                    <button class="poll-option" data-option="b">
+                        <span class="poll-emoji">🛠️</span>
+                        <span class="poll-label">Developer Experience</span>
+                        <span class="poll-sublabel">Self-documenting, typed APIs</span>
+                    </button>
+                    <button class="poll-option" data-option="c">
+                        <span class="poll-emoji">🎯</span>
+                        <span class="poll-label">Flexibility</span>
+                        <span class="poll-sublabel">Clients define their needs</span>
+                    </button>
+                </div>
+                <div class="poll-results" id="poll-results">
+                    <div class="poll-result-row">
+                        <span class="poll-res-label">⚡ Efficiency</span>
+                        <div class="poll-bar-track">
+                            <div class="poll-bar-fill poll-bar-a" id="poll-bar-a" style="width:0%"></div>
+                        </div>
+                        <span class="poll-count" id="poll-count-a">0</span>
+                    </div>
+                    <div class="poll-result-row">
+                        <span class="poll-res-label">🛠️ DX</span>
+                        <div class="poll-bar-track">
+                            <div class="poll-bar-fill poll-bar-b" id="poll-bar-b" style="width:0%"></div>
+                        </div>
+                        <span class="poll-count" id="poll-count-b">0</span>
+                    </div>
+                    <div class="poll-result-row">
+                        <span class="poll-res-label">🎯 Flexibility</span>
+                        <div class="poll-bar-track">
+                            <div class="poll-bar-fill poll-bar-c" id="poll-bar-c" style="width:0%"></div>
+                        </div>
+                        <span class="poll-count" id="poll-count-c">0</span>
+                    </div>
+                </div>
+                <p class="poll-instruction">Vote from your phone! 📱</p>
+            </div>
+        </section>
+
+        <!-- SLIDE 10: Demo -->
+        <section class="slide slide-demo" data-steps="1">
+            <div class="slide-bg-pattern"></div>
+            <div class="demo-content">
+                <h2 class="demo-title">Ready for the <span class="accent">Demo</span>?</h2>
+                <p class="demo-subtitle" data-step="0">Let's see GraphQL in action</p>
+                <div class="demo-resources" data-step="1">
+                    <a class="resource-link" href="https://graphql.org" target="_blank">
+                        <span class="resource-icon">📘</span>
+                        <span>graphql.org</span>
+                    </a>
+                    <a class="resource-link" href="https://www.apollographql.com" target="_blank">
+                        <span class="resource-icon">🚀</span>
+                        <span>Apollo GraphQL</span>
+                    </a>
+                    <a class="resource-link" href="https://the-guild.dev" target="_blank">
+                        <span class="resource-icon">⚔️</span>
+                        <span>The Guild</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- Slide counter -->
+    <div id="slide-counter">
+        <span id="current-slide-num">1</span> / <span id="total-slide-num">11</span>
+    </div>
+
+    <!-- Connection indicator -->
+    <div id="connection-status" class="disconnected">
+        <span class="status-dot"></span>
+        <span id="audience-count">0</span>
+    </div>
+
+    <script type="module" src="/src/audience.js"></script>
+</body>
+
+</html>

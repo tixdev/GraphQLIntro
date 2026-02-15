@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>GraphQL Presentation — Remote Control</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet" />
+    <link rel="stylesheet" href="/src/remote.css" />
+</head>
+
+<body>
+    <div id="remote-app">
+        <!-- Header -->
+        <header id="remote-header">
+            <h1>🎮 Remote Control</h1>
+            <div id="remote-connection" class="disconnected">
+                <span class="rc-dot"></span>
+                <span class="rc-label">Disconnected</span>
+            </div>
+        </header>
+
+        <!-- Audience counter -->
+        <div id="audience-counter">
+            <span class="ac-icon">👥</span>
+            <span class="ac-label"><strong id="audience-count">0</strong> connected</span>
+        </div>
+
+        <!-- Current slide info -->
+        <div id="slide-info">
+            <span id="slide-indicator">Slide <strong id="slide-num">1</strong> / <strong
+                    id="slide-total">6</strong></span>
+            <span id="step-indicator">Step <strong id="step-num">0</strong> / <strong id="step-total">0</strong></span>
+        </div>
+
+        <!-- Navigation buttons -->
+        <div id="nav-controls">
+            <button id="btn-prev" class="nav-btn" aria-label="Previous">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+                <span>Prev</span>
+            </button>
+            <button id="btn-next" class="nav-btn nav-btn-primary" aria-label="Next">
+                <span>Next</span>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                    stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Slide list -->
+        <div id="slide-list">
+            <button class="slide-item active" data-slide="0">
+                <span class="si-num">1</span>
+                <span class="si-title">Title</span>
+            </button>
+            <button class="slide-item" data-slide="1">
+                <span class="si-num">2</span>
+                <span class="si-title">What is GraphQL?</span>
+            </button>
+            <button class="slide-item" data-slide="2">
+                <span class="si-num">3</span>
+                <span class="si-title">How it Works</span>
+            </button>
+            <button class="slide-item" data-slide="3">
+                <span class="si-num">4</span>
+                <span class="si-title">Over-fetching</span>
+            </button>
+            <button class="slide-item" data-slide="4">
+                <span class="si-num">5</span>
+                <span class="si-title">Under-fetching</span>
+            </button>
+            <button class="slide-item" data-slide="5">
+                <span class="si-num">6</span>
+                <span class="si-title">Multiple Endpoints</span>
+            </button>
+            <button class="slide-item" data-slide="6">
+                <span class="si-num">7</span>
+                <span class="si-title">Advantages</span>
+            </button>
+            <button class="slide-item" data-slide="7">
+                <span class="si-num">8</span>
+                <span class="si-title">N+1 Problem</span>
+            </button>
+            <button class="slide-item" data-slide="8">
+                <span class="si-num">9</span>
+                <span class="si-title">Federation</span>
+            </button>
+            <button class="slide-item" data-slide="9">
+                <span class="si-num">10</span>
+                <span class="si-title">📊 Poll</span>
+            </button>
+            <button class="slide-item" data-slide="10">
+                <span class="si-num">11</span>
+                <span class="si-title">Demo</span>
+            </button>
+        </div>
+
+        <!-- Poll controls -->
+        <div id="poll-controls">
+            <button id="btn-reset-poll" class="poll-reset-btn">🔄 Reset Poll</button>
+        </div>
+    </div>
+
+    <script type="module" src="/src/remote.js"></script>
+</body>
+
+</html>
