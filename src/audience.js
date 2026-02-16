@@ -68,8 +68,8 @@ function updateLiveDemo(query, result) {
     const rEl = document.getElementById('live-result');
     const sEl = document.getElementById('live-status');
 
-    if (qEl) qEl.textContent = query;
-    if (rEl) rEl.textContent = JSON.stringify(result, null, 2);
+    if (qEl) qEl.innerHTML = highlightGraphQL(query);
+    if (rEl) rEl.innerHTML = highlightJSON(JSON.stringify(result, null, 2));
     if (sEl) sEl.textContent = 'Received update from presenter.';
 }
 
@@ -85,7 +85,7 @@ if (tryRunBtn) {
         if (!tryInput || !tryResult) return;
 
         const query = tryInput.value;
-        tryResult.textContent = 'Loading...';
+        tryResult.innerHTML = '<span class="cmt">// Loading...</span>';
 
         try {
             const response = await fetch('http://localhost:5095/graphql', {
@@ -94,11 +94,71 @@ if (tryRunBtn) {
                 body: JSON.stringify({ query })
             });
             const result = await response.json();
-            tryResult.textContent = JSON.stringify(result, null, 2);
+            tryResult.innerHTML = highlightJSON(JSON.stringify(result, null, 2));
         } catch (err) {
-            tryResult.textContent = JSON.stringify({ error: err.message }, null, 2);
+            tryResult.innerHTML = highlightJSON(JSON.stringify({ error: err.message }, null, 2));
         }
     });
+}
+
+// ============================================
+// Simple Syntax Highlighters
+// ============================================
+
+function highlightGraphQL(code) {
+    if (!code) return '';
+
+    // HTML-escape first
+    let html = code
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+    // Comments
+    html = html.replace(/(#.*)$/gm, '<span class="cmt">$1</span>');
+
+    // Strings
+    html = html.replace(/(".*?")/g, '<span class="str">$1</span>');
+
+    // Keywords (query, mutation, subscription, fragment, type, input, interface, union, scalar, directive, enum)
+    html = html.replace(/\b(query|mutation|subscription|fragment|type|input|interface|union|scalar|directive|enum)\b/g, '<span class="kw">$1</span>');
+
+    // Field arguments (word followed by colon)
+    html = html.replace(/(\w+)(?=:)/g, '<span class="arg">$1</span>');
+
+    // Numbers
+    html = html.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
+
+    // Functions/Fields (identifiers before parenthesis)
+    html = html.replace(/(\w+)(?=\()/g, '<span class="fn">$1</span>');
+
+    return html;
+}
+
+function highlightJSON(json) {
+    if (!json) return '';
+
+    // HTML-escape first
+    let html = json
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+
+    // Strings (keys and values)
+    html = html.replace(/(".*?")/g, (match) => {
+        if (match.startsWith('"') && match.endsWith(':')) {
+            return `<span class="arg">${match}</span>`; // Key
+        }
+        return `<span class="str">${match}</span>`; // Value
+    });
+
+    // Numbers
+    html = html.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
+
+    // Booleans/Null
+    html = html.replace(/\b(true|false|null)\b/g, '<span class="kw">$1</span>');
+
+    return html;
 }
 
 if (tryExamples) {
