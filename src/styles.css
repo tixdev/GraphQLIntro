@@ -613,9 +613,11 @@ body {
     opacity: 0;
     transform: translateX(-10px);
     transition: opacity 0.3s ease, transform 0.3s ease;
+    transition-delay: 0.1s;
 }
 
-.endpoint-item.visible {
+.endpoint-item.visible,
+.comparison-panel.visible .endpoint-item {
     opacity: 1;
     transform: translateX(0);
 }
