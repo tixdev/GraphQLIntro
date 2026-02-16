@@ -4,7 +4,8 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "node server/dev.js"
+    "dev": "node server/dev.js",
+    "dev:api": "dotnet run --project demo-server/demo-server.csproj"
   },
   "devDependencies": {
     "vite": "^6.1.0"

@@ -105,14 +105,14 @@ function next() {
     updateUI();
 }
 
+
 function prev() {
     if (currentStep > 0) {
-        // Previous step
         currentStep--;
     } else if (currentSlide > 0) {
-        // Previous slide — go to last step
         currentSlide--;
-        currentStep = SLIDE_STEPS[currentSlide] || 0;
+        const maxSteps = SLIDE_STEPS[currentSlide] || 0;
+        currentStep = maxSteps;
     }
 
     sendNavigate();
@@ -120,80 +120,82 @@ function prev() {
 }
 
 function goToSlide(index) {
-    currentSlide = index;
-    currentStep = 0;
-    sendNavigate();
-    updateUI();
+    if (index >= 0 && index < TOTAL_SLIDES) {
+        currentSlide = index;
+        currentStep = 0;
+        sendNavigate();
+        updateUI();
+    }
 }
-
-// ============================================
-// UI Update
-// ============================================
 
 function updateUI() {
     slideNum.textContent = currentSlide + 1;
     stepNum.textContent = currentStep;
-    stepTotal.textContent = SLIDE_STEPS[currentSlide] || 0;
 
-    // Button states
-    btnPrev.disabled = currentSlide === 0 && currentStep === 0;
-    btnNext.disabled = currentSlide === TOTAL_SLIDES - 1 && currentStep >= (SLIDE_STEPS[currentSlide] || 0);
+    // Update total steps for current slide
+    const maxSteps = SLIDE_STEPS[currentSlide] || 0;
+    stepTotal.textContent = maxSteps;
 
-    // Active slide in list
-    slideItems.forEach((item) => {
-        const idx = parseInt(item.getAttribute('data-slide'), 10);
-        item.classList.toggle('active', idx === currentSlide);
+    // Update buttons
+    if (btnPrev) btnPrev.disabled = currentSlide === 0 && currentStep === 0;
+
+    if (btnNext) btnNext.disabled = currentSlide === TOTAL_SLIDES - 1 && currentStep >= maxSteps;
+
+    // Update active state in list
+    slideItems.forEach((item, index) => {
+        item.classList.toggle('active', index === currentSlide);
+        if (index === currentSlide) {
+            item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
     });
 }
 
-// ============================================
 // Event Listeners
-// ============================================
+if (btnPrev) btnPrev.addEventListener('click', prev);
+if (btnNext) btnNext.addEventListener('click', next);
 
-btnNext.addEventListener('click', next);
-btnPrev.addEventListener('click', prev);
-
-slideItems.forEach((item) => {
-    item.addEventListener('click', () => {
-        const idx = parseInt(item.getAttribute('data-slide'), 10);
-        goToSlide(idx);
-    });
+slideItems.forEach((item, index) => {
+    item.addEventListener('click', () => goToSlide(index));
 });
 
-// Swipe gesture support
-let touchStartX = 0;
-let touchStartY = 0;
+// Keyboard controls
+document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'TEXTAREA') return;
 
-document.addEventListener('touchstart', (e) => {
-    // Don't capture touches on buttons/slide list
-    if (e.target.closest('#nav-controls') || e.target.closest('#slide-list')) return;
-    touchStartX = e.touches[0].clientX;
-    touchStartY = e.touches[0].clientY;
-});
-
-document.addEventListener('touchend', (e) => {
-    if (e.target.closest('#nav-controls') || e.target.closest('#slide-list')) return;
-    const dx = e.changedTouches[0].clientX - touchStartX;
-    const dy = e.changedTouches[0].clientY - touchStartY;
-
-    if (Math.abs(dx) > 50 && Math.abs(dx) > Math.abs(dy)) {
-        if (dx < 0) next();
-        else prev();
+    if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'Enter') {
+        e.preventDefault();
+        next();
+    } else if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        prev();
     }
 });
 
-// Keyboard (for desktop testing)
-document.addEventListener('keydown', (e) => {
-    if (e.key === 'ArrowRight' || e.key === ' ') { e.preventDefault(); next(); }
-    if (e.key === 'ArrowLeft') { e.preventDefault(); prev(); }
-});
 
-// Poll reset
-const btnResetPoll = document.getElementById('btn-reset-poll');
-if (btnResetPoll) {
-    btnResetPoll.addEventListener('click', () => {
-        if (ws && ws.readyState === 1) {
-            ws.send(JSON.stringify({ type: 'poll-reset' }));
+// ============================================
+// Live Demo Logic
+// ============================================
+
+const btnRunQuery = document.getElementById('btn-run-query');
+const queryInput = document.getElementById('remote-query-input');
+const examplesSelect = document.getElementById('remote-examples');
+
+if (btnRunQuery) {
+    btnRunQuery.addEventListener('click', () => {
+        if (!ws || ws.readyState !== 1) return;
+        const query = queryInput.value;
+        ws.send(JSON.stringify({
+            type: 'graphql-exec',
+            query,
+            variables: {}
+        }));
+    });
+}
+
+if (examplesSelect) {
+    examplesSelect.addEventListener('change', (e) => {
+        if (queryInput && e.target.value) {
+            queryInput.value = e.target.value;
         }
     });
 }

@@ -54,8 +54,29 @@
             </button>
         </div>
 
+        <!-- Live Demo Controls -->
+        <div class="control-group demo-controls">
+            <h3>Live Demo</h3>
+            <textarea id="remote-query-input" class="remote-textarea">
+{
+  books {
+    title
+    author {
+      name
+    }
+  }
+}</textarea>
+            <button id="btn-run-query" class="action-btn">▶ Run Query</button>
+            <select id="remote-examples" class="remote-select">
+                <option value="">Load Example...</option>
+                <option value="{ books { title year } }">All Books</option>
+                <option value="{ authors { name books { title } } }">Authors & Books</option>
+                <option value="{ book(id: 1) { title genre } }">Single Book</option>
+            </select>
+        </div>
+
         <!-- Slide list -->
-        <div id="slide-list">
+        <div class="slide-list" id="slide-list">
             <button class="slide-item active" data-slide="0">
                 <span class="si-num">1</span>
                 <span class="si-title">Title</span>
@@ -94,17 +115,12 @@
             </button>
             <button class="slide-item" data-slide="9">
                 <span class="si-num">10</span>
-                <span class="si-title">📊 Poll</span>
+                <span class="si-title">Live Demo</span>
             </button>
             <button class="slide-item" data-slide="10">
                 <span class="si-num">11</span>
-                <span class="si-title">Demo</span>
+                <span class="si-title">Try It!</span>
             </button>
-        </div>
-
-        <!-- Poll controls -->
-        <div id="poll-controls">
-            <button id="btn-reset-poll" class="poll-reset-btn">🔄 Reset Poll</button>
         </div>
     </div>
 

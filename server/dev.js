@@ -30,9 +30,7 @@ async function start() {
     let totalSlides = 11;
     let slideSteps = {}; // { slideIndex: totalSteps }
 
-    // Poll state
-    const pollVotes = { a: 0, b: 0, c: 0 };
-    const votedClients = new Set();
+    // Poll state removed
 
     const audiences = new Set();
     const presenters = new Set();
@@ -83,7 +81,7 @@ async function start() {
             broadcastAudienceCount();
         }
 
-        ws.on('message', (raw) => {
+        ws.on('message', async (raw) => {
             try {
                 const data = JSON.parse(raw);
 
@@ -98,21 +96,33 @@ async function start() {
                     totalSlides = data.totalSlides;
                 }
 
-                if (data.type === 'vote' && !votedClients.has(ws)) {
-                    const option = data.option;
-                    if (pollVotes[option] !== undefined) {
-                        pollVotes[option]++;
-                        votedClients.add(ws);
-                        broadcastAll({ type: 'poll-results', votes: { ...pollVotes } });
-                    }
-                }
+                if (data.type === 'graphql-exec') {
+                    const { query, variables } = data;
 
-                if (data.type === 'poll-reset') {
-                    pollVotes.a = 0;
-                    pollVotes.b = 0;
-                    pollVotes.c = 0;
-                    votedClients.clear();
-                    broadcastAll({ type: 'poll-results', votes: { ...pollVotes } });
+                    try {
+                        const response = await fetch('http://localhost:5095/graphql', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ query, variables })
+                        });
+
+                        const result = await response.json();
+
+                        // Broadcast query and result to everyone (audience sees what presenter does)
+                        broadcastAll({
+                            type: 'demo-result',
+                            query,
+                            variables,
+                            result
+                        });
+                    } catch (err) {
+                        broadcastAll({
+                            type: 'demo-result',
+                            query,
+                            variables,
+                            result: { errors: [{ message: 'Failed to connect to GraphQL server: ' + err.message }] }
+                        });
+                    }
                 }
             } catch (e) {
                 // ignore

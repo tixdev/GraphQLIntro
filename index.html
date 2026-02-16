@@ -587,77 +587,51 @@
             </div>
         </section>
 
-        <!-- SLIDE 9: Interactive Poll -->
-        <section class="slide slide-poll" data-steps="1">
-            <h2 class="slide-heading">Quick <span class="accent">Poll</span></h2>
-            <p class="slide-subheading" data-step="0">What excites you most about GraphQL?</p>
-
-            <div class="poll-container" data-step="1">
-                <div class="poll-options">
-                    <button class="poll-option" data-option="a">
-                        <span class="poll-emoji">⚡</span>
-                        <span class="poll-label">Efficiency</span>
-                        <span class="poll-sublabel">Less data, faster loads</span>
-                    </button>
-                    <button class="poll-option" data-option="b">
-                        <span class="poll-emoji">🛠️</span>
-                        <span class="poll-label">Developer Experience</span>
-                        <span class="poll-sublabel">Self-documenting, typed APIs</span>
-                    </button>
-                    <button class="poll-option" data-option="c">
-                        <span class="poll-emoji">🎯</span>
-                        <span class="poll-label">Flexibility</span>
-                        <span class="poll-sublabel">Clients define their needs</span>
-                    </button>
+        <!-- SLIDE 10: Live Demo -->
+        <section class="slide slide-live-demo" data-steps="1">
+            <h2 class="slide-heading">Live <span class="accent">Demo</span></h2>
+            <div class="demo-container" data-step="0">
+                <div class="demo-pane demo-query">
+                    <div class="pane-header">Query</div>
+                    <pre
+                        class="pane-content"><code id="live-query" class="language-graphql"># Waiting for presenter...</code></pre>
                 </div>
-                <div class="poll-results" id="poll-results">
-                    <div class="poll-result-row">
-                        <span class="poll-res-label">⚡ Efficiency</span>
-                        <div class="poll-bar-track">
-                            <div class="poll-bar-fill poll-bar-a" id="poll-bar-a" style="width:0%"></div>
-                        </div>
-                        <span class="poll-count" id="poll-count-a">0</span>
-                    </div>
-                    <div class="poll-result-row">
-                        <span class="poll-res-label">🛠️ DX</span>
-                        <div class="poll-bar-track">
-                            <div class="poll-bar-fill poll-bar-b" id="poll-bar-b" style="width:0%"></div>
-                        </div>
-                        <span class="poll-count" id="poll-count-b">0</span>
-                    </div>
-                    <div class="poll-result-row">
-                        <span class="poll-res-label">🎯 Flexibility</span>
-                        <div class="poll-bar-track">
-                            <div class="poll-bar-fill poll-bar-c" id="poll-bar-c" style="width:0%"></div>
-                        </div>
-                        <span class="poll-count" id="poll-count-c">0</span>
-                    </div>
+                <div class="demo-pane demo-result">
+                    <div class="pane-header">Result (JSON)</div>
+                    <pre class="pane-content"><code id="live-result" class="language-json">{}</code></pre>
                 </div>
-                <p class="poll-instruction">Vote from your phone! 📱</p>
             </div>
+            <p class="demo-status" data-step="1" id="live-status">Listening for updates...</p>
         </section>
 
-        <!-- SLIDE 10: Demo -->
-        <section class="slide slide-demo" data-steps="1">
-            <div class="slide-bg-pattern"></div>
-            <div class="demo-content">
-                <h2 class="demo-title">Ready for the <span class="accent">Demo</span>?</h2>
-                <p class="demo-subtitle" data-step="0">Let's see GraphQL in action</p>
-                <div class="demo-resources" data-step="1">
-                    <a class="resource-link" href="https://graphql.org" target="_blank">
-                        <span class="resource-icon">📘</span>
-                        <span>graphql.org</span>
-                    </a>
-                    <a class="resource-link" href="https://www.apollographql.com" target="_blank">
-                        <span class="resource-icon">🚀</span>
-                        <span>Apollo GraphQL</span>
-                    </a>
-                    <a class="resource-link" href="https://the-guild.dev" target="_blank">
-                        <span class="resource-icon">⚔️</span>
-                        <span>The Guild</span>
-                    </a>
+        <!-- SLIDE 11: Try It! -->
+        <section class="slide slide-try-it" data-steps="1">
+            <h2 class="slide-heading">Your Turn: <span class="accent">Try It!</span></h2>
+            <div class="try-container" data-step="0">
+                <div class="try-input-area">
+                    <textarea id="try-input" class="try-textarea" placeholder="Write your query here..."
+                        spellcheck="false">
+{
+  books {
+    title
+    author {
+      name
+    }
+  }
+}</textarea>
+                    <button id="try-run-btn" class="try-run-btn">▶ Run Query</button>
+                    <select id="try-examples" class="try-examples">
+                        <option value="">-- Select Example --</option>
+                        <option value="{ books { title year } }">All Books</option>
+                        <option value="{ authors { name books { title } } }">Authors & Books</option>
+                        <option value="{ book(id: 1) { title genre } }">Single Book</option>
+                    </select>
+                </div>
+                <div class="try-result-area">
+                    <pre id="try-result" class="try-result-pre">{}</pre>
                 </div>
             </div>
+            <p class="slide-subheading" data-step="1">Explore the graph on your phone!</p>
         </section>
 
     </div>

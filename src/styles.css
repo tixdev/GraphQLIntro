@@ -537,7 +537,8 @@ body {
     border-radius: 6px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    padding-left: 8px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.65rem;
     font-weight: 600;
@@ -1076,305 +1077,310 @@ body {
     display: flex;
     flex-direction: column;
     gap: 2rem;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
-}
 
-.poll-container.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.poll-options {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1rem;
-}
-
-.poll-option {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 1.5rem 1rem;
-    background: var(--bg-card);
-    border: 2px solid rgba(255, 255, 255, 0.08);
-    border-radius: 16px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    color: var(--text-primary);
-    font-family: inherit;
-}
-
-.poll-option:hover {
-    border-color: var(--accent-graphql);
-    background: rgba(229, 53, 171, 0.08);
-    transform: translateY(-4px);
-}
-
-.poll-option:active {
-    transform: scale(0.97);
-}
-
-.poll-option.poll-voted {
-    border-color: var(--accent-graphql);
-    background: linear-gradient(135deg, rgba(229, 53, 171, 0.15), rgba(0, 188, 212, 0.1));
-    box-shadow: 0 0 20px var(--accent-graphql-glow);
-}
-
-.poll-emoji {
-    font-size: 2rem;
-}
-
-.poll-label {
-    font-weight: 700;
-    font-size: 1rem;
-}
-
-.poll-sublabel {
-    font-size: 0.75rem;
-    color: var(--text-muted);
-}
-
-/* Poll results */
-.poll-results {
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-}
-
-.poll-result-row {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-}
-
-.poll-res-label {
-    width: 120px;
-    text-align: right;
-    font-size: 0.85rem;
-    font-weight: 500;
-    flex-shrink: 0;
-}
-
-.poll-bar-track {
-    flex: 1;
-    height: 28px;
-    background: rgba(255, 255, 255, 0.04);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-.poll-bar-fill {
-    height: 100%;
-    border-radius: 8px;
-    transition: width 0.6s var(--ease-out-expo);
-    min-width: 0;
-}
-
-.poll-bar-a {
-    background: linear-gradient(90deg, var(--accent-graphql), #ff6ec7);
-}
-
-.poll-bar-b {
-    background: linear-gradient(90deg, var(--accent-cyan), #4dd0e1);
-}
-
-.poll-bar-c {
-    background: linear-gradient(90deg, #f9a825, #ffcc02);
-}
-
-.poll-count {
-    width: 40px;
-    font-family: 'JetBrains Mono', monospace;
-    font-weight: 700;
-    font-size: 0.9rem;
-    text-align: left;
-    flex-shrink: 0;
-}
-
-.poll-instruction {
-    font-size: 0.9rem;
-    color: var(--text-muted);
-    animation: pulse 2s ease-in-out infinite;
-}
-
-@keyframes pulse {
-
-    0%,
-    100% {
-        opacity: 0.6;
+    /* =========================================
+   SLIDE 10: Live Demo
+   ========================================= */
+    .slide-live-demo .slide-heading {
+        margin-bottom: 30px;
     }
 
-    50% {
-        opacity: 1;
+    .demo-container {
+        display: flex;
+        gap: 2rem;
+        width: 100%;
+        height: 60vh;
+        margin-top: 20px;
     }
-}
 
-/* ============================================
+    .demo-pane {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+    }
+
+    .pane-header {
+        background: rgba(255, 255, 255, 0.1);
+        padding: 10px 15px;
+        font-size: 0.9rem;
+        font-weight: bold;
+        color: #cbd5e1;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .pane-content {
+        flex: 1;
+        padding: 15px;
+        margin: 0;
+        overflow: auto;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9rem;
+        white-space: pre-wrap;
+        text-align: left;
+    }
+
+    #live-query {
+        color: #e11d48;
+    }
+
+    #live-result {
+        color: #10b981;
+    }
+
+    .demo-status {
+        margin-top: 20px;
+        font-size: 0.9rem;
+        color: #94a3b8;
+        font-style: italic;
+    }
+
+    /* =========================================
+   SLIDE 11: Try It!
+   ========================================= */
+    .try-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+        width: 90%;
+        margin: 0 auto;
+        height: 65vh;
+    }
+
+    @media (min-width: 768px) {
+        .try-container {
+            flex-direction: row;
+        }
+    }
+
+    .try-input-area,
+    .try-result-area {
+        flex: 1;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 12px;
+        display: flex;
+        flex-direction: column;
+        padding: 10px;
+    }
+
+    .try-textarea {
+        flex: 1;
+        background: transparent;
+        border: none;
+        color: #e11d48;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.9rem;
+        resize: none;
+        outline: none;
+        min-height: 200px;
+    }
+
+    .try-run-btn {
+        margin-top: 10px;
+        padding: 10px;
+        background: #e11d48;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+    .try-run-btn:hover {
+        background: #be123c;
+    }
+
+    .try-examples {
+        margin-top: 10px;
+        padding: 8px;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        border-radius: 6px;
+    }
+
+    .try-result-pre {
+        margin: 0;
+        white-space: pre-wrap;
+        text-align: left;
+        font-family: 'Fira Code', monospace;
+        font-size: 0.85rem;
+        color: #10b981;
+        overflow: auto;
+        height: 100%;
+    }
+
+    /* ============================================
    Demo Slide
    ============================================ */
 
-.slide-demo {
-    text-align: center;
-}
+    .slide-demo {
+        text-align: center;
+    }
 
-.demo-content {
-    z-index: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
+    .demo-content {
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
 
-.demo-title {
-    font-size: clamp(3rem, 5vw, 4.5rem);
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    margin-bottom: 0.8rem;
-}
+    .demo-title {
+        font-size: clamp(3rem, 5vw, 4.5rem);
+        font-weight: 900;
+        letter-spacing: -0.03em;
+        margin-bottom: 0.8rem;
+    }
 
-.demo-subtitle {
-    font-size: 1.3rem;
-    color: var(--text-secondary);
-    margin-bottom: 3rem;
-}
+    .demo-subtitle {
+        font-size: 1.3rem;
+        color: var(--text-secondary);
+        margin-bottom: 3rem;
+    }
 
-.demo-resources {
-    display: flex;
-    gap: 1.5rem;
-    opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
-}
+    .demo-resources {
+        display: flex;
+        gap: 1.5rem;
+        opacity: 0;
+        transform: translateY(20px);
+        transition: opacity 0.6s var(--ease-out-expo), transform 0.6s var(--ease-out-expo);
+    }
 
-.demo-resources.visible {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.resource-link {
-    display: flex;
-    align-items: center;
-    gap: 0.6rem;
-    padding: 0.8rem 1.5rem;
-    background: var(--bg-card);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 12px;
-    color: var(--text-primary);
-    text-decoration: none;
-    font-weight: 500;
-    font-size: 1rem;
-    transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
-}
-
-.resource-link:hover {
-    border-color: var(--accent-graphql);
-    box-shadow: 0 0 20px var(--accent-graphql-glow);
-    transform: translateY(-2px);
-}
-
-.resource-icon {
-    font-size: 1.3rem;
-}
-
-/* ============================================
-   Slide Counter
-   ============================================ */
-
-#slide-counter {
-    position: fixed;
-    bottom: 1.5rem;
-    right: 2rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    z-index: 100;
-    opacity: 0.5;
-}
-
-/* ============================================
-   Connection Status
-   ============================================ */
-
-#connection-status {
-    position: fixed;
-    top: 1.5rem;
-    right: 2rem;
-    z-index: 100;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    opacity: 0.6;
-}
-
-#audience-count {
-    color: var(--text-secondary);
-}
-
-.status-dot {
-    display: block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    transition: background 0.3s;
-}
-
-.connected .status-dot {
-    background: var(--accent-green);
-    box-shadow: 0 0 8px var(--accent-green);
-}
-
-.disconnected .status-dot {
-    background: var(--accent-red);
-    box-shadow: 0 0 8px var(--accent-red);
-    animation: pulse-dot 2s ease-in-out infinite;
-}
-
-/* ============================================
-   Animations
-   ============================================ */
-
-@keyframes float {
-
-    0%,
-    100% {
+    .demo-resources.visible {
+        opacity: 1;
         transform: translateY(0);
     }
 
-    50% {
-        transform: translateY(-10px);
+    .resource-link {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.8rem 1.5rem;
+        background: var(--bg-card);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 12px;
+        color: var(--text-primary);
+        text-decoration: none;
+        font-weight: 500;
+        font-size: 1rem;
+        transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
     }
-}
 
-@keyframes pulse-dot {
+    .resource-link:hover {
+        border-color: var(--accent-graphql);
+        box-shadow: 0 0 20px var(--accent-graphql-glow);
+        transform: translateY(-2px);
+    }
 
-    0%,
-    100% {
+    .resource-icon {
+        font-size: 1.3rem;
+    }
+
+    /* ============================================
+   Slide Counter
+   ============================================ */
+
+    #slide-counter {
+        position: fixed;
+        bottom: 1.5rem;
+        right: 2rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        z-index: 100;
+        opacity: 0.5;
+    }
+
+    /* ============================================
+   Connection Status
+   ============================================ */
+
+    #connection-status {
+        position: fixed;
+        top: 1.5rem;
+        right: 2rem;
+        z-index: 100;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        opacity: 0.6;
+    }
+
+    #audience-count {
+        color: var(--text-secondary);
+    }
+
+    .status-dot {
+        display: block;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        transition: background 0.3s;
+    }
+
+    .connected .status-dot {
+        background: var(--accent-green);
+        box-shadow: 0 0 8px var(--accent-green);
+    }
+
+    .disconnected .status-dot {
+        background: var(--accent-red);
+        box-shadow: 0 0 8px var(--accent-red);
+        animation: pulse-dot 2s ease-in-out infinite;
+    }
+
+    /* ============================================
+   Animations
+   ============================================ */
+
+    @keyframes float {
+
+        0%,
+        100% {
+            transform: translateY(0);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
+
+    @keyframes pulse-dot {
+
+        0%,
+        100% {
+            opacity: 1;
+        }
+
+        50% {
+            opacity: 0.3;
+        }
+    }
+
+    /* Step visibility */
+    [data-step] {
+        opacity: 0;
+        transform: translateY(15px);
+        transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
+    }
+
+    [data-step="0"] {
         opacity: 1;
+        transform: translateY(0);
     }
 
-    50% {
-        opacity: 0.3;
+    [data-step].step-visible {
+        opacity: 1;
+        transform: translateY(0);
     }
-}
-
-/* Step visibility */
-[data-step] {
-    opacity: 0;
-    transform: translateY(15px);
-    transition: opacity 0.5s var(--ease-out-expo), transform 0.5s var(--ease-out-expo);
-}
-
-[data-step="0"] {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-[data-step].step-visible {
-    opacity: 1;
-    transform: translateY(0);
 }

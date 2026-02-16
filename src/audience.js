@@ -53,172 +53,133 @@ function connect() {
             navigateToSlide(data.slide, data.step);
         }
 
-        if (data.type === 'poll-results') {
-            updatePollBars(data.votes);
+        if (data.type === 'demo-result') {
+            updateLiveDemo(data.query, data.result);
         }
     };
 }
 
 // ============================================
-// Navigation (no user interaction)
+// Demo & Try It Logic
 // ============================================
 
-function navigateToSlide(slideIndex, step = 0) {
+function updateLiveDemo(query, result) {
+    const qEl = document.getElementById('live-query');
+    const rEl = document.getElementById('live-result');
+    const sEl = document.getElementById('live-status');
+
+    if (qEl) qEl.textContent = query;
+    if (rEl) rEl.textContent = JSON.stringify(result, null, 2);
+    if (sEl) sEl.textContent = 'Received update from presenter.';
+}
+
+// Try It Slide Logic
+const tryRunBtn = document.getElementById('try-run-btn');
+const tryInput = document.getElementById('try-input');
+const tryResult = document.getElementById('try-result');
+const tryExamples = document.getElementById('try-examples');
+
+if (tryRunBtn) {
+    tryRunBtn.addEventListener('click', async (e) => {
+        e.stopPropagation(); // prevent navigation
+        if (!tryInput || !tryResult) return;
+
+        const query = tryInput.value;
+        tryResult.textContent = 'Loading...';
+
+        try {
+            const response = await fetch('http://localhost:5095/graphql', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ query })
+            });
+            const result = await response.json();
+            tryResult.textContent = JSON.stringify(result, null, 2);
+        } catch (err) {
+            tryResult.textContent = JSON.stringify({ error: err.message }, null, 2);
+        }
+    });
+}
+
+if (tryExamples) {
+    tryExamples.addEventListener('change', (e) => {
+        e.stopPropagation();
+        if (tryInput && e.target.value) {
+            tryInput.value = e.target.value;
+        }
+    });
+}
+
+
+
+function navigateToSlide(slideIndex, stepIndex) {
     if (slideIndex < 0 || slideIndex >= slides.length) return;
 
-    const prevSlide = currentSlide;
     currentSlide = slideIndex;
-    currentStep = step;
+    currentStep = stepIndex;
+
+    // Update active slide
+    slides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === slideIndex);
+    });
 
     // Update slide counter
     currentSlideNum.textContent = slideIndex + 1;
 
-    // Transition slides
-    slides.forEach((slide, i) => {
-        slide.classList.remove('active', 'exit-up');
-        if (i === slideIndex) {
-            slide.classList.add('active');
-        } else if (i < slideIndex) {
-            slide.classList.add('exit-up');
-        }
-    });
-
-    // Apply steps
-    applySteps(slideIndex, step);
-
-    // Trigger slide-specific animations
-    triggerSlideAnimations(slideIndex, step);
-}
-
-// ============================================
-// Step System
-// ============================================
-
-function applySteps(slideIndex, step) {
-    const slide = slides[slideIndex];
-    const steppedElements = slide.querySelectorAll('[data-step]');
-
-    steppedElements.forEach((el) => {
-        const elStep = parseInt(el.getAttribute('data-step'), 10);
-        if (elStep === 0 || elStep <= step) {
-            el.classList.add('step-visible');
-            // Also add 'visible' class for panels, bars, etc.
-            el.classList.add('visible');
-        } else {
-            el.classList.remove('step-visible', 'visible');
-        }
-    });
-}
-
-// ============================================
-// Slide-Specific Animations
-// ============================================
-
-function triggerSlideAnimations(slideIndex, step) {
-    const slide = slides[slideIndex];
-
-    // Over-fetching: animated bars
-    if (slide.classList.contains('slide-overfetch') && step >= 3) {
-        animateBars(slide);
-    }
-
-    // Under-fetching: waterfall bars
-    if (slide.classList.contains('slide-underfetch')) {
-        if (step >= 1) animateWaterfall(slide, '.rest-panel');
-        if (step >= 2) animateWaterfall(slide, '.graphql-panel');
-    }
-
-    // Endpoints: cascade items
-    if (slide.classList.contains('slide-endpoints') && step >= 1) {
-        animateEndpoints(slide);
+    // Handle steps
+    const activeSlide = slides[slideIndex];
+    if (activeSlide) {
+        const steppedElements = activeSlide.querySelectorAll('[data-step]');
+        steppedElements.forEach(el => {
+            const elStep = parseInt(el.getAttribute('data-step'), 10);
+            if (activeSlide.classList.contains('active')) {
+                if (stepIndex >= elStep) {
+                    el.classList.add('visible');
+                } else {
+                    el.classList.remove('visible');
+                }
+            }
+        });
     }
 }
 
-// ============================================
-// Poll System
-// ============================================
-
-let hasVoted = false;
-
-function updatePollBars(votes) {
-    const total = votes.a + votes.b + votes.c;
-    ['a', 'b', 'c'].forEach(key => {
-        const pct = total > 0 ? (votes[key] / total * 100) : 0;
-        const bar = document.getElementById(`poll-bar-${key}`);
-        const count = document.getElementById(`poll-count-${key}`);
-        if (bar) bar.style.width = `${pct}%`;
-        if (count) count.textContent = votes[key];
-    });
-}
-
-// Handle poll option clicks
-document.querySelectorAll('.poll-option').forEach(btn => {
-    btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if (hasVoted || !ws || ws.readyState !== 1) return;
-        hasVoted = true;
-        const option = btn.getAttribute('data-option');
-        ws.send(JSON.stringify({ type: 'vote', option }));
-        // Highlight selected
-        document.querySelectorAll('.poll-option').forEach(b => b.classList.remove('poll-voted'));
-        btn.classList.add('poll-voted');
-    }, true);
-});
-
-// Animated comparison bars (over-fetching)
-function animateBars(slide) {
-    const fills = slide.querySelectorAll('.bar-fill');
-    fills.forEach((fill) => {
-        const targetWidth = fill.getAttribute('data-width');
-        setTimeout(() => {
-            fill.style.setProperty('--target-width', `${targetWidth}%`);
-            fill.classList.add('animate');
-        }, 200);
-    });
-}
-
-// Waterfall animation (under-fetching)
-function animateWaterfall(slide, panelSelector) {
-    const panel = slide.querySelector(panelSelector);
-    if (!panel) return;
-    const bars = panel.querySelectorAll('.wf-bar');
-    bars.forEach((bar, i) => {
-        const row = bar.closest('.waterfall-row');
-        const delay = row ? parseInt(row.getAttribute('data-delay') || i, 10) : i;
-        setTimeout(() => {
-            bar.style.width = bar.getAttribute('data-width');
-        }, delay * 200 + 300);
-    });
-}
-
-// Endpoint cascade animation
-function animateEndpoints(slide) {
-    const items = slide.querySelectorAll('.endpoint-item');
-    items.forEach((item, i) => {
-        setTimeout(() => {
-            item.classList.add('visible');
-        }, i * 80);
-    });
-}
 
 // ============================================
 // Block ALL user interaction
 // ============================================
 
-document.addEventListener('keydown', (e) => e.preventDefault(), true);
-document.addEventListener('wheel', (e) => e.preventDefault(), { passive: false });
-document.addEventListener('touchmove', (e) => e.preventDefault(), { passive: false });
+document.addEventListener('keydown', (e) => {
+    // Allow typing in textarea
+    if (e.target.tagName === 'TEXTAREA') return;
+    e.preventDefault();
+}, true);
+
+document.addEventListener('wheel', (e) => {
+    // Allow scrolling in result areas
+    if (e.target.closest('.try-result-area') || e.target.closest('.try-input-area') || e.target.closest('.demo-pane')) return;
+    e.preventDefault();
+}, { passive: false });
+
+document.addEventListener('touchmove', (e) => {
+    if (e.target.closest('.try-result-area') || e.target.closest('.try-input-area') || e.target.closest('.demo-pane')) return;
+    e.preventDefault();
+}, { passive: false });
+
 document.addEventListener('contextmenu', (e) => e.preventDefault());
 
-// Allow touch/click ONLY on poll buttons
+// Allow touch/click ONLY on interactive elements in Try It slide
+function isInteractive(target) {
+    return target.closest('.try-input-area') || target.closest('.try-result-area') || target.closest('.demo-pane');
+}
+
 document.addEventListener('touchstart', (e) => {
-    if (!e.target.closest('.poll-option')) {
+    if (!isInteractive(e.target)) {
         e.preventDefault();
     }
 }, { passive: false });
 
 document.addEventListener('mousedown', (e) => {
-    if (!e.target.closest('.poll-option')) {
+    if (!isInteractive(e.target)) {
         e.preventDefault();
     }
 }, true);
