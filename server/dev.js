@@ -35,8 +35,16 @@ async function start() {
     const audiences = new Set();
     const presenters = new Set();
 
-    // WebSocket server on a different port
-    const wss = new WebSocketServer({ port: 3001 });
+    // WebSocket server integrated with Vite server
+    const wss = new WebSocketServer({ noServer: true });
+
+    vite.httpServer.on('upgrade', (request, socket, head) => {
+        if (request.url.startsWith('/ws')) {
+            wss.handleUpgrade(request, socket, head, (ws) => {
+                wss.emit('connection', ws, request);
+            });
+        }
+    });
 
     function broadcast(data, targets) {
         const msg = JSON.stringify(data);
@@ -137,7 +145,7 @@ async function start() {
     });
 
     console.log(`\n  🎮 Remote control: ${remoteUrl}`);
-    console.log(`  📡 WebSocket server running on ws://${localIP}:3001\n`);
+    console.log(`  📡 WebSocket server running on ws://${localIP}:3000/ws\n`);
 }
 
 start();

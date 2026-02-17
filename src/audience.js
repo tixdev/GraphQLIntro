@@ -21,8 +21,8 @@ totalSlideNum.textContent = slides.length;
 
 function connect() {
     const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-    const host = location.hostname;
-    ws = new WebSocket(`${protocol}://${host}:3001/?role=audience`);
+    const host = location.host; // includes port
+    ws = new WebSocket(`${protocol}://${host}/ws?role=audience`);
 
     ws.onopen = () => {
         connectionStatus.className = 'connected';
