@@ -16,13 +16,14 @@ function getLocalIP() {
 
 async function start() {
     const vite = await createServer({
-        server: { port: 3000, host: true },
+        // server config is now in vite.config.js
     });
     await vite.listen();
     vite.printUrls();
 
     const localIP = getLocalIP();
-    const remoteUrl = `http://${localIP}:3000/remote.html`;
+    const publicUrl = process.env.PUBLIC_URL || `http://${localIP}:3000`;
+    const remoteUrl = `${publicUrl}/remote.html`;
 
     // State
     let currentSlide = 0;

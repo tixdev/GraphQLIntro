@@ -88,7 +88,7 @@ if (tryRunBtn) {
         tryResult.innerHTML = '<span class="cmt">// Loading...</span>';
 
         try {
-            const response = await fetch('http://localhost:5095/graphql', {
+            const response = await fetch('/graphql', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query })

@@ -5,6 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "node server/dev.js",
+    "dev:tunnel": "cloudflared tunnel --url http://localhost:3000",
+    "dev:public": "PUBLIC_URL=$PUBLIC_URL node server/dev.js",
     "dev:api": "dotnet run --project demo-server/demo-server.csproj"
   },
   "devDependencies": {
