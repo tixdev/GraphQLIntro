@@ -1265,7 +1265,7 @@ body {
     flex: 1;
     background: transparent;
     border: none;
-    color: #e11d48;
+    color: var(--text-primary);
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.9rem;
     resize: none;
