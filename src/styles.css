@@ -72,6 +72,10 @@ body {
     -webkit-user-select: none;
 }
 
+body.cursor-visible {
+    cursor: auto;
+}
+
 /* ============================================
    Presentation Container
    ============================================ */

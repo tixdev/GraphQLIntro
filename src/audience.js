@@ -201,6 +201,12 @@ function navigateToSlide(slideIndex, stepIndex) {
             }
         });
     }
+
+    if (activeSlide && (activeSlide.classList.contains('slide-try-it') || activeSlide.classList.contains('slide-live-demo'))) {
+        document.body.classList.add('cursor-visible');
+    } else {
+        document.body.classList.remove('cursor-visible');
+    }
 }
 
 
