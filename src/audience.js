@@ -2,6 +2,8 @@
 // Audience View — WebSocket Client + Animation Engine
 // ============================================
 
+import { parse, print } from 'graphql';
+
 const slides = document.querySelectorAll('.slide');
 const currentSlideNum = document.getElementById('current-slide-num');
 const totalSlideNum = document.getElementById('total-slide-num');
@@ -108,31 +110,40 @@ if (tryRunBtn) {
 function highlightGraphQL(code) {
     if (!code) return '';
 
-    // HTML-escape first
-    let html = code
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;');
+    try {
+        // 1. Parse and print to format
+        const ast = parse(code);
+        const pretty = print(ast);
 
-    // Comments
-    html = html.replace(/(#.*)$/gm, '<span class="cmt">$1</span>');
+        // 2. Syntax highlighting (reuse existing logic on formatted code)
+        let html = pretty
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;');
 
-    // Strings
-    html = html.replace(/(".*?")/g, '<span class="str">$1</span>');
+        // Comments
+        html = html.replace(/(#.*)$/gm, '<span class="cmt">$1</span>');
 
-    // Keywords (query, mutation, subscription, fragment, type, input, interface, union, scalar, directive, enum)
-    html = html.replace(/\b(query|mutation|subscription|fragment|type|input|interface|union|scalar|directive|enum)\b/g, '<span class="kw">$1</span>');
+        // Strings
+        html = html.replace(/(".*?")/g, '<span class="str">$1</span>');
 
-    // Field arguments (word followed by colon)
-    html = html.replace(/(\w+)(?=:)/g, '<span class="arg">$1</span>');
+        // Keywords
+        html = html.replace(/\b(query|mutation|subscription|fragment|type|input|interface|union|scalar|directive|enum)\b/g, '<span class="kw">$1</span>');
 
-    // Numbers
-    html = html.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
+        // Field arguments
+        html = html.replace(/(\w+)(?=:)/g, '<span class="arg">$1</span>');
 
-    // Functions/Fields (identifiers before parenthesis)
-    html = html.replace(/(\w+)(?=\()/g, '<span class="fn">$1</span>');
+        // Numbers
+        html = html.replace(/\b(\d+)\b/g, '<span class="num">$1</span>');
 
-    return html;
+        // Functions/Fields
+        html = html.replace(/(\w+)(?=\()/g, '<span class="fn">$1</span>');
+
+        return html;
+    } catch (e) {
+        console.warn('GraphQL formatting failed:', e);
+        return code; // Fallback to unformatted code if parsing fails (e.g. partial query)
+    }
 }
 
 function highlightJSON(json) {

@@ -1309,6 +1309,7 @@ body.cursor-visible {
     color: white;
     /* Explicit white text */
     border-radius: 6px;
+    max-width: 100%;
 }
 
 .try-result-pre {
@@ -1487,4 +1488,8 @@ body.cursor-visible {
 [data-step].step-visible {
     opacity: 1;
     transform: translateY(0);
+}
+
+.remote-select {
+    max-width: 100%;
 }

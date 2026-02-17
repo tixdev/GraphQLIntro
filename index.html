@@ -612,19 +612,44 @@
                     <textarea id="try-input" class="try-textarea" placeholder="Write your query here..."
                         spellcheck="false">
 {
-  books {
-    title
-    author {
+  person(first: 5) {
+    nodes {
       name
+      number
+      relationship {
+        type
+        asset {
+            name
+        }
+      }
     }
   }
 }</textarea>
                     <button id="try-run-btn" class="try-run-btn">▶ Run Query</button>
                     <select id="try-examples" class="try-examples">
                         <option value="">-- Select Example --</option>
-                        <option value="{ books { title year } }">All Books</option>
-                        <option value="{ authors { name books { title } } }">Authors & Books</option>
-                        <option value="{ book(id: 1) { title genre } }">Single Book</option>
+                        <option value="{ person(first: 5) { nodes { name } } }">1. Basic: Names only</option>
+                        <option value="{ person(first: 5) { nodes { name number } } }">2. Fields: Name & Number</option>
+                        <option value="{ person(where: { name: { contains: &quot;a&quot; } }) { nodes { name } } }">3.
+                            Filtering: Name contains 'a'</option>
+                        <option value="{ person(order: { name: ASC }) { nodes { name } } }">4. Sorting: Alphabetical
+                        </option>
+                        <option value="{ person(first: 5) { nodes { name relationship { type } } } }">5. Relation:
+                            Person -> Relationship</option>
+                        <option
+                            value="{ person(first: 5) { nodes { name relationship(where: { type: { eq: &quot;Parent&quot; } }) { type } } } }">
+                            6. Filter Relation: Only Parents</option>
+                        <option value="{ person(first: 5) { nodes { name relationship { asset { name type } } } } }">7.
+                            Depth: Person -> Rel -> Asset</option>
+                        <option
+                            value="{ person(first: 5) { nodes { name relationship { asset(where: { type: { eq: &quot;Account&quot; } }) { name } } } } }">
+                            8. Filter Asset: Only Accounts</option>
+                        <option
+                            value="{ person(first: 5) { nodes { name relationship { asset { name balance { amount currency } } } } } }">
+                            9. Full Depth: ... -> Balance</option>
+                        <option
+                            value="{ person(first: 2, order: { name: ASC }) { nodes { name address relationship { type asset { name balance { amount currency } } } } } }">
+                            10. Complex: Full Graph</option>
                     </select>
                 </div>
                 <div class="try-result-area">
