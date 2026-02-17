@@ -3,6 +3,9 @@
    ============================================ */
 
 :root {
+    /* Enforce dark mode for browser controls */
+    color-scheme: dark;
+
     /* Background */
     --bg-primary: #0a0a1a;
     --bg-secondary: #0f0f2a;
@@ -1268,6 +1271,9 @@ body.cursor-visible {
 .try-textarea {
     flex: 1;
     background: transparent;
+    /* Fallback */
+    background: rgba(10, 10, 26, 0.8);
+    /* Explicit dark background */
     border: none;
     color: var(--text-primary);
     font-family: 'JetBrains Mono', monospace;
@@ -1297,8 +1303,11 @@ body.cursor-visible {
     margin-top: 10px;
     padding: 8px;
     background: rgba(255, 255, 255, 0.1);
+    background-color: #1a1a3e;
+    /* Explicit dark background */
     border: 1px solid rgba(255, 255, 255, 0.2);
     color: white;
+    /* Explicit white text */
     border-radius: 6px;
 }
 
