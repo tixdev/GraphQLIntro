@@ -1000,15 +1000,24 @@ body.cursor-visible {
 
 .fed-arrow-spread {
     display: flex;
-    gap: 3rem;
+    gap: 1rem;
+    width: 100%;
+    margin-bottom: 0px;
     font-size: 1.2rem;
     color: var(--accent-cyan);
     line-height: 1;
 }
 
+.fed-arrow-spread>span {
+    flex: 1;
+    text-align: center;
+}
+
 .fed-services {
     display: flex;
     gap: 1rem;
+    width: 100%;
+    justify-content: space-between;
 }
 
 .fed-service {
@@ -1016,12 +1025,14 @@ body.cursor-visible {
     flex-direction: column;
     align-items: center;
     gap: 0.3rem;
-    padding: 0.8rem 1.2rem;
+    padding: 0.8rem 1rem;
     background: var(--bg-card);
     border: 1px solid rgba(255, 255, 255, 0.06);
     border-radius: 10px;
     font-size: 0.85rem;
     font-weight: 600;
+    flex: 1;
+    text-align: center;
 }
 
 .fed-svc-icon {
