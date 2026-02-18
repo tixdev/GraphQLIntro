@@ -120,13 +120,13 @@
                     <h3 class="flow-title">Schema</h3>
                     <p class="flow-desc">The contract — defines types and relationships</p>
                     <pre class="code-block code-block-compact"><code><span class="kw">type</span> <span class="type">Query</span> {
-  <span class="fn">user</span>(<span class="arg">id</span>: <span class="type">ID!</span>): <span class="type">User</span>
+  <span class="fn">person</span>(<span class="arg">id</span>: <span class="type">ID!</span>): <span class="type">Person</span>
 }
 
-<span class="kw">type</span> <span class="type">User</span> {
+<span class="kw">type</span> <span class="type">Person</span> {
   id: <span class="type">ID!</span>
   name: <span class="type">String!</span>
-  posts: [<span class="type">Post!</span>]!
+  relationship: [<span class="type">Relationship!</span>]!
 }</code></pre>
                 </div>
 
@@ -137,10 +137,10 @@
                     <h3 class="flow-title">Query</h3>
                     <p class="flow-desc">The request — client asks for specific fields</p>
                     <pre class="code-block code-block-compact"><code><span class="kw">query</span> {
-  <span class="fn">user</span>(<span class="arg">id</span>: <span class="num">1</span>) {
+  <span class="fn">person</span>(<span class="arg">id</span>: <span class="num">1</span>) {
     name
-    posts {
-      title
+    relationship {
+      type
     }
   }
 }</code></pre>
@@ -155,9 +155,9 @@
                     <pre class="code-block code-block-compact"><code><span class="cmt">// C# / HotChocolate</span>
 <span class="kw">public class</span> <span class="type">Query</span>
 {
-  <span class="kw">public</span> <span class="type">User</span> <span class="fn">GetUser</span>(
+  <span class="kw">public</span> <span class="type">Person</span> <span class="fn">GetPerson</span>(
     <span class="type">int</span> <span class="arg">id</span>,
-    <span class="type">UserService</span> <span class="arg">svc</span>)
+    <span class="type">PersonService</span> <span class="arg">svc</span>)
     => svc.<span class="fn">GetById</span>(id);
 }</code></pre>
                 </div>
