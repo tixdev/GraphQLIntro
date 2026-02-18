@@ -609,22 +609,21 @@
             <h2 class="slide-heading">Your Turn: <span class="accent">Try It!</span></h2>
             <div class="try-container" data-step="0">
                 <div class="try-input-area">
-                    <textarea id="try-input" class="try-textarea" placeholder="Write your query here..."
-                        spellcheck="false">
-{
-  person(first: 5) {
-    nodes {
-      name
-      number
-      relationship {
-        type
-        asset {
-            name
-        }
-      }
-    }
-  }
-}</textarea>
+                    <div id="try-input" class="try-textarea editor language-graphql">
+                        {
+                        person(first: 5) {
+                        nodes {
+                        name
+                        number
+                        relationship {
+                        type
+                        asset {
+                        name
+                        }
+                        }
+                        }
+                        }
+                        }</div>
                     <button id="try-run-btn" class="try-run-btn">▶ Run Query</button>
                     <select id="try-examples" class="try-examples">
                         <option value="">-- Select Example --</option>

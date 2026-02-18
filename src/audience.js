@@ -3,6 +3,10 @@
 // ============================================
 
 import { parse, print } from 'graphql';
+import { CodeJar } from 'codejar';
+import Prism from 'prismjs';
+import 'prismjs/components/prism-graphql';
+
 
 const slides = document.querySelectorAll('.slide');
 const currentSlideNum = document.getElementById('current-slide-num');
@@ -81,12 +85,61 @@ const tryInput = document.getElementById('try-input');
 const tryResult = document.getElementById('try-result');
 const tryExamples = document.getElementById('try-examples');
 
+let jar;
+
+if (tryInput) {
+    const highlight = (editor) => {
+        const code = editor.textContent;
+        // Simple manual highlighting for now, or use Prism if available
+        // But better to use Prism's highlightElement if we want full Prism power
+        //CodeJar expects us to update the innerHTML
+        editor.innerHTML = Prism.highlight(code, Prism.languages.graphql, 'graphql');
+    };
+
+    jar = CodeJar(tryInput, highlight, { tab: '  ' });
+
+    // Initial highlight & format
+    try {
+        const initialCode = tryInput.textContent;
+        // Only format if it looks like a query
+        if (initialCode.trim().length > 0) {
+            // Attempt to pretty print using GraphQL parser
+            try {
+                const ast = parse(initialCode);
+                const pretty = print(ast);
+                jar.updateCode(pretty);
+            } catch (parseErr) {
+                // Fallback: simple dedent
+                const lines = initialCode.split('\n');
+                // Find min indentation (ignoring empty lines)
+                let minIndent = Infinity;
+                lines.forEach(line => {
+                    if (line.trim().length > 0) {
+                        const indent = line.search(/\S/);
+                        if (indent !== -1 && indent < minIndent) minIndent = indent;
+                    }
+                });
+
+                if (minIndent !== Infinity && minIndent > 0) {
+                    const dedented = lines.map(l => l.length >= minIndent ? l.substring(minIndent) : l).join('\n').trim();
+                    jar.updateCode(dedented);
+                } else {
+                    jar.updateCode(initialCode.trim());
+                }
+            }
+        }
+    } catch (e) {
+        console.warn('Initial CodeJar setup failed:', e);
+        jar.updateCode(tryInput.textContent.trim());
+    }
+}
+
 if (tryRunBtn) {
     tryRunBtn.addEventListener('click', async (e) => {
         e.stopPropagation(); // prevent navigation
         if (!tryInput || !tryResult) return;
 
-        const query = tryInput.value;
+        const query = jar ? jar.toString() : tryInput.textContent;
         tryResult.innerHTML = '<span class="cmt">// Loading...</span>';
 
         try {
@@ -175,8 +228,24 @@ function highlightJSON(json) {
 if (tryExamples) {
     tryExamples.addEventListener('change', (e) => {
         e.stopPropagation();
-        if (tryInput && e.target.value) {
-            tryInput.value = e.target.value;
+        const newVal = e.target.value;
+        if (tryInput && newVal) {
+            let formattedVal = newVal;
+            try {
+                if (newVal.trim().length > 0) {
+                    const ast = parse(newVal);
+                    formattedVal = print(ast);
+                }
+            } catch (err) {
+                console.warn('Failed to format example:', err);
+                // Fallback to original value if parsing fails
+            }
+
+            if (jar) {
+                jar.updateCode(formattedVal);
+            } else {
+                tryInput.textContent = formattedVal;
+            }
         }
     });
 }
@@ -226,8 +295,8 @@ function navigateToSlide(slideIndex, stepIndex) {
 // ============================================
 
 document.addEventListener('keydown', (e) => {
-    // Allow typing in textarea
-    if (e.target.tagName === 'TEXTAREA') return;
+    // Allow typing in textarea or editor
+    if (e.target.tagName === 'TEXTAREA' || e.target.closest('.editor')) return;
     e.preventDefault();
 }, true);
 
