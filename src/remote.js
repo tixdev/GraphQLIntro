@@ -51,8 +51,8 @@ const SPEAKER_NOTES = [
     [
         "Il problema diametralmente opposto è l'Under-fetching, il male oscuro che emerge quando cerchiamo di alleggerire REST iper-frammentando gli endpoint.",
         "Considerate una dashboard: recupera l'anagrafica base (`/persons`), estrae l'ID, fa una chiamata a `/relationships`, poi usa quegli ID per caricare gli `/assets` e infine i loro `/balances`. È il famigerato N+1 HTTP, un waterfall fatale per le latenze.",
-        "Grazie all'attraversamento del grafo di GraphQL, il frontend invia una singola request massiva che specifica le join necessarie tra persona, relazioni e conti, in profondità, delegando al motore GraphQL l'aggancio logico.",
-        "Questo colpo di spugna elimina i roundtrip di rete sequenziali tra client e server. Il backend riceve la direttiva intera subito, e può persino parallelizzare i resolvers a livello di I/O."
+        "Grazie all'attraversamento del grafo di GraphQL, il client invia una singola request massiva che naviga i collegamenti logici tra persona, relazioni e conti, in profondità, delegando al motore GraphQL tutto l'onere del recupero e dell'aggregazione.",
+        "Questo colpo di spugna elimina i roundtrip di rete sequenziali tra client e server. Ma è importante sottolineare che riusciamo a navigare domini diversi in un solo colpo unicamente grazie alla Schema Federation: person, relationship e asset sono in realtà microservizi separati che il nostro Gateway cuce insieme dietro le quinte."
     ],
     // Slide 5
     [
