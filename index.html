@@ -176,7 +176,7 @@
         <!-- SLIDE 3: Over-fetching -->
         <section class="slide slide-overfetch" data-steps="3">
             <h2 class="slide-heading">Problem #1: <span class="accent">Over-fetching</span></h2>
-            <p class="slide-subheading" data-step="0">A dropdown autocomplete downloads entire product objects with
+            <p class="slide-subheading" data-step="0">A dropdown autocomplete downloads entire person objects with
                 nested data</p>
 
             <div class="comparison-grid">
@@ -188,7 +188,7 @@
                     </div>
                     <div class="network-bar">
                         <div class="network-row">
-                            <span class="net-label">GET /api/products/search?q=laptop</span>
+                            <span class="net-label">GET /api/persons/search?q=alice</span>
                             <span class="net-status">200</span>
                         </div>
                         <div class="net-details">
@@ -199,13 +199,13 @@
                     <pre class="code-block"><code>[
   {
     <span class="str">"id"</span>: <span class="num">123</span>,
-    <span class="str">"name"</span>: <span class="str">"Laptop Pro 15"</span>,
-    <span class="str">"description"</span>: <span class="str">"Lorem ipsum..."</span> <span class="cmt">// 2KB</span>
-    <span class="str">"specifications"</span>: {...}  <span class="cmt">// 15KB</span>
-    <span class="str">"images"</span>: [...]          <span class="cmt">// 20KB</span>
-    <span class="str">"reviews"</span>: [...]         <span class="cmt">// 35KB</span>
+    <span class="str">"name"</span>: <span class="str">"Alice"</span>,
+    <span class="str">"metadata"</span>: <span class="str">"{...}"</span> <span class="cmt">// 2KB</span>
+    <span class="str">"relationships"</span>: [...]  <span class="cmt">// 15KB</span>
+    <span class="str">"assets"</span>: [...]          <span class="cmt">// 20KB</span>
+    <span class="str">"balances"</span>: [...]         <span class="cmt">// 35KB</span>
   }
-  <span class="cmt">// ... 9 more products</span>
+  <span class="cmt">// ... 9 more persons</span>
 ]</code></pre>
                     <div class="verdict verdict-bad">
                         <span class="verdict-icon">⚠️</span>
@@ -232,17 +232,23 @@
                         </div>
                     </div>
                     <pre class="code-block"><code>{
-  <span class="fn">products</span>(<span class="arg">search</span>: <span class="str">"laptop"</span>) {
-    id
-    name
+  <span class="fn">person</span>(<span class="arg">where</span>: { name: { eq: <span class="str">"Alice"</span> } }) {
+    nodes {
+      name
+      relationship {
+        number
+      }
+    }
   }
 }
 
 <span class="cmt">// Response:</span>
-{ <span class="str">"products"</span>: [
-  {<span class="str">"id"</span>: <span class="num">123</span>, <span class="str">"name"</span>: <span class="str">"Laptop Pro 15"</span>},
-  {<span class="str">"id"</span>: <span class="num">124</span>, <span class="str">"name"</span>: <span class="str">"Laptop Air 13"</span>}
-]}</code></pre>
+{ <span class="str">"person"</span>: { <span class="str">"nodes"</span>: [
+  { 
+    <span class="str">"name"</span>: <span class="str">"Alice"</span>,
+    <span class="str">"relationship"</span>: [ { <span class="str">"number"</span>: <span class="num">123456</span> } ]
+  }
+]}}</code></pre>
                     <div class="verdict verdict-good">
                         <span class="verdict-icon">✅</span>
                         <span>Transferred <strong>280 bytes</strong> — perfect match</span>

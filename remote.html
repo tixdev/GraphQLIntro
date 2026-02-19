@@ -18,48 +18,49 @@
         <div class="remote-left-col">
             <!-- Header -->
             <header id="remote-header">
-            <h1>🎮 Remote Control</h1>
-            <div id="remote-connection" class="disconnected">
-                <span class="rc-dot"></span>
-                <span class="rc-label">Disconnected</span>
+                <h1>🎮 Remote Control</h1>
+                <div id="remote-connection" class="disconnected">
+                    <span class="rc-dot"></span>
+                    <span class="rc-label">Disconnected</span>
+                </div>
+            </header>
+
+            <!-- Audience counter -->
+            <div id="audience-counter">
+                <span class="ac-icon">👥</span>
+                <span class="ac-label"><strong id="audience-count">0</strong> connected</span>
             </div>
-        </header>
 
-        <!-- Audience counter -->
-        <div id="audience-counter">
-            <span class="ac-icon">👥</span>
-            <span class="ac-label"><strong id="audience-count">0</strong> connected</span>
-        </div>
+            <!-- Current slide info -->
+            <div id="slide-info">
+                <span id="slide-indicator">Slide <strong id="slide-num">1</strong> / <strong
+                        id="slide-total">6</strong></span>
+                <span id="step-indicator">Step <strong id="step-num">0</strong> / <strong
+                        id="step-total">0</strong></span>
+            </div>
 
-        <!-- Current slide info -->
-        <div id="slide-info">
-            <span id="slide-indicator">Slide <strong id="slide-num">1</strong> / <strong
-                    id="slide-total">6</strong></span>
-            <span id="step-indicator">Step <strong id="step-num">0</strong> / <strong id="step-total">0</strong></span>
-        </div>
+            <!-- Navigation buttons -->
+            <div id="nav-controls">
+                <button id="btn-prev" class="nav-btn" aria-label="Previous">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    <span>Prev</span>
+                </button>
+                <button id="btn-next" class="nav-btn nav-btn-primary" aria-label="Next">
+                    <span>Next</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
+            </div>
 
-        <!-- Navigation buttons -->
-        <div id="nav-controls">
-            <button id="btn-prev" class="nav-btn" aria-label="Previous">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <polyline points="15 18 9 12 15 6"></polyline>
-                </svg>
-                <span>Prev</span>
-            </button>
-            <button id="btn-next" class="nav-btn nav-btn-primary" aria-label="Next">
-                <span>Next</span>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                    stroke-linejoin="round">
-                    <polyline points="9 18 15 12 9 6"></polyline>
-                </svg>
-            </button>
-        </div>
-
-        <!-- Live Demo Controls -->
-        <div class="control-group demo-controls">
-            <h3>Live Demo</h3>
-            <textarea id="remote-query-input" class="remote-textarea">
+            <!-- Live Demo Controls -->
+            <div class="control-group demo-controls">
+                <h3>Live Demo</h3>
+                <textarea id="remote-query-input" class="remote-textarea">
 {
   person(first: 5) {
     nodes {
@@ -70,94 +71,96 @@
     }
   }
 }</textarea>
-            <button id="btn-run-query" class="action-btn">▶ Run Query</button>
-            <select id="remote-examples" class="remote-select">
-                <option value="">Load Example...</option>
-                <option value="{ person(first: 5) { nodes { name } } }">1. Basic: Names only</option>
-                <option value="{ person(first: 5) { nodes { name number } } }">2. Fields: Name & Number</option>
-                <option value="{ person(where: { name: { contains: &quot;a&quot; } }) { nodes { name } } }">3.
-                    Filtering: Name contains 'a'</option>
-                <option value="{ person(order: { name: ASC }) { nodes { name } } }">4. Sorting: Alphabetical</option>
-                <option value="{ person(first: 5) { nodes { name relationship { type } } } }">5. Relation: Person ->
-                    Relationship</option>
-                <option
-                    value="{ person(first: 5) { nodes { name relationship(where: { type: { eq: &quot;Parent&quot; } }) { type } } } }">
-                    6. Filter Relation: Only Parents</option>
-                <option value="{ person(first: 5) { nodes { name relationship { asset { name type } } } } }">7. Depth:
-                    Person -> Rel -> Asset</option>
-                <option
-                    value="{ person(first: 5) { nodes { name relationship { asset(where: { type: { eq: &quot;Account&quot; } }) { name } } } } }">
-                    8. Filter Asset: Only Accounts</option>
-                <option
-                    value="{ person(first: 5) { nodes { name relationship { asset { name balance { amount currency } } } } } }">
-                    9. Full Depth: ... -> Balance</option>
-                <option
-                    value="{ person(first: 2, order: { name: ASC }) { nodes { name address relationship { type asset { name balance { amount currency } } } } } }">
-                    10. Complex: Full Graph</option>
-            </select>
-        </div>
+                <button id="btn-run-query" class="action-btn">▶ Run Query</button>
+                <select id="remote-examples" class="remote-select">
+                    <option value="">Load Example...</option>
+                    <option value="{ person(first: 5) { nodes { name } } }">1. Basic: Names only</option>
+                    <option value="{ person(first: 5) { nodes { name number } } }">2. Fields: Name & Number</option>
+                    <option value="{ person(where: { name: { contains: &quot;a&quot; } }) { nodes { name } } }">3.
+                        Filtering: Name contains 'a'</option>
+                    <option value="{ person(order: { name: ASC }) { nodes { name } } }">4. Sorting: Alphabetical
+                    </option>
+                    <option value="{ person(first: 5) { nodes { name relationship { type } } } }">5. Relation: Person ->
+                        Relationship</option>
+                    <option
+                        value="{ person(first: 5) { nodes { name relationship(where: { type: { eq: &quot;Parent&quot; } }) { type } } } }">
+                        6. Filter Relation: Only Parents</option>
+                    <option value="{ person(first: 5) { nodes { name relationship { asset { name type } } } } }">7.
+                        Depth:
+                        Person -> Rel -> Asset</option>
+                    <option
+                        value="{ person(first: 5) { nodes { name relationship { asset(where: { type: { eq: &quot;Account&quot; } }) { name } } } } }">
+                        8. Filter Asset: Only Accounts</option>
+                    <option
+                        value="{ person(first: 5) { nodes { name relationship { asset { name balance { amount currency } } } } } }">
+                        9. Full Depth: ... -> Balance</option>
+                    <option
+                        value="{ person(first: 2, order: { name: ASC }) { nodes { name address relationship { type asset { name balance { amount currency } } } } } }">
+                        10. Complex: Full Graph</option>
+                </select>
+            </div>
 
-        <!-- Slide list -->
-        <div class="slide-list" id="slide-list">
-            <button class="slide-item active" data-slide="0">
-                <span class="si-num">0</span>
-                <span class="si-title">Title</span>
-            </button>
-            <button class="slide-item" data-slide="1">
-                <span class="si-num">1</span>
-                <span class="si-title">What is GraphQL?</span>
-            </button>
-            <button class="slide-item" data-slide="2">
-                <span class="si-num">2</span>
-                <span class="si-title">How it Works</span>
-            </button>
-            <button class="slide-item" data-slide="3">
-                <span class="si-num">3</span>
-                <span class="si-title">Over-fetching</span>
-            </button>
-            <button class="slide-item" data-slide="4">
-                <span class="si-num">4</span>
-                <span class="si-title">Under-fetching</span>
-            </button>
-            <button class="slide-item" data-slide="5">
-                <span class="si-num">5</span>
-                <span class="si-title">Multiple Endpoints</span>
-            </button>
-            <button class="slide-item" data-slide="6">
-                <span class="si-num">6</span>
-                <span class="si-title">Advantages</span>
-            </button>
-            <button class="slide-item" data-slide="7">
-                <span class="si-num">7</span>
-                <span class="si-title">N+1 Problem</span>
-            </button>
-            <button class="slide-item" data-slide="8">
-                <span class="si-num">8</span>
-                <span class="si-title">Federation</span>
-            </button>
-            <button class="slide-item" data-slide="9">
-                <span class="si-num">9</span>
-                <span class="si-title">Live Demo</span>
-            </button>
-            <button class="slide-item" data-slide="10">
-                <span class="si-num">10</span>
-                <span class="si-title">Try It!</span>
-            </button>
-        </div>
-    </div> <!-- End Left Column -->
+            <!-- Slide list -->
+            <div class="slide-list" id="slide-list">
+                <button class="slide-item active" data-slide="0">
+                    <span class="si-num">1</span>
+                    <span class="si-title">Title</span>
+                </button>
+                <button class="slide-item" data-slide="1">
+                    <span class="si-num">2</span>
+                    <span class="si-title">What is GraphQL?</span>
+                </button>
+                <button class="slide-item" data-slide="2">
+                    <span class="si-num">3</span>
+                    <span class="si-title">How it Works</span>
+                </button>
+                <button class="slide-item" data-slide="3">
+                    <span class="si-num">4</span>
+                    <span class="si-title">Over-fetching</span>
+                </button>
+                <button class="slide-item" data-slide="4">
+                    <span class="si-num">5</span>
+                    <span class="si-title">Under-fetching</span>
+                </button>
+                <button class="slide-item" data-slide="5">
+                    <span class="si-num">6</span>
+                    <span class="si-title">Multiple Endpoints</span>
+                </button>
+                <button class="slide-item" data-slide="6">
+                    <span class="si-num">7</span>
+                    <span class="si-title">Schema &amp; Types</span>
+                </button>
+                <button class="slide-item" data-slide="7">
+                    <span class="si-num">7</span>
+                    <span class="si-title">N+1 Problem</span>
+                </button>
+                <button class="slide-item" data-slide="8">
+                    <span class="si-num">9</span>
+                    <span class="si-title">Schema Federation</span>
+                </button>
+                <button class="slide-item" data-slide="9">
+                    <span class="si-num">10</span>
+                    <span class="si-title">Show me the Code</span>
+                </button>
+                <button class="slide-item" data-slide="10">
+                    <span class="si-num">11</span>
+                    <span class="si-title">Try it Yourself</span>
+                </button>
+            </div>
+        </div> <!-- End Left Column -->
 
-    <!-- Right Column: Speaker Notes -->
-    <div class="remote-right-col" id="notes-panel">
-        <div class="notes-header">
-            <span class="notes-icon">📝</span>
-            <h2>Speaker Notes</h2>
-        </div>
-        <div class="notes-step-indicator" id="notes-step-status">Slide 0 - Step 0</div>
-        <div class="notes-content" id="notes-text">
-            Loading notes...
-        </div>
-    </div> <!-- End Right Column -->
-</div> <!-- End remote-app -->
+        <!-- Right Column: Speaker Notes -->
+        <div class="remote-right-col" id="notes-panel">
+            <div class="notes-header">
+                <span class="notes-icon">📝</span>
+                <h2>Speaker Notes</h2>
+            </div>
+            <div class="notes-step-indicator" id="notes-step-status">Slide 0 - Step 0</div>
+            <div class="notes-content" id="notes-text">
+                Loading notes...
+            </div>
+        </div> <!-- End Right Column -->
+    </div> <!-- End remote-app -->
 
     <script type="module" src="/src/remote.js"></script>
 </body>
