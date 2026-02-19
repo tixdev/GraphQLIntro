@@ -14,8 +14,10 @@
 
 <body>
     <div id="remote-app">
-        <!-- Header -->
-        <header id="remote-header">
+        <!-- Left Column: Controls -->
+        <div class="remote-left-col">
+            <!-- Header -->
+            <header id="remote-header">
             <h1>🎮 Remote Control</h1>
             <div id="remote-connection" class="disconnected">
                 <span class="rc-dot"></span>
@@ -98,51 +100,64 @@
         <!-- Slide list -->
         <div class="slide-list" id="slide-list">
             <button class="slide-item active" data-slide="0">
-                <span class="si-num">1</span>
+                <span class="si-num">0</span>
                 <span class="si-title">Title</span>
             </button>
             <button class="slide-item" data-slide="1">
-                <span class="si-num">2</span>
+                <span class="si-num">1</span>
                 <span class="si-title">What is GraphQL?</span>
             </button>
             <button class="slide-item" data-slide="2">
-                <span class="si-num">3</span>
+                <span class="si-num">2</span>
                 <span class="si-title">How it Works</span>
             </button>
             <button class="slide-item" data-slide="3">
-                <span class="si-num">4</span>
+                <span class="si-num">3</span>
                 <span class="si-title">Over-fetching</span>
             </button>
             <button class="slide-item" data-slide="4">
-                <span class="si-num">5</span>
+                <span class="si-num">4</span>
                 <span class="si-title">Under-fetching</span>
             </button>
             <button class="slide-item" data-slide="5">
-                <span class="si-num">6</span>
+                <span class="si-num">5</span>
                 <span class="si-title">Multiple Endpoints</span>
             </button>
             <button class="slide-item" data-slide="6">
-                <span class="si-num">7</span>
+                <span class="si-num">6</span>
                 <span class="si-title">Advantages</span>
             </button>
             <button class="slide-item" data-slide="7">
-                <span class="si-num">8</span>
+                <span class="si-num">7</span>
                 <span class="si-title">N+1 Problem</span>
             </button>
             <button class="slide-item" data-slide="8">
-                <span class="si-num">9</span>
+                <span class="si-num">8</span>
                 <span class="si-title">Federation</span>
             </button>
             <button class="slide-item" data-slide="9">
-                <span class="si-num">10</span>
+                <span class="si-num">9</span>
                 <span class="si-title">Live Demo</span>
             </button>
             <button class="slide-item" data-slide="10">
-                <span class="si-num">11</span>
+                <span class="si-num">10</span>
                 <span class="si-title">Try It!</span>
             </button>
         </div>
-    </div>
+    </div> <!-- End Left Column -->
+
+    <!-- Right Column: Speaker Notes -->
+    <div class="remote-right-col" id="notes-panel">
+        <div class="notes-header">
+            <span class="notes-icon">📝</span>
+            <h2>Speaker Notes</h2>
+        </div>
+        <div class="notes-step-indicator" id="notes-step-status">Slide 0 - Step 0</div>
+        <div class="notes-content" id="notes-text">
+            Loading notes...
+        </div>
+    </div> <!-- End Right Column -->
+</div> <!-- End remote-app -->
 
     <script type="module" src="/src/remote.js"></script>
 </body>

@@ -11,10 +11,91 @@ const btnNext = document.getElementById('btn-next');
 const connectionEl = document.getElementById('remote-connection');
 const slideItems = document.querySelectorAll('.slide-item');
 const audienceCountEl = document.getElementById('audience-count');
+const notesTextEl = document.getElementById('notes-text');
+const notesStatusEl = document.getElementById('notes-step-status');
 
 // Slide steps configuration (must match index.html data-steps)
 const SLIDE_STEPS = [2, 3, 3, 3, 3, 2, 6, 3, 3, 1, 1]; // steps per slide
 const TOTAL_SLIDES = SLIDE_STEPS.length;
+
+// Italian Speaker Notes Data
+const SPEAKER_NOTES = [
+    // Slide 0
+    [
+        "Benvenuti ragazzi, vi propongo un breve tuffo in GraphQL, un approccio alternativo al REST che stiamo valutando per le nostre API. Vedremo come può aiutarci a sciogliere alcuni nodi di integrazione e ridurre le latenze tra i nostri servizi di backend, tenendo presente anche gli indubbi vantaggi lato frontend.",
+        "Iniziamo dal lato client. A sinistra c'è un esempio di 'Query': chi consuma l'API definisce con esattezza l'albero e i campi di cui ha bisogno per la sua vista.",
+        "Sotto c'è il lato server: lo 'Schema'. È il contratto strongly-typed che mettiamo a disposizione, così chiunque ci chiami sa a priori quali entità e relazioni può leggere."
+    ],
+    // Slide 1
+    [
+        "Entrando più nel dettaglio, diamo una definizione formale. GraphQL non è una semplice libreria, ma un vero e proprio linguaggio di interrogazione strutturato per le API, accompagnato dal relativo motore di esecuzione a runtime.",
+        "La genesi è interessante: nasce in Facebook nel 2012 per risolvere precise inefficienze legate al traffico dati. Con il classico approccio REST, per popolare un'interfaccia complessa erano costretti o a scaricare mastodontici documenti JSON pieni di dati inutili al momento, o a subire spaventose latenze a causa di multiple chiamate HTTP in cascata (il famoso waterfall). Serviva un paradigma che invertisse il controllo: a prescindere dal tipo di client, che sia una SPA desktop o un crontask backend, doveva poter richiedere un aggregato esatto con una singola istruzione.",
+        "Il risultato strategico è proprio questo: il servizio chiamante richiede un subset preciso di dati, e riceve in risposta una proiezione esatta. Nessun kilobyte viene serializzato e inviato per errore.",
+        "Sgomberiamo subito il campo da un malinteso comune: non è un database a grafo o un ORM. Si tratta esclusivamente di un livello logico di trasporto e validazione interposto tra chi chiede il dato e chi lo produce."
+    ],
+    // Slide 2
+    [
+        "Scendiamo ora nell'architettura. Come prende vita questa magia? Si basa interamente sull'interazione tra tre componenti core.",
+        "1. Al centro di tutto c'è lo Schema: è il vocabolario dati condiviso aziendale che modella tipi, enum e relazioni complesse in modo esplicito.",
+        "2. La Query: ogni client o worker formula le proprie richieste usando rigorosamente quel vocabolario. Il parser GraphQL respingerà istantaneamente qualsiasi richiesta non conforme.",
+        "3. I Resolvers: qui passiamo al calcolo effettivo. Sono funzioni dedicate al recupero fisico del singolo campo, che avvenga tramite query a un SQL Server locale, una get Redis, o chiamando via gRPC un altro microservizio."
+    ],
+    // Slide 3
+    [
+        "Questa flessibilità architetturale ci permette di superare due grandi antipattern propri dell'integrazione REST. Il primo, di cui siamo tutti colpevoli, è l'Over-fetching.",
+        "Immaginate lo scenario tipico: al nostro worker serve solo conoscere lo stato di pagamento di un utente. L'endpoint REST /users/123 però ci scarica un intero documento JSON anagrafico da decine di KB.",
+        "Con GraphQL, la request esprime solo il nodo 'status'. La risposta del server sarà microscopica, magari inferiore a 300 byte.",
+        "Se moltiplicate questo risparmio per migliaia di messaggi generati tra i nostri cluster interni, capite subito come il carico sulla CPU per la serializzazione/deserializzazione e l'uso di banda crollino drasticamente."
+    ],
+    // Slide 4
+    [
+        "Il problema diametralmente opposto è l'Under-fetching, il male oscuro che emerge quando cerchiamo di alleggerire REST iper-frammentando gli endpoint.",
+        "Considerate un batch job: recupera gli ordini (/orders), estrae i customer ID, fa una chiamata a /customers e infine cerca le anagrafiche prodotto in /products. È il famigerato N+1 HTTP, un waterfall fatale per le latenze.",
+        "Grazie all'attraversamento del grafo di GraphQL, il job invia una singola request massiva che specifica le join necessarie tra ordini, utenti e prodotti, delegando al motore GraphQL l'aggancio logico.",
+        "Questo colpo di spugna elimina i roundtrip di rete sequenziali. Il backend riceve tutto subito, e può persino parallelizzare i resolvers a livello di I/O."
+    ],
+    // Slide 5
+    [
+        "Tirando le somme di queste inefficienze classiche, arriviamo al problema di governance: i famosi 'endpoint ad hoc'.",
+        "Oggi un frontend o un partner team ci chiede un aggregato specifico. Domani ne serve un altro, e noi continuiamo a deployare e manutenere dozzine di interfacce REST fragili.",
+        "L'hub GraphQL è invece un paradigma monolitico dal punto di vista dell'accesso: esponiamo un unico endpoint astratto e flessibile. Sta al consumo determinare organicamente la forma del JSON restituito."
+    ],
+    // Slide 6
+    [
+        "Facendo un punto della situazione su ciò che ci portiamo a casa implementandolo:",
+        "Efficienza netta: le comunicazioni trasferiscono payload ottimizzati, azzerando le informazioni superflue.",
+        "Performance in latenza riducendo l'overhead dovuto alle connessioni TCP e handshake ripetuti.",
+        "Developer Experience eccellente: lo Schema è autodescrittivo, e tramite interfaccia (come Banana Cake Pop) abbiamo type ahead per navigare l'API intuitivamente.",
+        "Disaccoppiamento quasi assoluto: chi invoca i dati vive un ciclo di sviluppo svincolato dalle release backend, decidendo in autonomia quali dati consumare.",
+        "Type Safety by design: le strutture opzionali o non nullable garantiscono integrità formale prima dell'avvio della transazione.",
+        "Versioning morbido: si possono espandere e deprecare porzioni di schema informando dinamicamente i client, mettendo fine ai break derivanti dalle v1, v2, v3."
+    ],
+    // Slide 7
+    [
+        "Siamo di fronte a un silver bullet? Certamente no. Con la complessità arbitraria della Query lato client, il rischio si sposta violentemente sul Database.",
+        "Se iteriamo una lista di utenti chiedendone in innesto gli ultimi ordini, un set passivo di resolvers genererà una singola query sull'entità root e decine o centinaia di sub-query singole (il famelico N+1 DB).",
+        "Ci viene in salvataggio un potente middleware pattern: il DataLoader. Agisce come un buffer temporale, collezionando le chiavi invocate senza procedere istantaneamente all'I/O.",
+        "Non appena il branch logico si dirama, DataLoader attua il dispatch iniettando una sola macro-interrogazione batchata (WHERE IN). Passare da 101 query a 2 è la chiave di volta prestazionale."
+    ],
+    // Slide 8
+    [
+        "Arriviamo all'ultima grande sfida architetturale. L'ambiente in cui lavoriamo noi è a microservizi. E GraphQL suona tanto come un collo di bottiglia centralizzato, no? Qui entra la Federation.",
+        "Costruiamo una facciata unificata, un Gateway router che riceve tutto il traffico, senza ospitare alcuna logica di tracciamento dati.",
+        "Parallelamente, ogni dominio (il team ordini, il team billing) proietta in upstream il proprio GraphQL ristretto (Subgraph). Il gateway lo cuce con gli altri a runtime operando un 'supergrafo' coerente per chi sta a monte.",
+        "L'industria offre ecosistemi robusti. Apollo è lo standard per NodeJS, ma considerando la nostra base .NET, possiamo fare grande affidamento su Hot Chocolate Fusion per risultati eccellenti."
+    ],
+    // Slide 9
+    [
+        "A questo punto stacchiamo dalla teoria. Concedetemi un attimo e passiamo alla verifica sul campo.",
+        "Attraverso quest'interfaccia simuleremo delle transazioni reali ai nostri nodi e guarderemo come risponde il motore alle nostre mutazioni."
+    ],
+    // Slide 10
+    [
+        "Ma in realtà queste cose rendono solo se mettete le mani in pasta. Per farvi un'idea pratica,",
+        "il server di dev è in esecuzione all'indirizzo che vedete in homepage. Giocateci, c'è una lista di casi d'uso copiosa a destra, provateli e analizzatene le reazioni termiche sulla console."
+    ]
+];
+// SLIDE_STEPS configuration and TOTAL_SLIDES are already defined above
 
 let currentSlide = 0;
 let currentStep = 0;
@@ -148,6 +229,16 @@ function updateUI() {
             item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
     });
+
+    // Update Speaker Notes
+    if (notesTextEl && notesStatusEl) {
+        notesStatusEl.textContent = `Slide ${currentSlide + 1} — Step ${currentStep}`;
+        if (SPEAKER_NOTES[currentSlide] && SPEAKER_NOTES[currentSlide][currentStep]) {
+            notesTextEl.textContent = SPEAKER_NOTES[currentSlide][currentStep];
+        } else {
+            notesTextEl.textContent = "No notes for this step.";
+        }
+    }
 }
 
 // Event Listeners
