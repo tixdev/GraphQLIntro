@@ -13,6 +13,8 @@ const slideItems = document.querySelectorAll('.slide-item');
 const audienceCountEl = document.getElementById('audience-count');
 const notesTextEl = document.getElementById('notes-text');
 const notesStatusEl = document.getElementById('notes-step-status');
+const audienceStatsPanel = document.getElementById('audience-stats-panel');
+const audienceStatsList = document.getElementById('audience-stats-list');
 
 // Slide steps configuration (must match index.html data-steps)
 const SLIDE_STEPS = [2, 3, 3, 3, 3, 2, 6, 3, 3, 1, 1]; // steps per slide
@@ -100,6 +102,7 @@ const SPEAKER_NOTES = [
 let currentSlide = 0;
 let currentStep = 0;
 let ws = null;
+let latestClientQueries = {};
 
 slideTotal.textContent = TOTAL_SLIDES;
 
@@ -141,6 +144,10 @@ function connect() {
             if (data.audienceCount !== undefined) {
                 audienceCountEl.textContent = data.audienceCount;
             }
+            if (data.clientQueries) {
+                latestClientQueries = data.clientQueries;
+                renderQueryStats();
+            }
             updateUI();
         }
 
@@ -153,7 +160,37 @@ function connect() {
             currentStep = data.step;
             updateUI();
         }
+
+        if (data.type === 'query-stats') {
+            latestClientQueries = data.stats;
+            renderQueryStats();
+        }
     };
+}
+
+function renderQueryStats() {
+    if (!audienceStatsList) return;
+
+    const clients = Object.keys(latestClientQueries);
+    if (clients.length === 0) {
+        audienceStatsList.innerHTML = '<div class="stats-empty">No queries executed yet.</div>';
+        return;
+    }
+
+    // Sort by count descending
+    clients.sort((a, b) => latestClientQueries[b] - latestClientQueries[a]);
+
+    audienceStatsList.innerHTML = clients.map(clientId => `
+        <div class="stat-item updated">
+            <span class="stat-client">${clientId}</span>
+            <span class="stat-count">${latestClientQueries[clientId]}</span>
+        </div>
+    `).join('');
+
+    // Remove highlight class after animation
+    setTimeout(() => {
+        audienceStatsList.querySelectorAll('.stat-item').forEach(el => el.classList.remove('updated'));
+    }, 500);
 }
 
 // ============================================
@@ -237,6 +274,13 @@ function updateUI() {
             notesTextEl.textContent = SPEAKER_NOTES[currentSlide][currentStep];
         } else {
             notesTextEl.textContent = "No notes for this step.";
+        }
+    }
+    // Show stats panel only on the last slide "Try It Yourself" (index 10)
+    if (audienceStatsPanel) {
+        audienceStatsPanel.style.display = currentSlide === 10 ? 'block' : 'none';
+        if (currentSlide === 10) {
+            renderQueryStats(); // Force re-render incase panel was hidden
         }
     }
 }

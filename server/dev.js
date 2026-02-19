@@ -35,6 +35,7 @@ async function start() {
 
     const audiences = new Set();
     const presenters = new Set();
+    const clientQueries = {}; // { clientId: count }
 
     // WebSocket server integrated with Vite server
     const wss = new WebSocketServer({ noServer: true });
@@ -61,13 +62,22 @@ async function start() {
         broadcast(data, presenters);
     }
 
+    function getUniqueAudienceCount() {
+        const uniqueClients = new Set();
+        for (const ws of audiences) {
+            if (ws.clientId) uniqueClients.add(ws.clientId);
+        }
+        return uniqueClients.size;
+    }
+
     function broadcastAudienceCount() {
-        broadcastAll({ type: 'audience-count', count: audiences.size });
+        broadcastAll({ type: 'audience-count', count: getUniqueAudienceCount() });
     }
 
     wss.on('connection', (ws, req) => {
         const url = new URL(req.url, `http://${req.headers.host}`);
         const role = url.searchParams.get('role');
+        const clientId = url.searchParams.get('clientId');
 
         if (role === 'presenter') {
             presenters.add(ws);
@@ -77,15 +87,17 @@ async function start() {
                 step: currentStep,
                 totalSlides,
                 slideSteps,
-                audienceCount: audiences.size,
+                audienceCount: getUniqueAudienceCount(),
+                clientQueries
             }));
         } else {
+            ws.clientId = clientId || Math.random().toString(36).substring(2); // fallback for untracked
             audiences.add(ws);
             ws.send(JSON.stringify({
                 type: 'init',
                 slide: currentSlide,
                 step: currentStep,
-                audienceCount: audiences.size,
+                audienceCount: getUniqueAudienceCount(),
             }));
             broadcastAudienceCount();
         }
@@ -131,6 +143,14 @@ async function start() {
                             variables,
                             result: { errors: [{ message: 'Failed to connect to GraphQL server: ' + err.message }] }
                         });
+                    }
+                }
+
+                if (data.type === 'audience-query-exec') {
+                    const cid = data.clientId;
+                    if (cid) {
+                        clientQueries[cid] = (clientQueries[cid] || 0) + 1;
+                        broadcast({ type: 'query-stats', stats: clientQueries }, presenters);
                     }
                 }
             } catch (e) {

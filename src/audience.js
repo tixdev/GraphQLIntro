@@ -28,7 +28,14 @@ totalSlideNum.textContent = slides.length;
 function connect() {
     const protocol = location.protocol === 'https:' ? 'wss' : 'ws';
     const host = location.host; // includes port
-    ws = new WebSocket(`${protocol}://${host}/ws?role=audience`);
+
+    let clientId = localStorage.getItem('graphql_demo_client_id');
+    if (!clientId) {
+        clientId = Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+        localStorage.setItem('graphql_demo_client_id', clientId);
+    }
+
+    ws = new WebSocket(`${protocol}://${host}/ws?role=audience&clientId=${clientId}`);
 
     ws.onopen = () => {
         connectionStatus.className = 'connected';
@@ -141,6 +148,12 @@ if (tryRunBtn) {
 
         const query = jar ? jar.toString() : tryInput.textContent;
         tryResult.innerHTML = '<span class="cmt">// Loading...</span>';
+
+        // Notify server that a query was executed by this client
+        const clientId = localStorage.getItem('graphql_demo_client_id');
+        if (ws && ws.readyState === 1 && clientId) {
+            ws.send(JSON.stringify({ type: 'audience-query-exec', clientId }));
+        }
 
         try {
             const response = await fetch('/graphql', {

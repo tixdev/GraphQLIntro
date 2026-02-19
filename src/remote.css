@@ -40,7 +40,8 @@ body {
     display: flex;
     flex-direction: column;
     height: 100%;
-    max-width: 100%; /* Changed to support the side panel */
+    max-width: 100%;
+    /* Changed to support the side panel */
     margin: 0 auto;
     padding: 1rem;
     gap: 0.8rem;
@@ -53,7 +54,7 @@ body {
         gap: 2rem;
         padding: 2rem;
     }
-    
+
     .remote-left-col {
         flex: 1;
         max-width: 480px;
@@ -84,7 +85,7 @@ body {
         gap: 0.8rem;
         flex: 1;
     }
-    
+
     .remote-right-col {
         background: var(--bg-card);
         border: 1px solid var(--border);
@@ -413,4 +414,72 @@ body {
 
 .action-btn:active {
     transform: scale(0.98);
+}
+
+/* ============================================
+   Audience Query Stats Panel
+   ============================================ */
+
+#audience-stats-panel {
+    margin-top: 0.5rem;
+    border: 1px solid var(--border);
+    background: rgba(20, 20, 40, 0.5);
+}
+
+.stats-header {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-dim);
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.stats-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.stats-empty {
+    font-size: 0.9rem;
+    color: var(--text-dim);
+    text-align: center;
+    padding: 1rem 0;
+    font-style: italic;
+}
+
+.stat-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 0.5rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    border: 1px solid transparent;
+    transition: all 0.2s ease;
+}
+
+.stat-item.updated {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.4);
+}
+
+.stat-client {
+    font-family: monospace;
+    color: var(--text);
+}
+
+.stat-count {
+    font-weight: 700;
+    color: var(--green);
+    background: rgba(16, 185, 129, 0.15);
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
 }
