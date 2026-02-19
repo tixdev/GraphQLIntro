@@ -31,14 +31,14 @@ const SPEAKER_NOTES = [
         "Entrando più nel dettaglio, diamo una definizione formale. GraphQL non è una semplice libreria, ma un vero e proprio linguaggio di interrogazione strutturato per le API, accompagnato dal relativo motore di esecuzione a runtime.",
         "La genesi è interessante: nasce in Facebook nel 2012 per risolvere precise inefficienze legate al traffico dati. Con il classico approccio REST, per popolare un'interfaccia complessa erano costretti o a scaricare mastodontici documenti JSON pieni di dati inutili al momento, o a subire spaventose latenze a causa di multiple chiamate HTTP in cascata (il famoso waterfall). Serviva un paradigma che invertisse il controllo: a prescindere dal tipo di client, che sia una SPA desktop o un crontask backend, doveva poter richiedere un aggregato esatto con una singola istruzione.",
         "Il risultato strategico è proprio questo: il servizio chiamante richiede un subset preciso di dati, e riceve in risposta una proiezione esatta. Nessun kilobyte viene serializzato e inviato per errore.",
-        "Sgomberiamo subito il campo da un malinteso comune: non è un database a grafo o un ORM. Si tratta esclusivamente di un livello logico di trasporto e validazione interposto tra chi chiede il dato e chi lo produce."
+        "Sgomberiamo subito il campo da un malinteso comune, chiarendo cosa NON è GraphQL. Non è un database a grafo, non sostituisce il vostro SQL o NoSQL. Non è un ORM magico che scrive query per voi, e non è un layer di logica di business. Si tratta esclusivamente di un livello logico di trasporto e validazione formale, che delega ai servizi sottostanti l'onere del calcolo e del recupero dei dati."
     ],
     // Slide 2
     [
-        "Scendiamo ora nell'architettura. Come prende vita questa magia? Si basa interamente sull'interazione tra tre componenti core.",
-        "1. Al centro di tutto c'è lo Schema: è il vocabolario dati condiviso aziendale che modella tipi, enum e relazioni complesse in modo esplicito.",
+        "Scendiamo ora nell'architettura. Come funziona a livello operativo? Si basa interamente sull'interazione tra tre componenti core.",
+        "1. Partendo dal riquadro di sinistra, abbiamo lo Schema. È il contratto formale su cui si regge l'intera integrazione: dichiara preventivamente entità, campi e relazioni, garantendo a chi consuma l'API una struttura dati fortemente tipizzata e sicura.",
         "2. La Query: ogni client o worker formula le proprie richieste usando rigorosamente quel vocabolario. Il parser GraphQL respingerà istantaneamente qualsiasi richiesta non conforme.",
-        "3. I Resolvers: qui passiamo al calcolo effettivo. Sono funzioni dedicate al recupero fisico del singolo campo, che avvenga tramite query a un SQL Server locale, una get Redis, o chiamando via gRPC un altro microservizio."
+        "3. I Resolvers: qui passiamo al calcolo effettivo. Sono funzioni dedicate al recupero fisico del singolo campo, che avvenga tramite query a un SQL Server locale, o un'integrazione REST / gRPC verso altri microservizi aziendali."
     ],
     // Slide 3
     [

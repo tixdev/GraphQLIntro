@@ -90,10 +90,10 @@
                         nothing more, nothing less.</p>
                     <pre
                         class="code-block code-block-compact"><code><span class="cmt">// Client asks for exactly what it needs</span>
-{ <span class="fn">user</span>(<span class="arg">id</span>: <span class="num">1</span>) { name, email } }
+{ <span class="fn">person</span>(<span class="arg">id</span>: <span class="str">"1"</span>) { name, relationship { number } } }
 
 <span class="cmt">// Server returns exactly that</span>
-{ <span class="str">"user"</span>: { <span class="str">"name"</span>: <span class="str">"Alice"</span>, <span class="str">"email"</span>: <span class="str">"a@b.com"</span> } }</code></pre>
+{ <span class="str">"person"</span>: { <span class="str">"name"</span>: <span class="str">"Alice"</span>, <span class="str">"relationship"</span>: [ { <span class="str">"number"</span>: <span class="num">123456</span> } ] } }</code></pre>
                 </div>
                 <div class="info-card" data-step="3">
                     <div class="info-icon">🚫</div>
