@@ -57,7 +57,7 @@ const SPEAKER_NOTES = [
     // Slide 5
     [
         "Tirando le somme di queste inefficienze classiche, arriviamo al problema di governance: i famosi 'endpoint ad hoc'.",
-        "Oggi un frontend o un partner team ci chiede un aggregato specifico. Domani ne serve un altro, e noi continuiamo a deployare e manutenere dozzine di interfacce REST fragili.",
+        "Oggi un client o un partner team ci chiede un aggregato specifico. Domani ne serve un altro, e noi continuiamo a deployare e manutenere dozzine di interfacce REST fragili.",
         "L'hub GraphQL è invece un paradigma monolitico dal punto di vista dell'accesso: esponiamo un unico endpoint astratto e flessibile. Sta al consumo determinare organicamente la forma del JSON restituito."
     ],
     // Slide 6

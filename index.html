@@ -389,16 +389,17 @@
                         <span class="panel-title">REST API</span>
                     </div>
                     <div class="endpoints-list">
-                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products</div>
-                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/:id</div>
-                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/search</div>
-                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/autocomplete</div>
-                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/:id/reviews</div>
-                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/:id/inventory</div>
-                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/:id/pricing</div>
-                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/trending</div>
-                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/products/recommendations
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/persons</div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/persons/:id</div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/persons/search</div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/persons/autocomplete</div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/persons/:id/relationships
                         </div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/relationships/:id/assets
+                        </div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/assets/:id/balances</div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/persons/trending</div>
+                        <div class="endpoint-item"><span class="ep-method">GET</span> /api/persons/recommendations</div>
                         <div class="endpoint-item endpoint-more">// ... 150+ more endpoints</div>
                     </div>
                     <div class="verdict verdict-bad">
@@ -417,19 +418,19 @@
 <span class="cmt">// Clients compose queries:</span>
 
 <span class="kw">query</span> <span class="fn">Autocomplete</span> {
-  <span class="fn">products</span> { id, name }
+  <span class="fn">person</span> { nodes { id, name } }
 }
 
 <span class="kw">query</span> <span class="fn">DetailPage</span> {
-  <span class="fn">product</span>(<span class="arg">id</span>: <span class="num">123</span>) {
-    name, description, price
-    <span class="fn">reviews</span> { rating, text }
-    <span class="fn">inventory</span> { available }
+  <span class="fn">person</span>(<span class="arg">id</span>: <span class="num">123</span>) {
+    name, metadata { created }
+    <span class="fn">relationship</span> { type }
+    <span class="fn">audit</span> { lastLogin }
   }
 }
 
 <span class="kw">query</span> <span class="fn">Dashboard</span> {
-  <span class="fn">trending</span> { id, name, sales }
+  <span class="fn">trending</span> { id, name, lastActive }
   <span class="fn">recommendations</span> { id, name }
 }</code></pre>
                     <div class="verdict verdict-good">
