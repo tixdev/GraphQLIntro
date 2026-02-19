@@ -45,7 +45,7 @@ const SPEAKER_NOTES = [
         "Questa flessibilità architetturale ci permette di superare due grandi antipattern propri dell'integrazione REST. Il primo, di cui siamo tutti colpevoli, è l'Over-fetching.",
         "Immaginate lo scenario tipico: al client serve mostrare in UI solo il nome della persona e una lista testuale sintetica delle sue relazioni. L'endpoint REST `/api/persons/search` però ci scarica un mastodontico array JSON in cui ogni persona porta con sé anche tutti gli array espansi metadata, assets e balances.",
         "Con GraphQL, la request modella esattamente e unicamente questa esigenza: chiediamo il nodo 'name' e il numero identificativo delle sue 'relationships', scartando del tutto i pesanti metadata, assets e balances. La risposta del server sarà mirata, con un payload irrisorio.",
-        "Se moltiplicate questo risparmio per migliaia di messaggi generati tra i nostri cluster interni, capite subito come il carico sulla CPU per la serializzazione/deserializzazione e l'uso di banda crollino drasticamente."
+        "Se moltiplicate questo risparmio per migliaia di messaggi generati tra i nostri cluster interni, capite subito come l'uso di banda e il carico CPU per la serializzazione crollino drasticamente. Senza contare che, nel primo scenario REST, il backend avrebbe effettuato una quantità drammatica di costosi roundtrip verso il Database per recuperare tutti quegli array relazionali inutilizzati."
     ],
     // Slide 4
     [
