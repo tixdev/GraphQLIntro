@@ -87,7 +87,7 @@ const SPEAKER_NOTES = [
     // Slide 9
     [
         "A questo punto stacchiamo dalla teoria. Concedetemi un attimo e passiamo alla verifica sul campo.",
-        "Attraverso quest'interfaccia simuleremo delle transazioni reali ai nostri nodi e guarderemo come risponde il motore alle nostre mutazioni."
+        "Attraverso quest'interfaccia simuleremo delle transazioni reali ai nostri nodi e guarderemo come risponde il motore alle nostre richieste di lettura.",
     ],
     // Slide 10
     [
