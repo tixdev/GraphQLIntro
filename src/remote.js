@@ -58,24 +58,24 @@ const SPEAKER_NOTES = [
     [
         "Tirando le somme di queste inefficienze classiche, arriviamo al problema di governance: i famosi 'endpoint ad hoc'.",
         "Oggi un client o un partner team ci chiede un aggregato specifico. Domani ne serve un altro, e noi continuiamo a deployare e manutenere dozzine di interfacce REST fragili.",
-        "L'hub GraphQL è invece un paradigma monolitico dal punto di vista dell'accesso: esponiamo un unico endpoint astratto e flessibile. Sta al consumo determinare organicamente la forma del JSON restituito."
+        "GraphQL azzera questa operatività offrendo un singolo punto d'accesso universale. Ribaltiamo la responsabilità: è chi consuma le API a definire dinamicamente, tramite la propria query, l'esatta struttura dati di cui ha bisogno, e lo fa in modo strettamente tipizzato."
     ],
     // Slide 6
     [
         "Facendo un punto della situazione su ciò che ci portiamo a casa implementandolo:",
         "Efficienza netta: le comunicazioni trasferiscono payload ottimizzati, azzerando le informazioni superflue.",
         "Performance in latenza riducendo l'overhead dovuto alle connessioni TCP e handshake ripetuti.",
-        "Developer Experience eccellente: lo Schema è autodescrittivo, e tramite interfaccia (come Banana Cake Pop) abbiamo type ahead per navigare l'API intuitivamente.",
+        "Developer Experience eccellente: lo Schema è autodescrittivo, e tramite interfaccia (come Nitro) abbiamo type ahead per navigare l'API intuitivamente.",
         "Disaccoppiamento quasi assoluto: chi invoca i dati vive un ciclo di sviluppo svincolato dalle release backend, decidendo in autonomia quali dati consumare.",
         "Type Safety by design: le strutture opzionali o non nullable garantiscono integrità formale prima dell'avvio della transazione.",
         "Versioning morbido: si possono espandere e deprecare porzioni di schema informando dinamicamente i client, mettendo fine ai break derivanti dalle v1, v2, v3."
     ],
     // Slide 7
     [
-        "Siamo di fronte a un silver bullet? Certamente no. Con la complessità arbitraria della Query lato client, il rischio si sposta violentemente sul Database.",
-        "Se iteriamo una lista di utenti chiedendone in innesto gli ultimi ordini, un set passivo di resolvers genererà una singola query sull'entità root e decine o centinaia di sub-query singole (il famelico N+1 DB).",
+        "Siamo di fronte alla soluzione definitiva e priva di difetti? Certamente no. Con la complessità arbitraria della Query lato client, il rischio si sposta violentemente sul Database.",
+        "Se iteriamo una lista di 50 persone chiedendone in innesto le relative relazioni, un set passivo di resolvers genererà una singola query sull'entità root e 50 sub-query in loop (il famelico N+1 DB).",
         "Ci viene in salvataggio un potente middleware pattern: il DataLoader. Agisce come un buffer temporale, collezionando le chiavi invocate senza procedere istantaneamente all'I/O.",
-        "Non appena il branch logico si dirama, DataLoader attua il dispatch iniettando una sola macro-interrogazione batchata (WHERE IN). Passare da 101 query a 2 è la chiave di volta prestazionale."
+        "Non appena il branch logico si dirama, DataLoader attua il dispatch iniettando una sola macro-interrogazione batchata (WHERE IN). Passare da 51 query a 2 è la chiave di volta prestazionale."
     ],
     // Slide 8
     [

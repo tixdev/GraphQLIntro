@@ -493,21 +493,23 @@
                     </div>
                     <pre class="code-block"><code><span class="cmt">// This innocent query...</span>
 {
-  <span class="fn">users</span> {
-    name
-    <span class="fn">posts</span> { title }
+  <span class="fn">person</span>(first: 50) {
+    nodes {
+      name
+      <span class="fn">relationship</span> { type }
+    }
   }
 }
 
 <span class="cmt">// ...generates N+1 SQL queries:</span>
-<span class="str">SELECT * FROM users</span>          <span class="cmt">// 1 query</span>
-<span class="str">SELECT * FROM posts WHERE user_id=1</span> <span class="cmt">// +N</span>
-<span class="str">SELECT * FROM posts WHERE user_id=2</span>
-<span class="str">SELECT * FROM posts WHERE user_id=3</span>
-<span class="cmt">// ... one per user!</span></code></pre>
+<span class="str">SELECT * FROM person LIMIT 50</span>      <span class="cmt">// 1 query</span>
+<span class="str">SELECT * FROM rels WHERE p_id=1</span>    <span class="cmt">// +N</span>
+<span class="str">SELECT * FROM rels WHERE p_id=2</span>
+<span class="str">SELECT * FROM rels WHERE p_id=3</span>
+<span class="cmt">// ... one per person!</span></code></pre>
                     <div class="verdict verdict-bad">
                         <span class="verdict-icon">⚠️</span>
-                        <span>100 users = <strong>101 queries</strong> to the database</span>
+                        <span>50 persons = <strong>51 queries</strong> to the database</span>
                     </div>
                 </div>
 
@@ -518,28 +520,28 @@
                         <span class="panel-title">DataLoader Pattern</span>
                     </div>
                     <pre class="code-block"><code><span class="cmt">// HotChocolate DataLoader</span>
-<span class="kw">public class</span> <span class="type">PostsByUserLoader</span>
-  : <span class="type">BatchDataLoader</span>&lt;<span class="type">int</span>, <span class="type">Post</span>[]&gt;
+<span class="kw">public class</span> <span class="type">RelsByPersonLoader</span>
+  : <span class="type">BatchDataLoader</span>&lt;<span class="type">int</span>, <span class="type">Rel</span>[]&gt;
 {
   <span class="kw">protected override async</span> <span class="type">Task</span>
     <span class="fn">LoadBatchAsync</span>(
       <span class="type">IReadOnlyList</span>&lt;<span class="type">int</span>&gt; <span class="arg">keys</span>)
   {
-    <span class="cmt">// ONE query for ALL users:</span>
-    <span class="str">SELECT * FROM posts</span>
-    <span class="str">  WHERE user_id IN (1,2,3...)</span>
+    <span class="cmt">// ONE query for ALL persons:</span>
+    <span class="str">SELECT * FROM rels</span>
+    <span class="str">  WHERE p_id IN (1,2,3...)</span>
   }
 }</code></pre>
                     <div class="verdict verdict-good">
                         <span class="verdict-icon">✅</span>
-                        <span>100 users = <strong>2 queries</strong> (batched)</span>
+                        <span>50 persons = <strong>2 queries</strong> (batched)</span>
                     </div>
                 </div>
             </div>
 
             <div class="nplusone-summary" data-step="3">
                 <div class="npo-badge">
-                    <span class="npo-from">101</span>
+                    <span class="npo-from">51</span>
                     <span class="npo-arrow">→</span>
                     <span class="npo-to">2</span>
                 </div>
