@@ -50,9 +50,9 @@ const SPEAKER_NOTES = [
     // Slide 4
     [
         "Il problema diametralmente opposto è l'Under-fetching, il male oscuro che emerge quando cerchiamo di alleggerire REST iper-frammentando gli endpoint.",
-        "Considerate un batch job: recupera gli ordini (/orders), estrae i customer ID, fa una chiamata a /customers e infine cerca le anagrafiche prodotto in /products. È il famigerato N+1 HTTP, un waterfall fatale per le latenze.",
-        "Grazie all'attraversamento del grafo di GraphQL, il job invia una singola request massiva che specifica le join necessarie tra ordini, utenti e prodotti, delegando al motore GraphQL l'aggancio logico.",
-        "Questo colpo di spugna elimina i roundtrip di rete sequenziali. Il backend riceve tutto subito, e può persino parallelizzare i resolvers a livello di I/O."
+        "Considerate una dashboard: recupera l'anagrafica base (`/persons`), estrae l'ID, fa una chiamata a `/relationships`, poi usa quegli ID per caricare gli `/assets` e infine i loro `/balances`. È il famigerato N+1 HTTP, un waterfall fatale per le latenze.",
+        "Grazie all'attraversamento del grafo di GraphQL, il frontend invia una singola request massiva che specifica le join necessarie tra persona, relazioni e conti, in profondità, delegando al motore GraphQL l'aggancio logico.",
+        "Questo colpo di spugna elimina i roundtrip di rete sequenziali tra client e server. Il backend riceve la direttiva intera subito, e può persino parallelizzare i resolvers a livello di I/O."
     ],
     // Slide 5
     [

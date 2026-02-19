@@ -277,7 +277,7 @@
         <!-- SLIDE 2: Under-fetching -->
         <section class="slide slide-underfetch" data-steps="3">
             <h2 class="slide-heading">Problem #2: <span class="accent">Under-fetching</span></h2>
-            <p class="slide-subheading" data-step="0">Dashboard loads order details — multiple sequential requests
+            <p class="slide-subheading" data-step="0">Dashboard loads person details — multiple sequential requests
                 (waterfall)</p>
 
             <div class="comparison-grid">
@@ -289,42 +289,42 @@
                     </div>
                     <div class="waterfall-chart">
                         <div class="waterfall-row" data-delay="0">
-                            <span class="wf-label">orders/456</span>
+                            <span class="wf-label">persons/456</span>
                             <div class="wf-track">
                                 <div class="wf-bar wf-bar-rest" style="width:0%" data-width="14%"><span>120ms</span>
                                 </div>
                             </div>
                         </div>
                         <div class="waterfall-row" data-delay="1">
-                            <span class="wf-label">customers/789</span>
+                            <span class="wf-label">relationships?pId=456</span>
                             <div class="wf-track">
                                 <div class="wf-bar wf-bar-rest" style="width:0%" data-width="15%"><span>130ms</span>
                                 </div>
                             </div>
                         </div>
                         <div class="waterfall-row" data-delay="2">
-                            <span class="wf-label">products?ids=1,2,3</span>
+                            <span class="wf-label">assets?relIds=1,2</span>
                             <div class="wf-track">
                                 <div class="wf-bar wf-bar-rest" style="width:0%" data-width="16%"><span>140ms</span>
                                 </div>
                             </div>
                         </div>
                         <div class="waterfall-row" data-delay="3">
-                            <span class="wf-label">inventory?ids=1,2,3</span>
+                            <span class="wf-label">balances?assetIds=1,2</span>
                             <div class="wf-track">
                                 <div class="wf-bar wf-bar-rest" style="width:0%" data-width="14%"><span>125ms</span>
                                 </div>
                             </div>
                         </div>
                         <div class="waterfall-row" data-delay="4">
-                            <span class="wf-label">shipping/calc</span>
+                            <span class="wf-label">metadata/456</span>
                             <div class="wf-track">
                                 <div class="wf-bar wf-bar-rest" style="width:0%" data-width="16%"><span>135ms</span>
                                 </div>
                             </div>
                         </div>
                         <div class="waterfall-row" data-delay="5">
-                            <span class="wf-label">payments/456</span>
+                            <span class="wf-label">audit/456</span>
                             <div class="wf-track">
                                 <div class="wf-bar wf-bar-rest" style="width:0%" data-width="13%"><span>115ms</span>
                                 </div>
@@ -344,15 +344,13 @@
                         <span class="panel-title">GraphQL — Single Request</span>
                     </div>
                     <pre class="code-block code-block-compact"><code>{
-  <span class="fn">order</span>(<span class="arg">id</span>: <span class="num">456</span>) {
-    id, total
-    <span class="fn">customer</span> { name, email }
-    <span class="fn">items</span> {
-      <span class="fn">product</span> { name, price }
-      <span class="fn">inventory</span> { available }
+  <span class="fn">person</span>(<span class="arg">id</span>: <span class="num">456</span>) {
+    id, name
+    <span class="fn">metadata</span> { created }
+    <span class="fn">relationship</span> {
+      <span class="fn">asset</span> { name, <span class="fn">balance</span> { amount } }
     }
-    <span class="fn">shipping</span> { method, cost }
-    <span class="fn">payment</span> { status }
+    <span class="fn">audit</span> { lastLogin }
   }
 }</code></pre>
                     <div class="waterfall-chart waterfall-single">
