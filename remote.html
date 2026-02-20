@@ -14,50 +14,8 @@
 
 <body>
     <div id="remote-app">
-        <!-- Left Column: Controls -->
-        <div class="remote-left-col">
-            <!-- Header -->
-            <header id="remote-header">
-                <h1>🎮 Remote Control</h1>
-                <div id="remote-connection" class="disconnected">
-                    <span class="rc-dot"></span>
-                    <span class="rc-label">Disconnected</span>
-                </div>
-            </header>
-
-            <!-- Audience counter -->
-            <div id="audience-counter">
-                <span class="ac-icon">👥</span>
-                <span class="ac-label"><strong id="audience-count">0</strong> connected</span>
-            </div>
-
-            <!-- Current slide info -->
-            <div id="slide-info">
-                <span id="slide-indicator">Slide <strong id="slide-num">1</strong> / <strong
-                        id="slide-total">6</strong></span>
-                <span id="step-indicator">Step <strong id="step-num">0</strong> / <strong
-                        id="step-total">0</strong></span>
-            </div>
-
-            <!-- Navigation buttons -->
-            <div id="nav-controls">
-                <button id="btn-prev" class="nav-btn" aria-label="Previous">
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <polyline points="15 18 9 12 15 6"></polyline>
-                    </svg>
-                    <span>Prev</span>
-                </button>
-                <button id="btn-next" class="nav-btn nav-btn-primary" aria-label="Next">
-                    <span>Next</span>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
-                        stroke-linejoin="round">
-                        <polyline points="9 18 15 12 9 6"></polyline>
-                    </svg>
-                </button>
-            </div>
-
-            <!-- Live Demo Controls -->
+        <!-- Far Left Column: Live Demo -->
+        <div id="demo-controls-panel" class="remote-demo-col" style="display: none;">
             <div class="control-group demo-controls">
                 <h3>Live Demo</h3>
                 <textarea id="remote-query-input" class="remote-textarea">
@@ -99,9 +57,11 @@
                         10. Complex: Full Graph</option>
                 </select>
             </div>
+        </div>
 
-            <!-- Audience Query Stats (Visible only on Try It Yourself slide) -->
-            <div id="audience-stats-panel" class="control-group" style="display: none;">
+        <!-- Far Left Column: Audience Stats -->
+        <div id="audience-stats-panel" class="remote-demo-col" style="display: none;">
+            <div class="control-group">
                 <h3>Audience Activity</h3>
                 <div class="stats-header">
                     <span>Client ID</span>
@@ -110,6 +70,50 @@
                 <div id="audience-stats-list" class="stats-list">
                     <div class="stats-empty">No queries executed yet.</div>
                 </div>
+            </div>
+        </div>
+
+        <!-- Left Column: Controls -->
+        <div class="remote-left-col">
+            <!-- Header -->
+            <header id="remote-header">
+                <h1>🎮 Remote Control</h1>
+                <div id="remote-connection" class="disconnected">
+                    <span class="rc-dot"></span>
+                    <span class="rc-label">Disconnected</span>
+                </div>
+            </header>
+
+            <!-- Audience counter -->
+            <div id="audience-counter">
+                <span class="ac-icon">👥</span>
+                <span class="ac-label"><strong id="audience-count">0</strong> connected</span>
+            </div>
+
+            <!-- Current slide info -->
+            <div id="slide-info">
+                <span id="slide-indicator">Slide <strong id="slide-num">1</strong> / <strong
+                        id="slide-total">6</strong></span>
+                <span id="step-indicator">Step <strong id="step-num">0</strong> / <strong
+                        id="step-total">0</strong></span>
+            </div>
+
+            <!-- Navigation buttons -->
+            <div id="nav-controls">
+                <button id="btn-prev" class="nav-btn" aria-label="Previous">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polyline points="15 18 9 12 15 6"></polyline>
+                    </svg>
+                    <span>Prev</span>
+                </button>
+                <button id="btn-next" class="nav-btn nav-btn-primary" aria-label="Next">
+                    <span>Next</span>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <polyline points="9 18 15 12 9 6"></polyline>
+                    </svg>
+                </button>
             </div>
 
             <!-- Slide list -->

@@ -15,6 +15,7 @@ const notesTextEl = document.getElementById('notes-text');
 const notesStatusEl = document.getElementById('notes-step-status');
 const audienceStatsPanel = document.getElementById('audience-stats-panel');
 const audienceStatsList = document.getElementById('audience-stats-list');
+const demoControlsPanel = document.getElementById('demo-controls-panel');
 
 // Slide steps configuration (must match index.html data-steps)
 const SLIDE_STEPS = [2, 3, 3, 3, 3, 2, 6, 3, 3, 1, 1]; // steps per slide
@@ -278,10 +279,15 @@ function updateUI() {
     }
     // Show stats panel only on the last slide "Try It Yourself" (index 10)
     if (audienceStatsPanel) {
-        audienceStatsPanel.style.display = currentSlide === 10 ? 'block' : 'none';
+        audienceStatsPanel.style.display = currentSlide === 10 ? 'flex' : 'none';
         if (currentSlide === 10) {
             renderQueryStats(); // Force re-render incase panel was hidden
         }
+    }
+
+    // Show live demo controls only on "Show me the Code" slide (index 9)
+    if (demoControlsPanel) {
+        demoControlsPanel.style.display = currentSlide === 9 ? 'flex' : 'none';
     }
 }
 

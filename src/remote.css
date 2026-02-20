@@ -55,6 +55,20 @@ body {
         padding: 2rem;
     }
 
+    .remote-demo-col {
+        flex: 1;
+        max-width: 420px;
+        display: flex;
+        flex-direction: column;
+        gap: 0.8rem;
+        height: 100%;
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.5rem;
+        overflow-y: auto;
+    }
+
     .remote-left-col {
         flex: 1;
         max-width: 480px;
@@ -79,6 +93,15 @@ body {
 
 /* Fallback for mobile: standard column, notes at bottom */
 @media (max-width: 767px) {
+    .remote-demo-col {
+        background: var(--bg-card);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+        padding: 1.2rem;
+        margin-bottom: 1rem;
+        flex-shrink: 0;
+    }
+
     .remote-left-col {
         display: flex;
         flex-direction: column;
@@ -420,12 +443,6 @@ body {
    Audience Query Stats Panel
    ============================================ */
 
-#audience-stats-panel {
-    margin-top: 0.5rem;
-    border: 1px solid var(--border);
-    background: rgba(20, 20, 40, 0.5);
-}
-
 .stats-header {
     display: flex;
     justify-content: space-between;
@@ -442,7 +459,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    max-height: 200px;
+    flex: 1;
     overflow-y: auto;
 }
 
