@@ -1294,8 +1294,15 @@ body.cursor-visible {
     min-height: 200px;
 }
 
-.try-run-btn {
+.try-actions {
+    display: flex;
+    gap: 10px;
     margin-top: 10px;
+}
+
+.try-run-btn,
+.try-schema-btn {
+    flex: 1;
     padding: 10px;
     background: #e11d48;
     color: white;
@@ -1306,8 +1313,18 @@ body.cursor-visible {
     transition: background 0.2s;
 }
 
+.try-schema-btn {
+    background: var(--code-bg);
+    border: 1px solid var(--accent-graphql);
+    color: var(--text-primary);
+}
+
 .try-run-btn:hover {
     background: #be123c;
+}
+
+.try-schema-btn:hover {
+    background: rgba(229, 53, 171, 0.2);
 }
 
 .try-examples {
@@ -1600,4 +1617,88 @@ body.cursor-visible {
 
 .token.entity {
     cursor: help;
+}
+
+/* ============================================
+   Schema Modal
+   ============================================ */
+
+.schema-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.schema-modal.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.schema-modal-content {
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    border-radius: 12px;
+    width: 90%;
+    max-width: 800px;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    transform: scale(0.95);
+    transition: transform 0.3s var(--ease-out-expo);
+}
+
+.schema-modal.visible .schema-modal-content {
+    transform: scale(1);
+}
+
+.schema-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.schema-modal-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+}
+
+.schema-close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: color 0.2s ease;
+}
+
+.schema-close-btn:hover {
+    color: var(--accent-red);
+}
+
+.schema-modal-body {
+    padding: 1.5rem;
+    overflow-y: auto;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.85rem;
+}
+
+.schema-modal-body pre {
+    margin: 0;
+    white-space: pre-wrap;
+}
+
+.schema-modal-body code {
+    display: block;
 }

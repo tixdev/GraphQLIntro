@@ -88,9 +88,16 @@ function updateLiveDemo(query, result) {
 
 // Try It Slide Logic
 const tryRunBtn = document.getElementById('try-run-btn');
+const trySchemaBtn = document.getElementById('try-schema-btn');
 const tryInput = document.getElementById('try-input');
 const tryResult = document.getElementById('try-result');
 const tryExamples = document.getElementById('try-examples');
+
+const schemaModal = document.getElementById('schema-modal');
+const schemaCloseBtn = document.getElementById('schema-close-btn');
+const schemaContent = document.getElementById('schema-content');
+
+let cachedSchema = null;
 
 let jar;
 
@@ -165,6 +172,62 @@ if (tryRunBtn) {
             tryResult.innerHTML = highlightJSON(JSON.stringify(result, null, 2));
         } catch (err) {
             tryResult.innerHTML = highlightJSON(JSON.stringify({ error: err.message }, null, 2));
+        }
+    });
+}
+
+if (trySchemaBtn && schemaModal && schemaCloseBtn) {
+    trySchemaBtn.addEventListener('click', async (e) => {
+        e.stopPropagation();
+        schemaModal.classList.add('visible');
+
+        if (!cachedSchema) {
+            schemaContent.innerHTML = '<span class="cmt"># Fetching schema...</span>';
+            try {
+                const response = await fetch('/graphql?sdl');
+                const sdl = await response.text();
+
+                // Parse the SDL and sort the definitions to show meaningful objects first
+                const ast = parse(sdl);
+
+                const getSortWeight = (def) => {
+                    if (def.kind === 'SchemaDefinition') return 0;
+                    if (def.kind === 'ObjectTypeDefinition') {
+                        if (['Query', 'Mutation', 'Subscription'].includes(def.name.value)) return 1;
+                        if (!def.name.value.endsWith('Connection') &&
+                            !def.name.value.endsWith('Edge') &&
+                            def.name.value !== 'PageInfo') return 2;
+                        return 3;
+                    }
+                    if (def.kind === 'InputObjectTypeDefinition') return 4;
+                    if (def.kind === 'EnumTypeDefinition') return 5;
+                    return 6;
+                };
+
+                ast.definitions.sort((a, b) => {
+                    const weightA = getSortWeight(a);
+                    const weightB = getSortWeight(b);
+                    if (weightA !== weightB) return weightA - weightB;
+
+                    const nameA = a.name ? a.name.value : '';
+                    const nameB = b.name ? b.name.value : '';
+                    return nameA.localeCompare(nameB);
+                });
+
+                cachedSchema = print(ast);
+                schemaContent.innerHTML = Prism.highlight(cachedSchema, Prism.languages.graphql, 'graphql');
+            } catch (err) {
+                schemaContent.innerHTML = `<span class="cmt"># Error loading schema: ${err.message}</span>`;
+            }
+        }
+    });
+
+    const closeModal = () => schemaModal.classList.remove('visible');
+
+    schemaCloseBtn.addEventListener('click', closeModal);
+    schemaModal.addEventListener('click', (e) => {
+        if (e.target === schemaModal) {
+            closeModal();
         }
     });
 }
@@ -315,12 +378,12 @@ document.addEventListener('keydown', (e) => {
 
 document.addEventListener('wheel', (e) => {
     // Allow scrolling in result areas
-    if (e.target.closest('.try-result-area') || e.target.closest('.try-input-area') || e.target.closest('.demo-pane')) return;
+    if (e.target.closest('.try-result-area') || e.target.closest('.try-input-area') || e.target.closest('.demo-pane') || e.target.closest('.schema-modal-body')) return;
     e.preventDefault();
 }, { passive: false });
 
 document.addEventListener('touchmove', (e) => {
-    if (e.target.closest('.try-result-area') || e.target.closest('.try-input-area') || e.target.closest('.demo-pane')) return;
+    if (e.target.closest('.try-result-area') || e.target.closest('.try-input-area') || e.target.closest('.demo-pane') || e.target.closest('.schema-modal-body')) return;
     e.preventDefault();
 }, { passive: false });
 
@@ -328,7 +391,7 @@ document.addEventListener('contextmenu', (e) => e.preventDefault());
 
 // Allow touch/click ONLY on interactive elements in Try It slide
 function isInteractive(target) {
-    return target.closest('.try-input-area') || target.closest('.try-result-area') || target.closest('.demo-pane');
+    return target.closest('.try-input-area') || target.closest('.try-result-area') || target.closest('.demo-pane') || target.closest('.schema-modal-body');
 }
 
 document.addEventListener('touchstart', (e) => {

@@ -1,0 +1,250 @@
+schema {
+  query: Query
+}
+
+type Asset {
+  id: Int!
+  relationshipId: Int!
+  relationship: Relationship
+  name: String!
+  type: String!
+  number: String!
+  balance(where: BalanceFilterInput @cost(weight: "10") order: [BalanceSortInput!] @cost(weight: "10")): [Balance!]!
+}
+
+type Balance {
+  id: Int!
+  assetId: Int!
+  asset: Asset
+  amount: Decimal!
+  currency: String!
+}
+
+"Information about pagination in a connection."
+type PageInfo {
+  "Indicates whether more edges exist following the set defined by the clients arguments."
+  hasNextPage: Boolean!
+  "Indicates whether more edges exist prior the set defined by the clients arguments."
+  hasPreviousPage: Boolean!
+  "When paginating backwards, the cursor to continue."
+  startCursor: String
+  "When paginating forwards, the cursor to continue."
+  endCursor: String
+}
+
+type Person {
+  id: Int!
+  name: String!
+  address: String!
+  number: String!
+  relationship(where: RelationshipFilterInput @cost(weight: "10") order: [RelationshipSortInput!] @cost(weight: "10")): [Relationship!]!
+}
+
+"A connection to a list of items."
+type PersonConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [PersonEdge!]
+  "A flattened list of the nodes."
+  nodes: [Person!]
+  "Identifies the total count of items in the connection."
+  totalCount: Int! @cost(weight: "10")
+}
+
+"An edge in a connection."
+type PersonEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Person!
+}
+
+type Query {
+  person("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String where: PersonFilterInput @cost(weight: "10") order: [PersonSortInput!] @cost(weight: "10")): PersonConnection @listSize(assumedSize: 50, slicingArguments: [ "first", "last" ], slicingArgumentDefaultValue: 10, sizedFields: [ "edges", "nodes" ], requireOneSlicingArgument: false) @cost(weight: "10")
+  relationship("Returns the first _n_ elements from the list." first: Int "Returns the elements in the list that come after the specified cursor." after: String "Returns the last _n_ elements from the list." last: Int "Returns the elements in the list that come before the specified cursor." before: String where: RelationshipFilterInput @cost(weight: "10") order: [RelationshipSortInput!] @cost(weight: "10")): RelationshipConnection @listSize(assumedSize: 50, slicingArguments: [ "first", "last" ], slicingArgumentDefaultValue: 10, sizedFields: [ "edges", "nodes" ], requireOneSlicingArgument: false) @cost(weight: "10")
+}
+
+type Relationship {
+  id: Int!
+  personId: Int!
+  person: Person
+  number: Int!
+  type: String!
+  asset(where: AssetFilterInput @cost(weight: "10") order: [AssetSortInput!] @cost(weight: "10")): [Asset!]!
+}
+
+"A connection to a list of items."
+type RelationshipConnection {
+  "Information to aid in pagination."
+  pageInfo: PageInfo!
+  "A list of edges."
+  edges: [RelationshipEdge!]
+  "A flattened list of the nodes."
+  nodes: [Relationship!]
+  "Identifies the total count of items in the connection."
+  totalCount: Int! @cost(weight: "10")
+}
+
+"An edge in a connection."
+type RelationshipEdge {
+  "A cursor for use in pagination."
+  cursor: String!
+  "The item at the end of the edge."
+  node: Relationship!
+}
+
+input AssetFilterInput {
+  and: [AssetFilterInput!]
+  or: [AssetFilterInput!]
+  id: IntOperationFilterInput
+  relationshipId: IntOperationFilterInput
+  relationship: RelationshipFilterInput
+  name: StringOperationFilterInput
+  type: StringOperationFilterInput
+  number: StringOperationFilterInput
+  balance: ListFilterInputTypeOfBalanceFilterInput
+}
+
+input AssetSortInput {
+  id: SortEnumType @cost(weight: "10")
+  relationshipId: SortEnumType @cost(weight: "10")
+  relationship: RelationshipSortInput @cost(weight: "10")
+  name: SortEnumType @cost(weight: "10")
+  type: SortEnumType @cost(weight: "10")
+  number: SortEnumType @cost(weight: "10")
+}
+
+input BalanceFilterInput {
+  and: [BalanceFilterInput!]
+  or: [BalanceFilterInput!]
+  id: IntOperationFilterInput
+  assetId: IntOperationFilterInput
+  asset: AssetFilterInput
+  amount: DecimalOperationFilterInput
+  currency: StringOperationFilterInput
+}
+
+input BalanceSortInput {
+  id: SortEnumType @cost(weight: "10")
+  assetId: SortEnumType @cost(weight: "10")
+  asset: AssetSortInput @cost(weight: "10")
+  amount: SortEnumType @cost(weight: "10")
+  currency: SortEnumType @cost(weight: "10")
+}
+
+input DecimalOperationFilterInput {
+  eq: Decimal @cost(weight: "10")
+  neq: Decimal @cost(weight: "10")
+  in: [Decimal] @cost(weight: "10")
+  nin: [Decimal] @cost(weight: "10")
+  gt: Decimal @cost(weight: "10")
+  ngt: Decimal @cost(weight: "10")
+  gte: Decimal @cost(weight: "10")
+  ngte: Decimal @cost(weight: "10")
+  lt: Decimal @cost(weight: "10")
+  nlt: Decimal @cost(weight: "10")
+  lte: Decimal @cost(weight: "10")
+  nlte: Decimal @cost(weight: "10")
+}
+
+input IntOperationFilterInput {
+  eq: Int @cost(weight: "10")
+  neq: Int @cost(weight: "10")
+  in: [Int] @cost(weight: "10")
+  nin: [Int] @cost(weight: "10")
+  gt: Int @cost(weight: "10")
+  ngt: Int @cost(weight: "10")
+  gte: Int @cost(weight: "10")
+  ngte: Int @cost(weight: "10")
+  lt: Int @cost(weight: "10")
+  nlt: Int @cost(weight: "10")
+  lte: Int @cost(weight: "10")
+  nlte: Int @cost(weight: "10")
+}
+
+input ListFilterInputTypeOfAssetFilterInput {
+  all: AssetFilterInput @cost(weight: "10")
+  none: AssetFilterInput @cost(weight: "10")
+  some: AssetFilterInput @cost(weight: "10")
+  any: Boolean @cost(weight: "10")
+}
+
+input ListFilterInputTypeOfBalanceFilterInput {
+  all: BalanceFilterInput @cost(weight: "10")
+  none: BalanceFilterInput @cost(weight: "10")
+  some: BalanceFilterInput @cost(weight: "10")
+  any: Boolean @cost(weight: "10")
+}
+
+input ListFilterInputTypeOfRelationshipFilterInput {
+  all: RelationshipFilterInput @cost(weight: "10")
+  none: RelationshipFilterInput @cost(weight: "10")
+  some: RelationshipFilterInput @cost(weight: "10")
+  any: Boolean @cost(weight: "10")
+}
+
+input PersonFilterInput {
+  and: [PersonFilterInput!]
+  or: [PersonFilterInput!]
+  id: IntOperationFilterInput
+  name: StringOperationFilterInput
+  address: StringOperationFilterInput
+  number: StringOperationFilterInput
+  relationship: ListFilterInputTypeOfRelationshipFilterInput
+}
+
+input PersonSortInput {
+  id: SortEnumType @cost(weight: "10")
+  name: SortEnumType @cost(weight: "10")
+  address: SortEnumType @cost(weight: "10")
+  number: SortEnumType @cost(weight: "10")
+}
+
+input RelationshipFilterInput {
+  and: [RelationshipFilterInput!]
+  or: [RelationshipFilterInput!]
+  id: IntOperationFilterInput
+  personId: IntOperationFilterInput
+  person: PersonFilterInput
+  number: IntOperationFilterInput
+  type: StringOperationFilterInput
+  asset: ListFilterInputTypeOfAssetFilterInput
+}
+
+input RelationshipSortInput {
+  id: SortEnumType @cost(weight: "10")
+  personId: SortEnumType @cost(weight: "10")
+  person: PersonSortInput @cost(weight: "10")
+  number: SortEnumType @cost(weight: "10")
+  type: SortEnumType @cost(weight: "10")
+}
+
+input StringOperationFilterInput {
+  and: [StringOperationFilterInput!]
+  or: [StringOperationFilterInput!]
+  eq: String @cost(weight: "10")
+  neq: String @cost(weight: "10")
+  contains: String @cost(weight: "20")
+  ncontains: String @cost(weight: "20")
+  in: [String] @cost(weight: "10")
+  nin: [String] @cost(weight: "10")
+  startsWith: String @cost(weight: "20")
+  nstartsWith: String @cost(weight: "20")
+  endsWith: String @cost(weight: "20")
+  nendsWith: String @cost(weight: "20")
+}
+
+enum SortEnumType {
+  ASC
+  DESC
+}
+
+"The purpose of the `cost` directive is to define a `weight` for GraphQL types, fields, and arguments. Static analysis can use these weights when calculating the overall cost of a query or response."
+directive @cost("The `weight` argument defines what value to add to the overall cost for every appearance, or possible appearance, of a type, field, argument, etc." weight: String!) on SCALAR | OBJECT | FIELD_DEFINITION | ARGUMENT_DEFINITION | ENUM | INPUT_FIELD_DEFINITION
+
+"The purpose of the `@listSize` directive is to either inform the static analysis about the size of returned lists (if that information is statically available), or to point the analysis to where to find that information."
+directive @listSize("The `assumedSize` argument can be used to statically define the maximum length of a list returned by a field." assumedSize: Int "The `slicingArguments` argument can be used to define which of the field's arguments with numeric type are slicing arguments, so that their value determines the size of the list returned by that field. It may specify a list of multiple slicing arguments." slicingArguments: [String!] "The `slicingArgumentDefaultValue` argument can be used to define a default value for a slicing argument, which is used if the argument is not present in a query." slicingArgumentDefaultValue: Int "The `sizedFields` argument can be used to define that the value of the `assumedSize` argument or of a slicing argument does not affect the size of a list returned by a field itself, but that of a list returned by one of its sub-fields." sizedFields: [String!] "The `requireOneSlicingArgument` argument can be used to inform the static analysis that it should expect that exactly one of the defined slicing arguments is present in a query. If that is not the case (i.e., if none or multiple slicing arguments are present), the static analysis may throw an error." requireOneSlicingArgument: Boolean! = true) on FIELD_DEFINITION
+
+"The `Decimal` scalar type represents a decimal floating-point number."
+scalar Decimal
