@@ -25,7 +25,7 @@ const TOTAL_SLIDES = SLIDE_STEPS.length;
 const SPEAKER_NOTES = [
     // Slide 0
     [
-        "Benvenuti ragazzi, vi propongo un breve tuffo in GraphQL, un approccio alternativo al REST che stiamo valutando per le nostre API. Vedremo come può aiutarci a sciogliere alcuni nodi di integrazione e ridurre le latenze tra i nostri servizi di backend, tenendo presente anche gli indubbi vantaggi lato frontend.",
+        "Oggi vi propongo una breve introduzione a GraphQL, un paradigma alternativo al modello REST che stiamo analizzando come possibile evoluzione per le nostre API. Esamineremo in modo concreto come possa contribuire a semplificare alcune criticità di integrazione, ottimizzare le chiamate tra servizi backend e contenere le latenze, senza trascurare i benefici strutturali che offre anche sul versante frontend.",
         "Iniziamo dal lato client. A sinistra c'è un esempio di 'Query': chi consuma l'API definisce con esattezza l'albero e i campi di cui ha bisogno per la sua vista.",
         "Sotto c'è il lato server: lo 'Schema'. È il contratto strongly-typed che mettiamo a disposizione, così chiunque ci chiami sa a priori quali entità e relazioni può leggere."
     ],
