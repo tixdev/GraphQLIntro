@@ -19,6 +19,6 @@ public class PersonType : ObjectType<PersonModel>
         int id,
         [Service] PersonContext ctx)
     {
-        return await ctx.People.FirstOrDefaultAsync(p => p.Id == id);
+        return await ctx.Person.FirstOrDefaultAsync(p => p.Id == id);
     }
 }

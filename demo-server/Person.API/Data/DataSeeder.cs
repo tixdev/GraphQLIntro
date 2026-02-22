@@ -9,7 +9,7 @@ public static class DataSeeder
 {
     public static void Seed(PersonContext context)
     {
-        if (context.People.Any()) return;
+        if (context.Person.Any()) return;
 
         var personFaker = new Faker<PersonModel>()
             .RuleFor(p => p.Name, f => f.Name.FullName())
@@ -17,7 +17,7 @@ public static class DataSeeder
             .RuleFor(p => p.Number, f => "0100" + f.Random.Replace("#####"));
 
         var people = personFaker.Generate(100);
-        context.People.AddRange(people);
+        context.Person.AddRange(people);
         context.SaveChanges();
     }
 }
