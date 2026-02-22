@@ -6,12 +6,15 @@ using Relationship.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.AddSingleton<TestMetrics>();
+
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
         policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
 
-builder.Services.AddDbContext<RelationshipContext>(options =>
-    options.UseInMemoryDatabase("RelationshipDomain"));
+builder.Services.AddDbContext<RelationshipContext>((sp, options) =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+           .AddInterceptors(new MetricsDbCommandInterceptor(sp.GetRequiredService<TestMetrics>())));
 
 builder.Services.AddRelationshipGraphQL();
 
@@ -20,10 +23,23 @@ var app = builder.Build();
 using (var scope = app.Services.CreateScope())
 {
     var context = scope.ServiceProvider.GetRequiredService<RelationshipContext>();
+    context.Database.EnsureCreated();
     DataSeeder.Seed(context);
 }
 
 app.UseCors();
+app.Use(async (ctx, next) => {
+    if (ctx.Request.Path.StartsWithSegments("/graphql"))
+        ctx.RequestServices.GetRequiredService<TestMetrics>().GraphQLRequests++;
+    await next();
+});
+
+app.MapGet("/_metrics", (TestMetrics m) => Results.Ok(new {
+    m.GraphQLRequests, m.SqlQueries,
+    SqlStatements = m.SqlStatements.ToList()
+}));
+app.MapDelete("/_metrics", (TestMetrics m) => { m.Reset(); return Results.Ok(); });
+
 app.MapGraphQL();
 
 app.Run();

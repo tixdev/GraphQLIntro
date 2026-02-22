@@ -18,7 +18,7 @@ const gateway = new ApolloGateway({
                 console.log(`\x1b[33m[Gateway] >> Request to [${name}]\x1b[0m`);
                 console.log("Query:", request.query);
                 if (request.variables) {
-                    console.log("Variables:", JSON.stringify(request.variables, null, 2));
+                    //console.log("Variables:", JSON.stringify(request.variables, null, 2));
                 }
             }
         });

@@ -31,9 +31,9 @@ public class AssetType : ObjectType<AssetModel>
     [ReferenceResolver]
     public static async Task<AssetModel?> GetByIdAsync(
         int id,
-        [Service] AssetContext ctx)
+        AssetByIdDataLoader dataLoader)
     {
-        return await ctx.Assets.FirstOrDefaultAsync(a => a.Id == id);
+        return await dataLoader.LoadAsync(id);
     }
 }
 
@@ -47,10 +47,10 @@ public class RelationshipRef
     
     public int Id { get; set; }
 
-    public async Task<List<AssetModel>> GetAssets(
+    public async Task<AssetModel[]> GetAssets(
         [Parent] RelationshipRef relationship,
-        [Service] AssetContext ctx)
-        => await ctx.Assets
-            .Where(a => a.RelationshipId == relationship.Id)
-            .ToListAsync();
+        AssetsByRelationshipIdDataLoader dataLoader)
+    {
+        return await dataLoader.LoadAsync(relationship.Id);
+    }
 }

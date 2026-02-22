@@ -10,7 +10,8 @@
     "dev:api": "concurrently \"dotnet run --project demo-server/Person.API/Person.API.csproj\" \"dotnet run --project demo-server/Relationship.API/Relationship.API.csproj\" \"dotnet run --project demo-server/Asset.API/Asset.API.csproj\" \"dotnet run --project demo-server/Balance.API/Balance.API.csproj\"",
     "compose": "APOLLO_ELV2_LICENSE=accept ~/.rover/bin/rover supergraph compose --config apollo-gateway/supergraph-config.yaml > apollo-gateway/supergraph.graphql",
     "dev:router": "node apollo-gateway/index.mjs",
-    "dev:supergraph": "concurrently \"npm run dev:api\" \"sleep 8 && npm run dev:router\""
+    "dev:supergraph": "concurrently \"npm run dev:api\" \"sleep 8 && npm run dev:router\"",
+    "dev:supergraphobly": "npm run dev:router"
   },
   "devDependencies": {
     "concurrently": "^9.2.1",

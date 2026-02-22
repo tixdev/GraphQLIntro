@@ -31,9 +31,9 @@ public class BalanceType : ObjectType<BalanceModel>
     [ReferenceResolver]
     public static async Task<BalanceModel?> GetByIdAsync(
         int id,
-        [Service] BalanceContext ctx)
+        BalanceByIdDataLoader dataLoader)
     {
-        return await ctx.Balances.FirstOrDefaultAsync(b => b.Id == id);
+        return await dataLoader.LoadAsync(id);
     }
 }
 
@@ -47,10 +47,10 @@ public class AssetRef
     
     public int Id { get; set; }
 
-    public async Task<List<BalanceModel>> GetBalances(
+    public async Task<BalanceModel[]> GetBalances(
         [Parent] AssetRef asset,
-        [Service] BalanceContext ctx)
-        => await ctx.Balances
-            .Where(b => b.AssetId == asset.Id)
-            .ToListAsync();
+        BalancesByAssetIdDataLoader dataLoader)
+    {
+        return await dataLoader.LoadAsync(asset.Id);
+    }
 }

@@ -32,9 +32,9 @@ public class RelationshipType : ObjectType<RelationshipModel>
     [ReferenceResolver]
     public static async Task<RelationshipModel?> GetByIdAsync(
         int id,
-        [Service] RelationshipContext ctx)
+        RelationshipByIdDataLoader dataLoader)
     {
-        return await ctx.Relationships.FirstOrDefaultAsync(r => r.Id == id);
+        return await dataLoader.LoadAsync(id);
     }
 }
 
@@ -48,10 +48,10 @@ public class PersonRef
     
     public int Id { get; set; }
 
-    public async Task<List<RelationshipModel>> GetRelationships(
+    public async Task<RelationshipModel[]> GetRelationships(
         [Parent] PersonRef person,
-        [Service] RelationshipContext ctx)
-        => await ctx.Relationships
-            .Where(r => r.PersonId == person.Id)
-            .ToListAsync();
+        RelationshipsByPersonIdDataLoader dataLoader)
+    {
+        return await dataLoader.LoadAsync(person.Id);
+    }
 }
