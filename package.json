@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "node server/dev.js",
-    "dev:tunnel": "cloudflared tunnel --url http://localhost:3000",
+    "dev:tunnel": "cloudflared tunnel run --token eyJhIjoiMGM0ZTY5YWEzZTIwNTFiZTQ3MDVkYzMyOTU5MWQzMjYiLCJ0IjoiOTY1NTdmNGUtOTg2My00ZjEzLTgxODEtZWM0YTkzNGIyOGRhIiwicyI6IlpEUXlOell4TVRndFpXSTRNeTAwTnpjMUxXRmlZV1l0WmpFeVpUQXpaakprWWpFeCJ9",
     "dev:public": "PUBLIC_URL=$PUBLIC_URL node server/dev.js",
     "dev:api": "concurrently \"dotnet run --project demo-server/Person.API/Person.API.csproj\" \"dotnet run --project demo-server/Relationship.API/Relationship.API.csproj\" \"dotnet run --project demo-server/Asset.API/Asset.API.csproj\" \"dotnet run --project demo-server/Balance.API/Balance.API.csproj\"",
     "compose": "APOLLO_ELV2_LICENSE=accept ~/.rover/bin/rover supergraph compose --config apollo-gateway/supergraph-config.yaml > apollo-gateway/supergraph.graphql",
