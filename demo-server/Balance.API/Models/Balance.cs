@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace BalanceAPI.Models;
+namespace Balance.API.Models;
 
 public class Balance
 {

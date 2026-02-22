@@ -4,10 +4,10 @@ using HotChocolate.Data;
 using HotChocolate.Types;
 using HotChocolate.Types.Pagination;
 using Microsoft.EntityFrameworkCore;
-using PersonAPI.Data;
-using PersonModel = PersonAPI.Models.Person;
+using Person.API.Data;
+using PersonModel = Person.API.Models.Person;
 
-namespace PersonAPI.GraphQL;
+namespace Person.API.GraphQL;
 
 public class Query
 {

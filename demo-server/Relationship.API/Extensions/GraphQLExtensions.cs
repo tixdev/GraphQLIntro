@@ -2,10 +2,10 @@ using Microsoft.Extensions.DependencyInjection;
 using HotChocolate.Execution;
 using HotChocolate.ApolloFederation.Types;
 using HotChocolate.Types;
-using RelationshipAPI.GraphQL;
-using RelationshipAPI.GraphQL.Types;
+using Relationship.API.GraphQL;
+using Relationship.API.GraphQL.Types;
 
-namespace RelationshipAPI.Extensions;
+namespace Relationship.API.Extensions;
 
 public static class GraphQLExtensions
 {

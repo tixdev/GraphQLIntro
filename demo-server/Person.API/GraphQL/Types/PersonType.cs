@@ -1,11 +1,11 @@
 using HotChocolate.Types;
 using HotChocolate.ApolloFederation.Types;
-using PersonAPI.Data;
-using PersonModel = PersonAPI.Models.Person;
+using Person.API.Data;
+using PersonModel = Person.API.Models.Person;
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 
-namespace PersonAPI.GraphQL.Types;
+namespace Person.API.GraphQL.Types;
 
 public class PersonType : ObjectType<PersonModel>
 {

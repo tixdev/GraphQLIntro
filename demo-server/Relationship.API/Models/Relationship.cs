@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace RelationshipAPI.Models;
+namespace Relationship.API.Models;
 
 public class Relationship
 {

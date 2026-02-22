@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using PersonAPI.Data;
-using PersonAPI.Extensions;
+using Person.API.Data;
+using Person.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

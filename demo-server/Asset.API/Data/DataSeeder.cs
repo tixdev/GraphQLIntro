@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bogus;
-using AssetAPI.Models;
-using AssetModel = AssetAPI.Models.Asset;
+using Asset.API.Models;
+using AssetModel = Asset.API.Models.Asset;
 
-namespace AssetAPI.Data;
+namespace Asset.API.Data;
 
 public static class DataSeeder
 {

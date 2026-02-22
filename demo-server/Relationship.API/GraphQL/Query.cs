@@ -4,10 +4,10 @@ using HotChocolate.Data;
 using HotChocolate.Types;
 using HotChocolate.Types.Pagination;
 using Microsoft.EntityFrameworkCore;
-using RelationshipAPI.Data;
-using RelationshipModel = RelationshipAPI.Models.Relationship;
+using Relationship.API.Data;
+using RelationshipModel = Relationship.API.Models.Relationship;
 
-namespace RelationshipAPI.GraphQL;
+namespace Relationship.API.GraphQL;
 
 public class Query
 {

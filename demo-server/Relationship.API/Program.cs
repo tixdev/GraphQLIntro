@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using RelationshipAPI.Data;
-using RelationshipAPI.Extensions;
+using Relationship.API.Data;
+using Relationship.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using BalanceAPI.Models;
+using Balance.API.Models;
 
-namespace BalanceAPI.Data;
+namespace Balance.API.Data;
 
 public class BalanceContext : DbContext
 {
     public BalanceContext(DbContextOptions<BalanceContext> options) : base(options) { }
 
-    public DbSet<Balance> Balances { get; set; }
+    public DbSet<Models.Balance> Balances { get; set; }
 }

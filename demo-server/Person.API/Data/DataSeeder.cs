@@ -1,9 +1,9 @@
 using System.Linq;
 using Bogus;
-using PersonAPI.Models;
-using PersonModel = PersonAPI.Models.Person;
+using Person.API.Models;
+using PersonModel = Person.API.Models.Person;
 
-namespace PersonAPI.Data;
+namespace Person.API.Data;
 
 public static class DataSeeder
 {

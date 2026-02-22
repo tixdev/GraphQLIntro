@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using BalanceAPI.Data;
-using BalanceAPI.Extensions;
+using Balance.API.Data;
+using Balance.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

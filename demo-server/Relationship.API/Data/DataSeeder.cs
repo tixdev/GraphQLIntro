@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bogus;
-using RelationshipAPI.Models;
-using RelationshipModel = RelationshipAPI.Models.Relationship;
+using Relationship.API.Models;
+using RelationshipModel = Relationship.API.Models.Relationship;
 
-namespace RelationshipAPI.Data;
+namespace Relationship.API.Data;
 
 public static class DataSeeder
 {

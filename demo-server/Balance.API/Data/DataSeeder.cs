@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using Bogus;
-using BalanceAPI.Models;
-using BalanceModel = BalanceAPI.Models.Balance;
+using Balance.API.Models;
+using BalanceModel = Balance.API.Models.Balance;
 
-namespace BalanceAPI.Data;
+namespace Balance.API.Data;
 
 public static class DataSeeder
 {

@@ -5,11 +5,11 @@ using HotChocolate.Data;
 using System.Reflection;
 using HotChocolate.ApolloFederation;
 using HotChocolate.Data;
-using BalanceAPI.Data;
-using BalanceModel = BalanceAPI.Models.Balance;
+using Balance.API.Data;
+using BalanceModel = Balance.API.Models.Balance;
 using Microsoft.EntityFrameworkCore;
 
-namespace BalanceAPI.GraphQL.Types;
+namespace Balance.API.GraphQL.Types;
 
 public class BalanceType : ObjectType<BalanceModel>
 {

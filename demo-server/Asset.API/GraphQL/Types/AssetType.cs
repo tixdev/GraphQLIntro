@@ -5,11 +5,11 @@ using HotChocolate.Data;
 using System.Reflection;
 using HotChocolate.ApolloFederation;
 using HotChocolate.Data;
-using AssetAPI.Data;
-using AssetModel = AssetAPI.Models.Asset;
+using Asset.API.Data;
+using AssetModel = Asset.API.Models.Asset;
 using Microsoft.EntityFrameworkCore;
 
-namespace AssetAPI.GraphQL.Types;
+namespace Asset.API.GraphQL.Types;
 
 public class AssetType : ObjectType<AssetModel>
 {

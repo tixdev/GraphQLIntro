@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace AssetAPI.Models;
+namespace Asset.API.Models;
 
 public class Asset
 {

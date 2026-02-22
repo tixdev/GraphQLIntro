@@ -4,10 +4,10 @@ using HotChocolate.Data;
 using HotChocolate.Types;
 using HotChocolate.Types.Pagination;
 using Microsoft.EntityFrameworkCore;
-using BalanceAPI.Data;
-using BalanceModel = BalanceAPI.Models.Balance;
+using Balance.API.Data;
+using BalanceModel = Balance.API.Models.Balance;
 
-namespace BalanceAPI.GraphQL;
+namespace Balance.API.GraphQL;
 
 public class Query
 {

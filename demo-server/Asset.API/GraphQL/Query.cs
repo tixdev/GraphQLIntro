@@ -4,10 +4,10 @@ using HotChocolate.Data;
 using HotChocolate.Types;
 using HotChocolate.Types.Pagination;
 using Microsoft.EntityFrameworkCore;
-using AssetAPI.Data;
-using AssetModel = AssetAPI.Models.Asset;
+using Asset.API.Data;
+using AssetModel = Asset.API.Models.Asset;
 
-namespace AssetAPI.GraphQL;
+namespace Asset.API.GraphQL;
 
 public class Query
 {

@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using RelationshipAPI.Models;
+using Relationship.API.Models;
 
-namespace RelationshipAPI.Data;
+namespace Relationship.API.Data;
 
 public class RelationshipContext : DbContext
 {
     public RelationshipContext(DbContextOptions<RelationshipContext> options) : base(options) { }
 
-    public DbSet<Relationship> Relationships { get; set; }
+    public DbSet<Models.Relationship> Relationships { get; set; }
 }

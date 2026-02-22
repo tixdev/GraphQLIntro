@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using AssetAPI.Models;
+using Asset.API.Models;
 
-namespace AssetAPI.Data;
+namespace Asset.API.Data;
 
 public class AssetContext : DbContext
 {
     public AssetContext(DbContextOptions<AssetContext> options) : base(options) { }
 
-    public DbSet<Asset> Assets { get; set; }
+    public DbSet<Models.Asset> Assets { get; set; }
 }

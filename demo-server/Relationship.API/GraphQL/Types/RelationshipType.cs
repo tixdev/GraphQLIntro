@@ -5,11 +5,11 @@ using HotChocolate.Data;
 using System.Reflection;
 using HotChocolate.ApolloFederation;
 using HotChocolate.Data;
-using RelationshipAPI.Data;
-using RelationshipModel = RelationshipAPI.Models.Relationship;
+using Relationship.API.Data;
+using RelationshipModel = Relationship.API.Models.Relationship;
 using Microsoft.EntityFrameworkCore;
 
-namespace RelationshipAPI.GraphQL.Types;
+namespace Relationship.API.GraphQL.Types;
 
 public class RelationshipType : ObjectType<RelationshipModel>
 {

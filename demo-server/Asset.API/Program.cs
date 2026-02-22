@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
-using AssetAPI.Data;
-using AssetAPI.Extensions;
+using Asset.API.Data;
+using Asset.API.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 

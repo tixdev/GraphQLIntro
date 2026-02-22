@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using PersonAPI.Models;
+using Person.API.Models;
 
-namespace PersonAPI.Data;
+namespace Person.API.Data;
 
 public class PersonContext : DbContext
 {
     public PersonContext(DbContextOptions<PersonContext> options) : base(options) { }
 
-    public DbSet<Person> Person { get; set; }
+    public DbSet<Models.Person> Person { get; set; }
 }

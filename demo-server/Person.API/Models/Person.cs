@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 
-namespace PersonAPI.Models;
+namespace Person.API.Models;
 
 public class Person
 {
