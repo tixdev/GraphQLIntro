@@ -5,7 +5,7 @@ namespace Relationship.API.Models;
 public class Relationship
 {
     [Key]
-    public int Id { get; set; }
+    public int RelationshipID { get; set; }
     
     public int PersonId { get; set; }
 

@@ -5,7 +5,7 @@ namespace Balance.API.Models;
 public class Balance
 {
     [Key]
-    public int Id { get; set; }
+    public int BalanceID { get; set; }
 
     public int AssetId { get; set; }
 

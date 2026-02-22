@@ -3,12 +3,8 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace Person.API.Data;
 
-public class MetricsDbCommandInterceptor : DbCommandInterceptor
+public class MetricsDbCommandInterceptor(TestMetrics metrics) : DbCommandInterceptor
 {
-    private readonly TestMetrics _metrics;
-
-    public MetricsDbCommandInterceptor(TestMetrics metrics) => _metrics = metrics;
-
     public override ValueTask<InterceptionResult<DbDataReader>> ReaderExecutingAsync(
         DbCommand command, CommandEventData eventData,
         InterceptionResult<DbDataReader> result,
@@ -34,7 +30,7 @@ public class MetricsDbCommandInterceptor : DbCommandInterceptor
         if (sql.Contains("sys.objects") || sql.Contains("IS_SRVROLEMEMBER")
             || sql.Contains("SELECT 1") || sql.Contains("CASE") && sql.Contains("EXISTS"))
             return;
-        _metrics.SqlQueries++;
-        _metrics.SqlStatements.Add(sql);
+        metrics.SqlQueries++;
+        metrics.SqlStatements.Add(sql);
     }
 }

@@ -27,10 +27,10 @@ public class AssetByIdDataLoader : BatchDataLoader<int, AssetModel>
         CancellationToken cancellationToken)
     {
         var items = await _dbContext.Assets
-            .Where(r => keys.Contains(r.Id))
+            .Where(r => keys.Contains(r.AssetID))
             .ToListAsync(cancellationToken);
             
-        return items.ToDictionary(r => r.Id);
+        return items.ToDictionary(r => r.AssetID);
     }
 }
 

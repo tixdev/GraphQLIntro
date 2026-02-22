@@ -16,7 +16,7 @@ public class BalanceType : ObjectType<BalanceModel>
     protected override void Configure(IObjectTypeDescriptor<BalanceModel> descriptor)
     {
         var method = typeof(BalanceType).GetMethod(nameof(GetByIdAsync))!;
-        descriptor.Key("id").ResolveReferenceWith(method);
+        descriptor.Key("balanceID").ResolveReferenceWith(method);
 
         descriptor.Field(t => t.AssetId).IsProjected(true);
 
@@ -24,7 +24,7 @@ public class BalanceType : ObjectType<BalanceModel>
             .Resolve(ctx =>
             {
                 var parent = ctx.Parent<BalanceModel>();
-                return new AssetRef { Id = parent.AssetId };
+                return new AssetRef { AssetID = parent.AssetId };
             });
     }
 
@@ -38,19 +38,19 @@ public class BalanceType : ObjectType<BalanceModel>
 }
 
 [ObjectType("Asset")]
-[HotChocolate.ApolloFederation.Types.Key("id")]
+[HotChocolate.ApolloFederation.Types.Key("assetID")]
 public class AssetRef
 {
     [HotChocolate.ApolloFederation.Resolvers.ReferenceResolver]
-    public static async Task<AssetRef> GetByIdAsync(int id)
-        => await Task.FromResult(new AssetRef { Id = id });
+    public static async Task<AssetRef> GetByIdAsync(int assetID)
+        => await Task.FromResult(new AssetRef { AssetID = assetID });
     
-    public int Id { get; set; }
+    public int AssetID { get; set; }
 
     public async Task<BalanceModel[]> GetBalances(
         [Parent] AssetRef asset,
         BalancesByAssetIdDataLoader dataLoader)
     {
-        return await dataLoader.LoadAsync(asset.Id);
+        return await dataLoader.LoadAsync(asset.AssetID);
     }
 }

@@ -16,7 +16,7 @@ public class AssetType : ObjectType<AssetModel>
     protected override void Configure(IObjectTypeDescriptor<AssetModel> descriptor)
     {
         var method = typeof(AssetType).GetMethod(nameof(GetByIdAsync))!;
-        descriptor.Key("id").ResolveReferenceWith(method);
+        descriptor.Key("assetID").ResolveReferenceWith(method);
 
         descriptor.Field(t => t.RelationshipId).IsProjected(true);
 
@@ -24,7 +24,7 @@ public class AssetType : ObjectType<AssetModel>
             .Resolve(ctx =>
             {
                 var parent = ctx.Parent<AssetModel>();
-                return new RelationshipRef { Id = parent.RelationshipId };
+                return new RelationshipRef { RelationshipID = parent.RelationshipId };
             });
     }
 
@@ -38,19 +38,19 @@ public class AssetType : ObjectType<AssetModel>
 }
 
 [ObjectType("Relationship")]
-[HotChocolate.ApolloFederation.Types.Key("id")]
+[HotChocolate.ApolloFederation.Types.Key("relationshipID")]
 public class RelationshipRef
 {
     [HotChocolate.ApolloFederation.Resolvers.ReferenceResolver]
-    public static async Task<RelationshipRef> GetByIdAsync(int id)
-        => await Task.FromResult(new RelationshipRef { Id = id });
+    public static async Task<RelationshipRef> GetByIdAsync(int relationshipID)
+        => await Task.FromResult(new RelationshipRef { RelationshipID = relationshipID });
     
-    public int Id { get; set; }
+    public int RelationshipID { get; set; }
 
     public async Task<AssetModel[]> GetAssets(
         [Parent] RelationshipRef relationship,
         AssetsByRelationshipIdDataLoader dataLoader)
     {
-        return await dataLoader.LoadAsync(relationship.Id);
+        return await dataLoader.LoadAsync(relationship.RelationshipID);
     }
 }

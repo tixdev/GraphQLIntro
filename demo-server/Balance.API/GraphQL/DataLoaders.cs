@@ -27,10 +27,10 @@ public class BalanceByIdDataLoader : BatchDataLoader<int, BalanceModel>
         CancellationToken cancellationToken)
     {
         var items = await _dbContext.Balances
-            .Where(r => keys.Contains(r.Id))
+            .Where(r => keys.Contains(r.BalanceID))
             .ToListAsync(cancellationToken);
             
-        return items.ToDictionary(r => r.Id);
+        return items.ToDictionary(r => r.BalanceID);
     }
 }
 

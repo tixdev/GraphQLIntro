@@ -27,10 +27,10 @@ public class RelationshipByIdDataLoader : BatchDataLoader<int, RelationshipModel
         CancellationToken cancellationToken)
     {
         var items = await _dbContext.Relationships
-            .Where(r => keys.Contains(r.Id))
+            .Where(r => keys.Contains(r.RelationshipID))
             .ToListAsync(cancellationToken);
             
-        return items.ToDictionary(r => r.Id);
+        return items.ToDictionary(r => r.RelationshipID);
     }
 }
 

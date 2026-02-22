@@ -1,7 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
-using HotChocolate.Execution;
 using HotChocolate.ApolloFederation.Types;
-using HotChocolate.Types;
 using Person.API.GraphQL;
 using Person.API.GraphQL.Types;
 

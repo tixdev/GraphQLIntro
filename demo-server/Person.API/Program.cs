@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Person.API.Data;
 using Person.API.Extensions;
@@ -19,13 +17,6 @@ builder.Services.AddDbContext<PersonContext>((sp, options) =>
 builder.Services.AddPersonGraphQL();
 
 var app = builder.Build();
-
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<PersonContext>();
-    context.Database.EnsureCreated();
-    DataSeeder.Seed(context);
-}
 
 app.UseCors();
 app.Use(async (ctx, next) => {

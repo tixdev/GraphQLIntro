@@ -5,7 +5,7 @@ namespace Asset.API.Models;
 public class Asset
 {
     [Key]
-    public int Id { get; set; }
+    public int AssetID { get; set; }
 
     public int RelationshipId { get; set; }
 
