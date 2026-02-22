@@ -1,3 +1,5 @@
+using Microsoft.Extensions.DependencyInjection;
+using HotChocolate.Execution;
 using HotChocolate.ApolloFederation.Types;
 using Relationship.API.GraphQL;
 using Relationship.API.GraphQL.Types;
@@ -20,6 +22,24 @@ public static class GraphQLExtensions
             .AddProjections()
             .AddFiltering()
             .AddSorting()
+            .InitializeOnStartup(warmup: async (executor, ct) =>
+            {
+                var result = await executor.ExecuteAsync(@"
+                    query Warmup {
+                        relationship(take: 10) {
+                            items {
+                                relationshipID
+                                number
+                            }
+                        }
+                    }", ct);
+
+                if (result is IOperationResult { Errors: { Count: > 0 } errors })
+                {
+                    var errorMessages = string.Join(", ", errors.Select(e => e.Message));
+                    throw new Exception($"[Warmup Failed] GraphQL errors: {errorMessages}");
+                }
+            })
             .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);
 
         return services;
