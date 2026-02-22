@@ -1,14 +1,21 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Relationship.API.Models;
 
+[Table("Relationship", Schema = "Relationship")]
 public class Relationship
 {
     [Key]
     public int RelationshipID { get; set; }
     
-    public int PersonId { get; set; }
+    public int Number { get; set; }
+    
+    public int PltRelationshipTypeID { get; set; }
+    
+    public int GroupBankID { get; set; }
 
-    public int Number { get; set; } // 6 digits between 200000 and 800000
-    public required string Type { get; set; } // e.g. Parent, Partner
+    // Navigation
+    public RelationshipName? Name { get; set; }
+    public ICollection<RelationshipToPerson> RelationshipToPersons { get; set; } = new List<RelationshipToPerson>();
 }

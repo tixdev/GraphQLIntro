@@ -1,5 +1,3 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Relationship.API.Data;
 using Relationship.API.Extensions;
@@ -19,13 +17,6 @@ builder.Services.AddDbContext<RelationshipContext>((sp, options) =>
 builder.Services.AddRelationshipGraphQL();
 
 var app = builder.Build();
-
-using (var scope = app.Services.CreateScope())
-{
-    var context = scope.ServiceProvider.GetRequiredService<RelationshipContext>();
-    context.Database.EnsureCreated();
-    DataSeeder.Seed(context);
-}
 
 app.UseCors();
 app.Use(async (ctx, next) => {

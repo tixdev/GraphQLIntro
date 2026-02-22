@@ -1,7 +1,4 @@
-using Microsoft.Extensions.DependencyInjection;
-using HotChocolate.Execution;
 using HotChocolate.ApolloFederation.Types;
-using HotChocolate.Types;
 using Relationship.API.GraphQL;
 using Relationship.API.GraphQL.Types;
 
@@ -16,6 +13,7 @@ public static class GraphQLExtensions
             .AddApolloFederation()
             .AddQueryType<Query>()
             .AddType<RelationshipType>()
+            .AddType<PersonRef>()
             .AddTypeExtension(new ObjectTypeExtension(d => d
                 .Name("CollectionSegmentInfo")
                 .Shareable()))

@@ -1,32 +1,21 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using GreenDonut;
 using Microsoft.EntityFrameworkCore;
 using Relationship.API.Data;
 using RelationshipModel = Relationship.API.Models.Relationship;
 
 namespace Relationship.API.GraphQL;
 
-public class RelationshipByIdDataLoader : BatchDataLoader<int, RelationshipModel>
+public class RelationshipByIdDataLoader(
+    IBatchScheduler batchScheduler,
+    DataLoaderOptions options,
+    RelationshipContext dbContext)
+    : BatchDataLoader<int, RelationshipModel>(batchScheduler, options)
 {
-    private readonly RelationshipContext _dbContext;
-
-    public RelationshipByIdDataLoader(
-        IBatchScheduler batchScheduler,
-        DataLoaderOptions options,
-        RelationshipContext dbContext)
-        : base(batchScheduler, options)
-    {
-        _dbContext = dbContext;
-    }
-
     protected override async Task<IReadOnlyDictionary<int, RelationshipModel>> LoadBatchAsync(
         IReadOnlyList<int> keys,
         CancellationToken cancellationToken)
     {
-        var items = await _dbContext.Relationships
+        var items = await dbContext.Relationships
+            .Include(r => r.Name)
             .Where(r => keys.Contains(r.RelationshipID))
             .ToListAsync(cancellationToken);
             
@@ -34,27 +23,26 @@ public class RelationshipByIdDataLoader : BatchDataLoader<int, RelationshipModel
     }
 }
 
-public class RelationshipsByPersonIdDataLoader : GroupedDataLoader<int, RelationshipModel>
+public class RelationshipsByPersonIdDataLoader(
+    IBatchScheduler batchScheduler,
+    DataLoaderOptions options,
+    RelationshipContext dbContext)
+    : GroupedDataLoader<int, RelationshipModel>(batchScheduler, options)
 {
-    private readonly RelationshipContext _dbContext;
-
-    public RelationshipsByPersonIdDataLoader(
-        IBatchScheduler batchScheduler,
-        DataLoaderOptions options,
-        RelationshipContext dbContext)
-        : base(batchScheduler, options)
-    {
-        _dbContext = dbContext;
-    }
-
     protected override async Task<ILookup<int, RelationshipModel>> LoadGroupedBatchAsync(
         IReadOnlyList<int> keys,
         CancellationToken cancellationToken)
     {
-        var items = await _dbContext.Relationships
-            .Where(r => keys.Contains(r.PersonId))
+        var now = DateTime.UtcNow;
+        var items = await dbContext.RelationshipToPersons
+            .Where(rtp => keys.Contains(rtp.PersonID) && rtp.ValidEndDate > now)
+            .Include(rtp => rtp.Relationship)
+            .ThenInclude(r => r.Name)
+            .Select(rtp => new { rtp.PersonID, rtp.Relationship })
             .ToListAsync(cancellationToken);
 
-        return items.ToLookup(r => r.PersonId);
+        return items
+            .DistinctBy(x => new { x.PersonID, x.Relationship.RelationshipID })
+            .ToLookup(x => x.PersonID, x => x.Relationship);
     }
 }
