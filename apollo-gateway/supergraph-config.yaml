@@ -1,0 +1,18 @@
+federation_version: =2
+subgraphs:
+  person:
+    routing_url: http://localhost:5011/graphql
+    schema:
+      subgraph_url: http://localhost:5011/graphql
+  relationship:
+    routing_url: http://localhost:5012/graphql
+    schema:
+      subgraph_url: http://localhost:5012/graphql
+  asset:
+    routing_url: http://localhost:5013/graphql
+    schema:
+      subgraph_url: http://localhost:5013/graphql
+  balance:
+    routing_url: http://localhost:5014/graphql
+    schema:
+      subgraph_url: http://localhost:5014/graphql

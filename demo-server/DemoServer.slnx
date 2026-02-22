@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="Person.API/Person.API.csproj" />
+  <Project Path="Relationship.API/Relationship.API.csproj" />
+  <Project Path="Asset.API/Asset.API.csproj" />
+  <Project Path="Balance.API/Balance.API.csproj" />
+</Solution>

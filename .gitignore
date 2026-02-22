@@ -1,4 +1,16 @@
 node_modules
 dist
-demo-server/bin
-demo-server/obj
+apollo-gateway/router
+apollo-gateway/supergraph.graphql
+
+# .NET Core
+[bB]in/
+[oO]bj/
+*.userprefs
+*.user
+
+# IDEs
+.vscode/
+.vs/
+*.suo
+*.sln.docstates
