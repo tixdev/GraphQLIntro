@@ -15,6 +15,7 @@ public class RelationshipByIdDataLoader(
         CancellationToken cancellationToken)
     {
         var items = await dbContext.Relationships
+            .AsNoTracking()
             .Include(r => r.Name)
             .Where(r => keys.Contains(r.RelationshipID))
             .ToListAsync(cancellationToken);
@@ -34,6 +35,7 @@ public class RelationshipsByPersonIdDataLoader(
     {
         var now = DateTime.UtcNow;
         var items = await dbContext.RelationshipToPersons
+            .AsNoTracking()
             .Where(rtp => keys.Contains(rtp.PersonID) && rtp.ValidEndDate > now)
             .Include(rtp => rtp.Relationship)
             .ThenInclude(r => r.Name)

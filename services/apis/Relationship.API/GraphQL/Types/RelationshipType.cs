@@ -12,9 +12,6 @@ public class RelationshipType : ObjectType<RelationshipModel>
         var method = typeof(RelationshipType).GetMethod(nameof(GetByIdAsync))!;
         descriptor.Key("relationshipID").ResolveReferenceWith(method);
 
-        // We don't expose PersonId directly anymore as it is in RelationshipToPerson
-        // The Person -> Relationship direction is handled in PersonRef.
-
         descriptor.Field(t => t.Name).Type<RelationshipNameType>();
     }
 
@@ -47,6 +44,7 @@ public class PersonRef
     public async Task<RelationshipModel[]> GetRelationships([Parent] PersonRef person,
         RelationshipsByPersonIdDataLoader dataLoader)
     {
-        return await dataLoader.LoadAsync(person.PersonID);
+        var results = await dataLoader.LoadAsync(person.PersonID);
+        return results?.ToArray() ?? Array.Empty<RelationshipModel>();
     }
 }
