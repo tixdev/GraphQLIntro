@@ -9,7 +9,7 @@
     "dev:public": "PUBLIC_URL=$PUBLIC_URL node infra/dev-server/dev.js",
     "dev:api": "concurrently \"dotnet run --project services/apis/Person.API/Person.API.csproj\" \"dotnet run --project services/apis/Relationship.API/Relationship.API.csproj\" \"dotnet run --project services/apis/Asset.API/Asset.API.csproj\" \"dotnet run --project services/apis/Balance.API/Balance.API.csproj\"",
     "compose": "APOLLO_ELV2_LICENSE=accept ~/.rover/bin/rover supergraph compose --config services/gateway/supergraph-config.yaml > services/gateway/supergraph.graphql",
-    "dev:router": "APOLLO_ROUTER_CONFIG_PATH=services/gateway/router-config.yaml ./services/gateway/router --config services/gateway/router-config.yaml --supergraph services/gateway/supergraph.graphql --hot-reload",
+    "dev:router": "node services/gateway/setup-router.js && ./services/gateway/router --config services/gateway/router-config.yaml --supergraph services/gateway/supergraph.graphql --hot-reload",
     "dev:supergraph": "concurrently \"npm run dev:api\" \"sleep 5 && npm run dev:router\"",
     "dev:supergraphonly": "npm run dev:router"
   },
