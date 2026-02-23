@@ -1,0 +1,15 @@
+supergraph:
+  listen: 0.0.0.0:4000
+  introspection: true # Required for Sandbox
+
+# Rhai script for custom logging
+rhai:
+  scripts: "/Users/tizianocrisci/sources/graphql_intro/services/gateway"
+  main: "main.rhai"
+
+# Enable Sandbox IDE
+sandbox:
+  enabled: true
+
+homepage:
+  enabled: false # Redirects root (/) to Sandbox

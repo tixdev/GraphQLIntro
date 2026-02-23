@@ -1,0 +1,992 @@
+schema
+  @link(url: "https://specs.apollo.dev/link/v1.0")
+  @link(url: "https://specs.apollo.dev/join/v0.3", for: EXECUTION)
+{
+  query: Query
+}
+
+directive @join__enumValue(graph: join__Graph!) repeatable on ENUM_VALUE
+
+directive @join__field(graph: join__Graph, requires: join__FieldSet, provides: join__FieldSet, type: String, external: Boolean, override: String, usedOverridden: Boolean) repeatable on FIELD_DEFINITION | INPUT_FIELD_DEFINITION
+
+directive @join__graph(name: String!, url: String!) on ENUM_VALUE
+
+directive @join__implements(graph: join__Graph!, interface: String!) repeatable on OBJECT | INTERFACE
+
+directive @join__type(graph: join__Graph!, key: join__FieldSet, extension: Boolean! = false, resolvable: Boolean! = true, isInterfaceObject: Boolean! = false) repeatable on OBJECT | INTERFACE | UNION | ENUM | INPUT_OBJECT | SCALAR
+
+directive @join__unionMember(graph: join__Graph!, member: String!) repeatable on UNION
+
+directive @link(url: String, as: String, for: link__Purpose, import: [link__Import]) repeatable on SCHEMA
+
+type Asset
+  @join__type(graph: ASSET, key: "assetID")
+  @join__type(graph: BALANCE, key: "assetID")
+{
+  relationshipId: Int! @join__field(graph: ASSET)
+  relationship: Relationship @join__field(graph: ASSET)
+  assetID: Int!
+  name: String! @join__field(graph: ASSET)
+  type: String! @join__field(graph: ASSET)
+  number: String! @join__field(graph: ASSET)
+  balances: [Balance!]! @join__field(graph: BALANCE)
+}
+
+"""A segment of a collection."""
+type AssetCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [Asset!]
+  totalCount: Int!
+}
+
+input AssetFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetFilterInput!]
+  or: [AssetFilterInput!]
+  assetID: IntOperationFilterInput
+  relationshipId: IntOperationFilterInput
+  name: StringOperationFilterInput
+  type: StringOperationFilterInput
+  number: StringOperationFilterInput
+}
+
+input AssetSortInput
+  @join__type(graph: ASSET)
+{
+  assetID: SortEnumType
+  relationshipId: SortEnumType
+  name: SortEnumType
+  type: SortEnumType
+  number: SortEnumType
+}
+
+type Balance
+  @join__type(graph: BALANCE, key: "balanceID")
+{
+  assetId: Int!
+  asset: Asset
+  balanceID: Int!
+  amount: Decimal!
+  currency: String!
+}
+
+"""A segment of a collection."""
+type BalanceCollectionSegment
+  @join__type(graph: BALANCE)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [Balance!]
+  totalCount: Int!
+}
+
+input BalanceFilterInput
+  @join__type(graph: BALANCE)
+{
+  and: [BalanceFilterInput!]
+  or: [BalanceFilterInput!]
+  balanceID: IntOperationFilterInput
+  assetId: IntOperationFilterInput
+  amount: DecimalOperationFilterInput
+  currency: StringOperationFilterInput
+}
+
+input BalanceSortInput
+  @join__type(graph: BALANCE)
+{
+  balanceID: SortEnumType
+  assetId: SortEnumType
+  amount: SortEnumType
+  currency: SortEnumType
+}
+
+input BooleanOperationFilterInput
+  @join__type(graph: PERSON)
+{
+  eq: Boolean
+  neq: Boolean
+}
+
+"""Information about the offset pagination."""
+type CollectionSegmentInfo
+  @join__type(graph: ASSET)
+  @join__type(graph: BALANCE)
+  @join__type(graph: PERSON)
+  @join__type(graph: RELATIONSHIP)
+{
+  """
+  Indicates whether more items exist following the set defined by the clients arguments.
+  """
+  hasNextPage: Boolean!
+
+  """
+  Indicates whether more items exist prior the set defined by the clients arguments.
+  """
+  hasPreviousPage: Boolean!
+}
+
+"""The `DateTime` scalar represents an ISO-8601 compliant date time type."""
+scalar DateTime
+  @join__type(graph: PERSON)
+  @join__type(graph: RELATIONSHIP)
+  @specifiedBy(url: "https://www.graphql-scalars.com/date-time")
+
+input DateTimeOperationFilterInput
+  @join__type(graph: PERSON)
+  @join__type(graph: RELATIONSHIP)
+{
+  eq: DateTime
+  neq: DateTime
+  in: [DateTime]
+  nin: [DateTime]
+  gt: DateTime
+  ngt: DateTime
+  gte: DateTime
+  ngte: DateTime
+  lt: DateTime
+  nlt: DateTime
+  lte: DateTime
+  nlte: DateTime
+}
+
+"""The `Decimal` scalar type represents a decimal floating-point number."""
+scalar Decimal
+  @join__type(graph: BALANCE)
+
+input DecimalOperationFilterInput
+  @join__type(graph: BALANCE)
+{
+  eq: Decimal
+  neq: Decimal
+  in: [Decimal]
+  nin: [Decimal]
+  gt: Decimal
+  ngt: Decimal
+  gte: Decimal
+  ngte: Decimal
+  lt: Decimal
+  nlt: Decimal
+  lte: Decimal
+  nlte: Decimal
+}
+
+type GroupPerson
+  @join__type(graph: PERSON)
+{
+  groupPersonID: Int!
+  agreedName: String
+  groupNameID: Int
+  pltJoinTypeID: Int
+  creationDate: LocalDate
+  hasIndividualJointPersons: Boolean!
+  hasOrganizationJointPersons: Boolean!
+  languageID: Int
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  person: Person!
+  sensibleData: GroupPersonSensibleData
+}
+
+input GroupPersonFilterInput
+  @join__type(graph: PERSON)
+{
+  and: [GroupPersonFilterInput!]
+  or: [GroupPersonFilterInput!]
+  groupPersonID: IntOperationFilterInput
+  agreedName: StringOperationFilterInput
+  groupNameID: IntOperationFilterInput
+  pltJoinTypeID: IntOperationFilterInput
+  creationDate: LocalDateOperationFilterInput
+  hasIndividualJointPersons: BooleanOperationFilterInput
+  hasOrganizationJointPersons: BooleanOperationFilterInput
+  languageID: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  person: PersonFilterInput
+  sensibleData: GroupPersonSensibleDataFilterInput
+}
+
+type GroupPersonSensibleData
+  @join__type(graph: PERSON)
+{
+  groupPersonID: Int!
+  name: String
+  groupBankID: Int!
+  groupPerson: GroupPerson!
+}
+
+input GroupPersonSensibleDataFilterInput
+  @join__type(graph: PERSON)
+{
+  and: [GroupPersonSensibleDataFilterInput!]
+  or: [GroupPersonSensibleDataFilterInput!]
+  groupPersonID: IntOperationFilterInput
+  name: StringOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  groupPerson: GroupPersonFilterInput
+}
+
+input GroupPersonSensibleDataSortInput
+  @join__type(graph: PERSON)
+{
+  groupPersonID: SortEnumType
+  name: SortEnumType
+  groupBankID: SortEnumType
+  groupPerson: GroupPersonSortInput
+}
+
+input GroupPersonSortInput
+  @join__type(graph: PERSON)
+{
+  groupPersonID: SortEnumType
+  agreedName: SortEnumType
+  groupNameID: SortEnumType
+  pltJoinTypeID: SortEnumType
+  creationDate: SortEnumType
+  hasIndividualJointPersons: SortEnumType
+  hasOrganizationJointPersons: SortEnumType
+  languageID: SortEnumType
+  validStartDate: SortEnumType
+  validEndDate: SortEnumType
+  groupBankID: SortEnumType
+  person: PersonSortInput
+  sensibleData: GroupPersonSensibleDataSortInput
+}
+
+type InternalPerson
+  @join__type(graph: PERSON)
+{
+  internalPersonID: Int!
+  internalName: String!
+  pltPersonInternalTypeID: Int!
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  person: Person!
+}
+
+input InternalPersonFilterInput
+  @join__type(graph: PERSON)
+{
+  and: [InternalPersonFilterInput!]
+  or: [InternalPersonFilterInput!]
+  internalPersonID: IntOperationFilterInput
+  internalName: StringOperationFilterInput
+  pltPersonInternalTypeID: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  person: PersonFilterInput
+}
+
+input InternalPersonSortInput
+  @join__type(graph: PERSON)
+{
+  internalPersonID: SortEnumType
+  internalName: SortEnumType
+  pltPersonInternalTypeID: SortEnumType
+  validStartDate: SortEnumType
+  validEndDate: SortEnumType
+  groupBankID: SortEnumType
+  person: PersonSortInput
+}
+
+input IntOperationFilterInput
+  @join__type(graph: ASSET)
+  @join__type(graph: BALANCE)
+  @join__type(graph: PERSON)
+  @join__type(graph: RELATIONSHIP)
+{
+  eq: Int
+  neq: Int
+  in: [Int]
+  nin: [Int]
+  gt: Int
+  ngt: Int
+  gte: Int
+  ngte: Int
+  lt: Int
+  nlt: Int
+  lte: Int
+  nlte: Int
+}
+
+scalar join__FieldSet
+
+enum join__Graph {
+  ASSET @join__graph(name: "asset", url: "http://localhost:5013/graphql")
+  BALANCE @join__graph(name: "balance", url: "http://localhost:5014/graphql")
+  PERSON @join__graph(name: "person", url: "http://localhost:5011/graphql")
+  RELATIONSHIP @join__graph(name: "relationship", url: "http://localhost:5012/graphql")
+}
+
+type LegalPerson
+  @join__type(graph: PERSON)
+{
+  legalPersonID: Int!
+  agreedName: String
+  foundationDate: LocalDate
+  languageID: Int
+  pltEmployeesRangeNumberID: Int
+  pltPersonOrganizationTypeID: Int
+  economicallyExposedLegal: Boolean
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  domiciliaryCompanyPurpose: String
+  complexStructurePurpose: String
+  person: Person!
+  sensibleData: LegalPersonSensibleData
+}
+
+input LegalPersonFilterInput
+  @join__type(graph: PERSON)
+{
+  and: [LegalPersonFilterInput!]
+  or: [LegalPersonFilterInput!]
+  legalPersonID: IntOperationFilterInput
+  agreedName: StringOperationFilterInput
+  foundationDate: LocalDateOperationFilterInput
+  languageID: IntOperationFilterInput
+  pltEmployeesRangeNumberID: IntOperationFilterInput
+  pltPersonOrganizationTypeID: IntOperationFilterInput
+  economicallyExposedLegal: BooleanOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  domiciliaryCompanyPurpose: StringOperationFilterInput
+  complexStructurePurpose: StringOperationFilterInput
+  person: PersonFilterInput
+  sensibleData: LegalPersonSensibleDataFilterInput
+}
+
+type LegalPersonSensibleData
+  @join__type(graph: PERSON)
+{
+  legalPersonID: Int!
+  businessNameID: Int!
+  businessName: String
+  pltRegisteredOfficeID: Int
+  groupBankID: Int!
+  legalPerson: LegalPerson!
+}
+
+input LegalPersonSensibleDataFilterInput
+  @join__type(graph: PERSON)
+{
+  and: [LegalPersonSensibleDataFilterInput!]
+  or: [LegalPersonSensibleDataFilterInput!]
+  legalPersonID: IntOperationFilterInput
+  businessNameID: IntOperationFilterInput
+  businessName: StringOperationFilterInput
+  pltRegisteredOfficeID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  legalPerson: LegalPersonFilterInput
+}
+
+input LegalPersonSensibleDataSortInput
+  @join__type(graph: PERSON)
+{
+  legalPersonID: SortEnumType
+  businessNameID: SortEnumType
+  businessName: SortEnumType
+  pltRegisteredOfficeID: SortEnumType
+  groupBankID: SortEnumType
+  legalPerson: LegalPersonSortInput
+}
+
+input LegalPersonSortInput
+  @join__type(graph: PERSON)
+{
+  legalPersonID: SortEnumType
+  agreedName: SortEnumType
+  foundationDate: SortEnumType
+  languageID: SortEnumType
+  pltEmployeesRangeNumberID: SortEnumType
+  pltPersonOrganizationTypeID: SortEnumType
+  economicallyExposedLegal: SortEnumType
+  validStartDate: SortEnumType
+  validEndDate: SortEnumType
+  groupBankID: SortEnumType
+  domiciliaryCompanyPurpose: SortEnumType
+  complexStructurePurpose: SortEnumType
+  person: PersonSortInput
+  sensibleData: LegalPersonSensibleDataSortInput
+}
+
+scalar link__Import
+
+enum link__Purpose {
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+
+  """
+  `EXECUTION` features provide metadata necessary for operation execution.
+  """
+  EXECUTION
+}
+
+input ListFilterInputTypeOfRelationshipToPersonFilterInput
+  @join__type(graph: RELATIONSHIP)
+{
+  all: RelationshipToPersonFilterInput
+  none: RelationshipToPersonFilterInput
+  some: RelationshipToPersonFilterInput
+  any: Boolean
+}
+
+"""
+The `LocalDate` scalar type represents a ISO date string, represented as UTF-8 character sequences YYYY-MM-DD. The scalar follows the specification defined in RFC3339
+"""
+scalar LocalDate
+  @join__type(graph: PERSON)
+
+input LocalDateOperationFilterInput
+  @join__type(graph: PERSON)
+{
+  eq: LocalDate
+  neq: LocalDate
+  in: [LocalDate]
+  nin: [LocalDate]
+  gt: LocalDate
+  ngt: LocalDate
+  gte: LocalDate
+  ngte: LocalDate
+  lt: LocalDate
+  nlt: LocalDate
+  lte: LocalDate
+  nlte: LocalDate
+}
+
+"""
+The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1.
+"""
+scalar Long
+  @join__type(graph: PERSON)
+
+input LongOperationFilterInput
+  @join__type(graph: PERSON)
+{
+  eq: Long
+  neq: Long
+  in: [Long]
+  nin: [Long]
+  gt: Long
+  ngt: Long
+  gte: Long
+  ngte: Long
+  lt: Long
+  nlt: Long
+  lte: Long
+  nlte: Long
+}
+
+type NaturalPerson
+  @join__type(graph: PERSON)
+{
+  naturalPersonID: Int!
+  agreedName: String
+  pltGenderCodeID: Int
+  familySituationID: Int
+  pltPersonMaritalStatusID: Int
+  pltMaritalRegimeID: Int
+  pltPersonDependentsNumberID: Int
+  pltPersonProfessionID: Int
+  languageID: Int
+  politicallyExposed: Boolean!
+  pltPepID: Int
+  economicallyExposed: Boolean
+  borderWorker: Boolean!
+  pinid: Int!
+  pin: Int
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  hasRetirementFund: Boolean
+  workOverRetirement: Boolean
+  person: Person!
+  sensibleData: NaturalPersonSensibleData
+}
+
+input NaturalPersonFilterInput
+  @join__type(graph: PERSON)
+{
+  and: [NaturalPersonFilterInput!]
+  or: [NaturalPersonFilterInput!]
+  naturalPersonID: IntOperationFilterInput
+  agreedName: StringOperationFilterInput
+  pltGenderCodeID: IntOperationFilterInput
+  familySituationID: IntOperationFilterInput
+  pltPersonMaritalStatusID: IntOperationFilterInput
+  pltMaritalRegimeID: IntOperationFilterInput
+  pltPersonDependentsNumberID: IntOperationFilterInput
+  pltPersonProfessionID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  politicallyExposed: BooleanOperationFilterInput
+  pltPepID: IntOperationFilterInput
+  economicallyExposed: BooleanOperationFilterInput
+  borderWorker: BooleanOperationFilterInput
+  pinid: IntOperationFilterInput
+  pin: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  hasRetirementFund: BooleanOperationFilterInput
+  workOverRetirement: BooleanOperationFilterInput
+  person: PersonFilterInput
+  sensibleData: NaturalPersonSensibleDataFilterInput
+}
+
+type NaturalPersonSensibleData
+  @join__type(graph: PERSON)
+{
+  naturalPersonID: Int!
+  legalSurnameNameID: Int!
+  legalSurname: String
+  legalName: String
+  birthDate: LocalDate
+  birthLocation: String
+  pltBirthNationID: Int
+  pltSecondNationalityID: Int
+  pltResidencyID: Int
+  groupBankID: Int!
+  naturalPerson: NaturalPerson!
+}
+
+input NaturalPersonSensibleDataFilterInput
+  @join__type(graph: PERSON)
+{
+  and: [NaturalPersonSensibleDataFilterInput!]
+  or: [NaturalPersonSensibleDataFilterInput!]
+  naturalPersonID: IntOperationFilterInput
+  legalSurnameNameID: IntOperationFilterInput
+  legalSurname: StringOperationFilterInput
+  legalName: StringOperationFilterInput
+  birthDate: LocalDateOperationFilterInput
+  birthLocation: StringOperationFilterInput
+  pltBirthNationID: IntOperationFilterInput
+  pltSecondNationalityID: IntOperationFilterInput
+  pltResidencyID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  naturalPerson: NaturalPersonFilterInput
+}
+
+input NaturalPersonSensibleDataSortInput
+  @join__type(graph: PERSON)
+{
+  naturalPersonID: SortEnumType
+  legalSurnameNameID: SortEnumType
+  legalSurname: SortEnumType
+  legalName: SortEnumType
+  birthDate: SortEnumType
+  birthLocation: SortEnumType
+  pltBirthNationID: SortEnumType
+  pltSecondNationalityID: SortEnumType
+  pltResidencyID: SortEnumType
+  groupBankID: SortEnumType
+  naturalPerson: NaturalPersonSortInput
+}
+
+input NaturalPersonSortInput
+  @join__type(graph: PERSON)
+{
+  naturalPersonID: SortEnumType
+  agreedName: SortEnumType
+  pltGenderCodeID: SortEnumType
+  familySituationID: SortEnumType
+  pltPersonMaritalStatusID: SortEnumType
+  pltMaritalRegimeID: SortEnumType
+  pltPersonDependentsNumberID: SortEnumType
+  pltPersonProfessionID: SortEnumType
+  languageID: SortEnumType
+  politicallyExposed: SortEnumType
+  pltPepID: SortEnumType
+  economicallyExposed: SortEnumType
+  borderWorker: SortEnumType
+  pinid: SortEnumType
+  pin: SortEnumType
+  validStartDate: SortEnumType
+  validEndDate: SortEnumType
+  groupBankID: SortEnumType
+  hasRetirementFund: SortEnumType
+  workOverRetirement: SortEnumType
+  person: PersonSortInput
+  sensibleData: NaturalPersonSensibleDataSortInput
+}
+
+type Person
+  @join__type(graph: PERSON, key: "personID")
+  @join__type(graph: RELATIONSHIP, key: "personID")
+{
+  personID: Int!
+  personNumber: String! @join__field(graph: PERSON)
+  pltPersonNatureID: Int! @join__field(graph: PERSON)
+  pltPersonCodingTypeID: Int! @join__field(graph: PERSON)
+  isMigrated: Boolean! @join__field(graph: PERSON)
+  groupBankID: Int! @join__field(graph: PERSON)
+  caseID: Long @join__field(graph: PERSON)
+  personDetail: PersonDetail @join__field(graph: PERSON)
+  naturalPerson: NaturalPerson @join__field(graph: PERSON)
+  legalPerson: LegalPerson @join__field(graph: PERSON)
+  internalPerson: InternalPerson @join__field(graph: PERSON)
+  groupPerson: GroupPerson @join__field(graph: PERSON)
+  personOnlineService: PersonOnlineService @join__field(graph: PERSON)
+  relationships: [Relationship!]! @join__field(graph: RELATIONSHIP)
+}
+
+"""A segment of a collection."""
+type PersonCollectionSegment
+  @join__type(graph: PERSON)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [Person!]
+  totalCount: Int!
+}
+
+type PersonDetail
+  @join__type(graph: PERSON)
+{
+  personDetailID: Int!
+  personID: Int!
+  basicDataID: Int!
+  pltPersonAcquisitionSourceID: Int
+  pltPersonalityID: Int
+  mainOfficer: String
+  deputyOfficer: String
+  groupBankID: Int!
+  caseID: Long
+  person: Person!
+  sensibleData: PersonDetailSensibleData
+}
+
+input PersonDetailFilterInput
+  @join__type(graph: PERSON)
+{
+  and: [PersonDetailFilterInput!]
+  or: [PersonDetailFilterInput!]
+  personDetailID: IntOperationFilterInput
+  personID: IntOperationFilterInput
+  basicDataID: IntOperationFilterInput
+  pltPersonAcquisitionSourceID: IntOperationFilterInput
+  pltPersonalityID: IntOperationFilterInput
+  mainOfficer: StringOperationFilterInput
+  deputyOfficer: StringOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  person: PersonFilterInput
+  sensibleData: PersonDetailSensibleDataFilterInput
+}
+
+type PersonDetailSensibleData
+  @join__type(graph: PERSON)
+{
+  personDetailID: Int!
+  pltNationalityID: Int
+  pltNogaID: Int
+  groupBankID: Int!
+  personDetail: PersonDetail!
+}
+
+input PersonDetailSensibleDataFilterInput
+  @join__type(graph: PERSON)
+{
+  and: [PersonDetailSensibleDataFilterInput!]
+  or: [PersonDetailSensibleDataFilterInput!]
+  personDetailID: IntOperationFilterInput
+  pltNationalityID: IntOperationFilterInput
+  pltNogaID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  personDetail: PersonDetailFilterInput
+}
+
+input PersonDetailSensibleDataSortInput
+  @join__type(graph: PERSON)
+{
+  personDetailID: SortEnumType
+  pltNationalityID: SortEnumType
+  pltNogaID: SortEnumType
+  groupBankID: SortEnumType
+  personDetail: PersonDetailSortInput
+}
+
+input PersonDetailSortInput
+  @join__type(graph: PERSON)
+{
+  personDetailID: SortEnumType
+  personID: SortEnumType
+  basicDataID: SortEnumType
+  pltPersonAcquisitionSourceID: SortEnumType
+  pltPersonalityID: SortEnumType
+  mainOfficer: SortEnumType
+  deputyOfficer: SortEnumType
+  groupBankID: SortEnumType
+  caseID: SortEnumType
+  person: PersonSortInput
+  sensibleData: PersonDetailSensibleDataSortInput
+}
+
+input PersonFilterInput
+  @join__type(graph: PERSON)
+{
+  and: [PersonFilterInput!]
+  or: [PersonFilterInput!]
+  personID: IntOperationFilterInput
+  personNumber: StringOperationFilterInput
+  pltPersonNatureID: IntOperationFilterInput
+  pltPersonCodingTypeID: IntOperationFilterInput
+  isMigrated: BooleanOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  personDetail: PersonDetailFilterInput
+  naturalPerson: NaturalPersonFilterInput
+  legalPerson: LegalPersonFilterInput
+  internalPerson: InternalPersonFilterInput
+  groupPerson: GroupPersonFilterInput
+  personOnlineService: PersonOnlineServiceFilterInput
+}
+
+type PersonOnlineService
+  @join__type(graph: PERSON)
+{
+  personOnlineServiceID: Int!
+  personID: Int!
+  groupBankID: Int!
+  personDigital: Boolean
+  personDigitalDate: DateTime
+  relationshipDigital: Boolean!
+  relationshipDigitalDate: DateTime
+  ccUser: String
+  ccms_ID: String
+  matchability: Boolean!
+  status: String
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  caseID: Long
+  bankUser: String
+  person: Person!
+}
+
+input PersonOnlineServiceFilterInput
+  @join__type(graph: PERSON)
+{
+  and: [PersonOnlineServiceFilterInput!]
+  or: [PersonOnlineServiceFilterInput!]
+  personOnlineServiceID: IntOperationFilterInput
+  personID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  personDigital: BooleanOperationFilterInput
+  personDigitalDate: DateTimeOperationFilterInput
+  relationshipDigital: BooleanOperationFilterInput
+  relationshipDigitalDate: DateTimeOperationFilterInput
+  ccUser: StringOperationFilterInput
+  ccms_ID: StringOperationFilterInput
+  matchability: BooleanOperationFilterInput
+  status: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  caseID: LongOperationFilterInput
+  bankUser: StringOperationFilterInput
+  person: PersonFilterInput
+}
+
+input PersonOnlineServiceSortInput
+  @join__type(graph: PERSON)
+{
+  personOnlineServiceID: SortEnumType
+  personID: SortEnumType
+  groupBankID: SortEnumType
+  personDigital: SortEnumType
+  personDigitalDate: SortEnumType
+  relationshipDigital: SortEnumType
+  relationshipDigitalDate: SortEnumType
+  ccUser: SortEnumType
+  ccms_ID: SortEnumType
+  matchability: SortEnumType
+  status: SortEnumType
+  validStartDate: SortEnumType
+  validEndDate: SortEnumType
+  caseID: SortEnumType
+  bankUser: SortEnumType
+  person: PersonSortInput
+}
+
+input PersonSortInput
+  @join__type(graph: PERSON)
+{
+  personID: SortEnumType
+  personNumber: SortEnumType
+  pltPersonNatureID: SortEnumType
+  pltPersonCodingTypeID: SortEnumType
+  isMigrated: SortEnumType
+  groupBankID: SortEnumType
+  caseID: SortEnumType
+  personDetail: PersonDetailSortInput
+  naturalPerson: NaturalPersonSortInput
+  legalPerson: LegalPersonSortInput
+  internalPerson: InternalPersonSortInput
+  groupPerson: GroupPersonSortInput
+  personOnlineService: PersonOnlineServiceSortInput
+}
+
+type Query
+  @join__type(graph: ASSET)
+  @join__type(graph: BALANCE)
+  @join__type(graph: PERSON)
+  @join__type(graph: RELATIONSHIP)
+{
+  asset(skip: Int, take: Int, where: AssetFilterInput, order: [AssetSortInput!]): AssetCollectionSegment @join__field(graph: ASSET)
+  balance(skip: Int, take: Int, where: BalanceFilterInput, order: [BalanceSortInput!]): BalanceCollectionSegment @join__field(graph: BALANCE)
+  person(skip: Int, take: Int, where: PersonFilterInput, order: [PersonSortInput!]): PersonCollectionSegment @join__field(graph: PERSON)
+  relationship(skip: Int, take: Int, where: RelationshipFilterInput, order: [RelationshipSortInput!]): RelationshipCollectionSegment @join__field(graph: RELATIONSHIP)
+}
+
+type Relationship
+  @join__type(graph: ASSET, key: "relationshipID")
+  @join__type(graph: RELATIONSHIP, key: "relationshipID")
+{
+  assets: [Asset!]! @join__field(graph: ASSET)
+  relationshipID: Int!
+  name: RelationshipName @join__field(graph: RELATIONSHIP)
+  number: Int! @join__field(graph: RELATIONSHIP)
+  pltRelationshipTypeID: Int! @join__field(graph: RELATIONSHIP)
+  groupBankID: Int! @join__field(graph: RELATIONSHIP)
+  relationshipToPersons: [RelationshipToPerson!]! @join__field(graph: RELATIONSHIP)
+}
+
+"""A segment of a collection."""
+type RelationshipCollectionSegment
+  @join__type(graph: RELATIONSHIP)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [Relationship!]
+  totalCount: Int!
+}
+
+input RelationshipFilterInput
+  @join__type(graph: RELATIONSHIP)
+{
+  and: [RelationshipFilterInput!]
+  or: [RelationshipFilterInput!]
+  relationshipID: IntOperationFilterInput
+  number: IntOperationFilterInput
+  pltRelationshipTypeID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  name: RelationshipNameFilterInput
+  relationshipToPersons: ListFilterInputTypeOfRelationshipToPersonFilterInput
+}
+
+type RelationshipName
+  @join__type(graph: RELATIONSHIP)
+{
+  name: String!
+}
+
+input RelationshipNameFilterInput
+  @join__type(graph: RELATIONSHIP)
+{
+  and: [RelationshipNameFilterInput!]
+  or: [RelationshipNameFilterInput!]
+  relationshipID: IntOperationFilterInput
+  name: StringOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  relationship: RelationshipFilterInput
+}
+
+input RelationshipNameSortInput
+  @join__type(graph: RELATIONSHIP)
+{
+  relationshipID: SortEnumType
+  name: SortEnumType
+  groupBankID: SortEnumType
+  validStartDate: SortEnumType
+  validEndDate: SortEnumType
+  relationship: RelationshipSortInput
+}
+
+input RelationshipSortInput
+  @join__type(graph: RELATIONSHIP)
+{
+  relationshipID: SortEnumType
+  number: SortEnumType
+  pltRelationshipTypeID: SortEnumType
+  groupBankID: SortEnumType
+  name: RelationshipNameSortInput
+}
+
+type RelationshipToPerson
+  @join__type(graph: RELATIONSHIP)
+{
+  relationshipToPersonID: Int!
+  relationshipID: Int!
+  personID: Int!
+  pltPersonToRelationshipRoleID: Int!
+  groupBankID: Int!
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  relationship: Relationship!
+}
+
+input RelationshipToPersonFilterInput
+  @join__type(graph: RELATIONSHIP)
+{
+  and: [RelationshipToPersonFilterInput!]
+  or: [RelationshipToPersonFilterInput!]
+  relationshipToPersonID: IntOperationFilterInput
+  relationshipID: IntOperationFilterInput
+  personID: IntOperationFilterInput
+  pltPersonToRelationshipRoleID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  relationship: RelationshipFilterInput
+}
+
+enum SortEnumType
+  @join__type(graph: ASSET)
+  @join__type(graph: BALANCE)
+  @join__type(graph: PERSON)
+  @join__type(graph: RELATIONSHIP)
+{
+  ASC @join__enumValue(graph: ASSET) @join__enumValue(graph: BALANCE) @join__enumValue(graph: PERSON) @join__enumValue(graph: RELATIONSHIP)
+  DESC @join__enumValue(graph: ASSET) @join__enumValue(graph: BALANCE) @join__enumValue(graph: PERSON) @join__enumValue(graph: RELATIONSHIP)
+}
+
+input StringOperationFilterInput
+  @join__type(graph: ASSET)
+  @join__type(graph: BALANCE)
+  @join__type(graph: PERSON)
+  @join__type(graph: RELATIONSHIP)
+{
+  and: [StringOperationFilterInput!]
+  or: [StringOperationFilterInput!]
+  eq: String
+  neq: String
+  contains: String
+  ncontains: String
+  in: [String]
+  nin: [String]
+  startsWith: String
+  nstartsWith: String
+  endsWith: String
+  nendsWith: String
+}

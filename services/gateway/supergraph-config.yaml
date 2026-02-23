@@ -1,4 +1,4 @@
-federation_version: =2
+federation_version: 2
 subgraphs:
   person:
     routing_url: http://localhost:5011/graphql

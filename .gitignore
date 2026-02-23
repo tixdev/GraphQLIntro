@@ -14,3 +14,4 @@ apollo-gateway/supergraph.graphql
 .vs/
 *.suo
 *.sln.docstates
+router
