@@ -19,9 +19,7 @@ public class RelationshipType : ObjectType<RelationshipModel>
     }
 
     [ReferenceResolver]
-    public static async Task<RelationshipModel?> GetByIdAsync(
-        int id,
-        RelationshipByIdDataLoader dataLoader)
+    public static async Task<RelationshipModel?> GetByIdAsync(int id, RelationshipByIdDataLoader dataLoader)
     {
         return await dataLoader.LoadAsync(id);
     }

@@ -18,7 +18,7 @@ public class RelationshipByIdDataLoader(
             .Include(r => r.Name)
             .Where(r => keys.Contains(r.RelationshipID))
             .ToListAsync(cancellationToken);
-            
+
         return items.ToDictionary(r => r.RelationshipID);
     }
 }
@@ -26,8 +26,7 @@ public class RelationshipByIdDataLoader(
 public class RelationshipsByPersonIdDataLoader(
     IBatchScheduler batchScheduler,
     DataLoaderOptions options,
-    RelationshipContext dbContext)
-    : GroupedDataLoader<int, RelationshipModel>(batchScheduler, options)
+    RelationshipContext dbContext) : GroupedDataLoader<int, RelationshipModel>(batchScheduler, options)
 {
     protected override async Task<ILookup<int, RelationshipModel>> LoadGroupedBatchAsync(
         IReadOnlyList<int> keys,
