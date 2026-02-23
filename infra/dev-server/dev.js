@@ -16,6 +16,7 @@ function getLocalIP() {
 
 async function start() {
     const vite = await createServer({
+        root: 'apps/presentation',
         // server config is now in vite.config.js
     });
     await vite.listen();
