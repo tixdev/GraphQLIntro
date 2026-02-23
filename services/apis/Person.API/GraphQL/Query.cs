@@ -10,6 +10,5 @@ public class Query
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<PersonModel> GetPerson([Service] PersonContext context) =>
-        context.Person.AsNoTracking();
+    public IQueryable<PersonModel> GetPerson([Service] PersonContext context) => context.Person.AsNoTracking();
 }
