@@ -1,0 +1,26 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Common Packages -->
+    <PackageVersion Include="Bogus" Version="35.6.5" />
+    
+    <!-- HotChocolate Packages -->
+    <PackageVersion Include="HotChocolate.ApolloFederation" Version="15.1.12" />
+    <PackageVersion Include="HotChocolate.AspNetCore" Version="15.1.12" />
+    <PackageVersion Include="HotChocolate.Data.EntityFramework" Version="15.1.12" />
+    <PackageVersion Include="HotChocolate.Types.OffsetPagination" Version="15.1.12" />
+    
+    <!-- Entity Framework Core Packages -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.3" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.3" />
+    
+    <!-- Integration Testing Packages -->
+    <PackageVersion Include="coverlet.collector" Version="6.0.2" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.12.0" />
+    <PackageVersion Include="System.Net.Http.Json" Version="10.0.3" />
+    <PackageVersion Include="xunit" Version="2.9.2" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.2" />
+  </ItemGroup>
+</Project>

@@ -7,13 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Bogus" Version="35.6.5" />
-    <PackageReference Include="HotChocolate.ApolloFederation" Version="15.1.12" />
-    <PackageReference Include="HotChocolate.AspNetCore" Version="15.1.12" />
-    <PackageReference Include="HotChocolate.Data.EntityFramework" Version="15.1.12" />
-    <PackageReference Include="HotChocolate.Types.OffsetPagination" Version="15.1.12" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="10.0.3" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="10.0.3" />
+    <PackageReference Include="Bogus" />
+    <PackageReference Include="HotChocolate.ApolloFederation" />
+    <PackageReference Include="HotChocolate.AspNetCore" />
+    <PackageReference Include="HotChocolate.Data.EntityFramework" />
+    <PackageReference Include="HotChocolate.Types.OffsetPagination" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
   </ItemGroup>
 
 </Project>
