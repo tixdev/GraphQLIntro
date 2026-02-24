@@ -73,9 +73,11 @@ public class GatewayTests : IAsyncLifetime
       personNumber
       naturalPerson { agreedName }
       relationships {
-        relationshipID
-        number
-        name { name }
+        items{
+            relationshipID
+            number
+            name { name }
+        }      
       }
     }
   }

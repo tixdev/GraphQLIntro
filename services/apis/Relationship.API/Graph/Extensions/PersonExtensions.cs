@@ -2,6 +2,7 @@ using HotChocolate.ApolloFederation.Types;
 using HotChocolate.ApolloFederation.Resolvers;
 using Relationship.API.Graph.DataLoaders;
 using RelationshipModel = Relationship.API.Models.Relationship;
+using HotChocolate.Types;
 
 namespace Relationship.API.Graph.Extensions;
 
@@ -15,10 +16,12 @@ public class PersonExtensions
 
     public int PersonID { get; set; }
 
-    public async Task<RelationshipModel[]> GetRelationships([Parent] PersonExtensions person,
+    [UseOffsetPaging(IncludeTotalCount = true)]
+    public async Task<IEnumerable<RelationshipModel>> GetRelationships(
+        [Parent] PersonExtensions person,
         RelationshipsByPersonIdDataLoader dataLoader)
     {
         var results = await dataLoader.LoadAsync(person.PersonID);
-        return results?.ToArray() ?? Array.Empty<RelationshipModel>();
+        return results ?? Array.Empty<RelationshipModel>();
     }
 }

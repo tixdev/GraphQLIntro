@@ -643,7 +643,7 @@ type Person
   internalPerson: InternalPerson @join__field(graph: PERSON)
   groupPerson: GroupPerson @join__field(graph: PERSON)
   personOnlineService: PersonOnlineService @join__field(graph: PERSON)
-  relationships: [Relationship!]! @join__field(graph: RELATIONSHIP)
+  relationships(skip: Int, take: Int): RelationshipsCollectionSegment @join__field(graph: RELATIONSHIP)
 }
 
 """A segment of a collection."""
@@ -921,6 +921,18 @@ input RelationshipNameSortInput
   validStartDate: SortEnumType
   validEndDate: SortEnumType
   relationship: RelationshipSortInput
+}
+
+"""A segment of a collection."""
+type RelationshipsCollectionSegment
+  @join__type(graph: RELATIONSHIP)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [Relationship!]
+  totalCount: Int!
 }
 
 input RelationshipSortInput
