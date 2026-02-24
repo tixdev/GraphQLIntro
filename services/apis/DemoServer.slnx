@@ -1,6 +1,11 @@
 <Solution>
   <Project Path="Person.API/Person.API.csproj" />
   <Project Path="Relationship.API/Relationship.API.csproj" />
+  <Folder Name="/Infrastructure/">
+    <File Path="decision_flow.svg" />
+    <File Path="Directory.Packages.props" />
+    <File Path="README.md" />
+  </Folder>
   <Project Path="Asset.API/Asset.API.csproj" />
   <Project Path="Balance.API/Balance.API.csproj" />
   <Project Path="Gateway.IntegrationTests/Gateway.IntegrationTests.csproj" />

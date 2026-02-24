@@ -264,3 +264,11 @@ Per microservizi, considerare:
 | Hot Chocolate (.NET) | [chillicream.com/docs/hotchocolate](https://chillicream.com/docs/hotchocolate) |
 | GraphQL Code Generator | [graphql-code-generator.com](https://the-guild.dev/graphql/codegen) |
 | DataLoader Pattern | [github.com/graphql/dataloader](https://github.com/graphql/dataloader) |
+
+| DataLoader Pattern | [github.com/graphql/dataloader](https://github.com/graphql/dataloader) |
+
+---
+
+## Processo di "Industrializzazione" Grafi
+
+Per i dettagli tecnici su come scalare e organizzare i grafi (Type, Extensions, DataLoader) nei microservizi, consulta il [README dedicato in services/apis](file:///Users/tizianocrisci/sources/graphql_intro/services/apis/README.md).

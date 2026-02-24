@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Relationship.API.Data;
 using RelationshipModel = Relationship.API.Models.Relationship;
 
-namespace Relationship.API.GraphQL;
+namespace Relationship.API.Graph;
 
 public class Query
 {
