@@ -19,14 +19,17 @@ builder.Services.AddPersonGraphQL();
 var app = builder.Build();
 
 app.UseCors();
-app.Use(async (ctx, next) => {
+app.Use(async (ctx, next) =>
+{
     if (ctx.Request.Path.StartsWithSegments("/graphql"))
         ctx.RequestServices.GetRequiredService<TestMetrics>().GraphQLRequests++;
     await next();
 });
 
-app.MapGet("/_metrics", (TestMetrics m) => Results.Ok(new {
-    m.GraphQLRequests, m.SqlQueries,
+app.MapGet("/_metrics", (TestMetrics m) => Results.Ok(new
+{
+    m.GraphQLRequests,
+    m.SqlQueries,
     SqlStatements = m.SqlStatements.ToList()
 }));
 app.MapDelete("/_metrics", (TestMetrics m) => { m.Reset(); return Results.Ok(); });

@@ -1,8 +1,8 @@
 using Microsoft.Extensions.DependencyInjection;
 using HotChocolate.Execution;
 using HotChocolate.ApolloFederation.Types;
-using Person.API.GraphQL;
-using Person.API.GraphQL.Types;
+using Person.API.Graph;
+using Person.API.Graph.Types;
 
 namespace Person.API.Extensions;
 

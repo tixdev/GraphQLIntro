@@ -30,7 +30,7 @@ public static class DataSeeder
                 assets.Add(asset);
             }
         }
-        
+
         context.Assets.AddRange(assets);
         context.SaveChanges();
     }

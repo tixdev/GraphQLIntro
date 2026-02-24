@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Person.API.Data;
 using PersonModel = Person.API.Models.Person;
 
-namespace Person.API.GraphQL;
+namespace Person.API.Graph;
 
 public class Query
 {

@@ -4,10 +4,10 @@ using HotChocolate.Data;
 using HotChocolate.Types;
 using HotChocolate.Types.Pagination;
 using Microsoft.EntityFrameworkCore;
-using Balance.API.Data;
-using BalanceModel = Balance.API.Models.Balance;
+using Asset.API.Data;
+using AssetModel = Asset.API.Models.Asset;
 
-namespace Balance.API.GraphQL;
+namespace Asset.API.Graph;
 
 public class Query
 {
@@ -15,5 +15,5 @@ public class Query
     [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<BalanceModel> GetBalance([Service] BalanceContext context) => context.Balances.AsNoTracking();
+    public IQueryable<AssetModel> GetAsset([Service] AssetContext context) => context.Assets.AsNoTracking();
 }

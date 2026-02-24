@@ -4,12 +4,13 @@ using HotChocolate.ApolloFederation.Resolvers;
 using HotChocolate.Data;
 using System.Reflection;
 using HotChocolate.ApolloFederation;
-using HotChocolate.Data;
 using Balance.API.Data;
 using BalanceModel = Balance.API.Models.Balance;
 using Microsoft.EntityFrameworkCore;
+using Balance.API.Graph.DataLoaders;
+using Balance.API.Graph.Extensions;
 
-namespace Balance.API.GraphQL.Types;
+namespace Balance.API.Graph.Types;
 
 public class BalanceType : ObjectType<BalanceModel>
 {
@@ -34,23 +35,5 @@ public class BalanceType : ObjectType<BalanceModel>
         BalanceByIdDataLoader dataLoader)
     {
         return await dataLoader.LoadAsync(id);
-    }
-}
-
-[ObjectType("Asset")]
-[HotChocolate.ApolloFederation.Types.Key("assetID")]
-public class AssetRef
-{
-    [HotChocolate.ApolloFederation.Resolvers.ReferenceResolver]
-    public static async Task<AssetRef> GetByIdAsync(int assetID)
-        => await Task.FromResult(new AssetRef { AssetID = assetID });
-    
-    public int AssetID { get; set; }
-
-    public async Task<BalanceModel[]> GetBalances(
-        [Parent] AssetRef asset,
-        BalancesByAssetIdDataLoader dataLoader)
-    {
-        return await dataLoader.LoadAsync(asset.AssetID);
     }
 }

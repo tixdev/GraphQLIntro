@@ -2,8 +2,8 @@ using Microsoft.Extensions.DependencyInjection;
 using HotChocolate.Execution;
 using HotChocolate.ApolloFederation.Types;
 using HotChocolate.Types;
-using Balance.API.GraphQL;
-using Balance.API.GraphQL.Types;
+using Balance.API.Graph;
+using Balance.API.Graph.Types;
 
 namespace Balance.API.Extensions;
 
@@ -15,7 +15,7 @@ public static class GraphQLExtensions
             .AddGraphQLServer()
             .AddApolloFederation()
             .AddQueryType<Query>()
-            .AddType<BalanceType>()
+            .AddAutoScaffoldedTypes()
             .AddTypeExtension(new ObjectTypeExtension(d => d
                 .Name("CollectionSegmentInfo")
                 .Shareable()))

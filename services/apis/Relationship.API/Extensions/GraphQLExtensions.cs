@@ -15,8 +15,7 @@ public static class GraphQLExtensions
             .AddGraphQLServer()
             .AddApolloFederation()
             .AddQueryType<Query>()
-            .AddType<RelationshipType>()
-            .AddTypeExtension<PersonExtensions>()
+            .AddAutoScaffoldedTypes()
             .AddTypeExtension(new ObjectTypeExtension(d => d
                 .Name("CollectionSegmentInfo")
                 .Shareable()))

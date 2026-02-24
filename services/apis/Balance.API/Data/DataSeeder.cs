@@ -25,7 +25,7 @@ public static class DataSeeder
             balance.AssetId = assetId;
             balances.Add(balance);
         }
-        
+
         context.Balances.AddRange(balances);
         context.SaveChanges();
     }
