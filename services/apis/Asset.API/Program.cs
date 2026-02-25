@@ -3,8 +3,11 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Asset.API.Data;
 using Asset.API.Extensions;
+using Shared.Temporal;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<ITemporalContext, TemporalContext>();
 
 builder.Services.AddSingleton<TestMetrics>();
 

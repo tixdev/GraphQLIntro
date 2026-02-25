@@ -4,6 +4,7 @@ using HotChocolate.ApolloFederation.Types;
 using HotChocolate.Types;
 using Asset.API.Graph;
 using Asset.API.Graph.Types;
+using Shared.Temporal;
 
 namespace Asset.API.Extensions;
 
@@ -21,7 +22,8 @@ public static class GraphQLExtensions
                 .Shareable()))
             .AddProjections()
             .AddFiltering()
-            .AddSorting();
+            .AddSorting()
+            .AddHttpRequestInterceptor<TemporalHttpRequestInterceptor>();
 
         return services;
     }

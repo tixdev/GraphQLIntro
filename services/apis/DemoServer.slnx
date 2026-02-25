@@ -6,6 +6,7 @@
     <File Path="Directory.Packages.props" />
     <File Path="README.md" />
   </Folder>
+  <Project Path="../shared/Shared/Shared.csproj" />
   <Project Path="Asset.API/Asset.API.csproj" />
   <Project Path="Balance.API/Balance.API.csproj" />
   <Project Path="Gateway.IntegrationTests/Gateway.IntegrationTests.csproj" />

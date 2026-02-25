@@ -4,6 +4,7 @@ using HotChocolate.ApolloFederation.Types;
 using Relationship.API.Graph;
 using Relationship.API.Graph.Types;
 using Relationship.API.Graph.Extensions;
+using Shared.Temporal;
 
 namespace Relationship.API.Extensions;
 
@@ -22,6 +23,7 @@ public static class GraphQLExtensions
             .AddProjections()
             .AddFiltering()
             .AddSorting()
+            .AddHttpRequestInterceptor<TemporalHttpRequestInterceptor>()
             .InitializeOnStartup(warmup: async (executor, ct) =>
             {
                 var result = await executor.ExecuteAsync(@"

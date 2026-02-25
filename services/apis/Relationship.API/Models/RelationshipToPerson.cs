@@ -1,10 +1,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Shared.Temporal;
 
 namespace Relationship.API.Models;
 
 [Table("RelationshipToPerson", Schema = "Relationship")]
-public class RelationshipToPerson
+public class RelationshipToPerson : ITemporalEntity
 {
     [Key]
     public int RelationshipToPersonID { get; set; }

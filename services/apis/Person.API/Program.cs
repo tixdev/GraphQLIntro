@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Person.API.Data;
 using Person.API.Extensions;
+using Shared.Temporal;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<ITemporalContext, TemporalContext>();
 
 builder.Services.AddSingleton<TestMetrics>();
 

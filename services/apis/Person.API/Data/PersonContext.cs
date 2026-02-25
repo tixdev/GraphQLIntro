@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Person.API.Models;
+using Shared.Temporal;
 
 namespace Person.API.Data;
 
-public class PersonContext(DbContextOptions<PersonContext> options) : DbContext(options)
+public class PersonContext(DbContextOptions<PersonContext> options, ITemporalContext temporalContext) : DbContext(options)
 {
     public DbSet<Models.Person> Person { get; set; }
     public DbSet<PersonDetail> PersonDetail { get; set; }
@@ -117,5 +118,26 @@ public class PersonContext(DbContextOptions<PersonContext> options) : DbContext(
             e.HasOne(p => p.Person).WithOne(p => p.PersonOnlineService)
                 .HasForeignKey<PersonOnlineService>(p => p.PersonID);
         });
+
+        // Apply Global Query Filter for Temporal Entities dynamically
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            if (typeof(ITemporalEntity).IsAssignableFrom(entityType.ClrType))
+            {
+                var method = typeof(PersonContext).GetMethod(nameof(SetTemporalFilter), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (method != null)
+                {
+                    method.MakeGenericMethod(entityType.ClrType).Invoke(this, new object[] { modelBuilder });
+                }
+            }
+        }
+    }
+
+    private void SetTemporalFilter<TEntity>(ModelBuilder modelBuilder) where TEntity : class, ITemporalEntity
+    {
+        modelBuilder.Entity<TEntity>().HasQueryFilter(e =>
+            e.ValidStartDate <= temporalContext.CurrentAsOfDate &&
+            e.ValidEndDate >= temporalContext.CurrentAsOfDate
+        );
     }
 }

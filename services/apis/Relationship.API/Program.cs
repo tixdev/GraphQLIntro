@@ -1,8 +1,11 @@
 using Microsoft.EntityFrameworkCore;
 using Relationship.API.Data;
 using Relationship.API.Extensions;
+using Shared.Temporal;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddScoped<ITemporalContext, TemporalContext>();
 
 builder.Services.AddSingleton<TestMetrics>();
 

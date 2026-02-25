@@ -7,3 +7,8 @@ cors:
   allow_any_origin: true
 include_subgraph_errors:
   all: true
+headers:
+  all:
+    request:
+      - propagate:
+          named: x-as-of-date

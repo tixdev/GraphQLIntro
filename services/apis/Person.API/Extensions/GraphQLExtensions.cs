@@ -3,6 +3,7 @@ using HotChocolate.Execution;
 using HotChocolate.ApolloFederation.Types;
 using Person.API.Graph;
 using Person.API.Graph.Types;
+using Shared.Temporal;
 
 namespace Person.API.Extensions;
 
@@ -21,6 +22,7 @@ public static class GraphQLExtensions
             .AddProjections()
             .AddFiltering()
             .AddSorting()
+            .AddHttpRequestInterceptor<TemporalHttpRequestInterceptor>()
             .InitializeOnStartup(warmup: async (executor, ct) =>
             {
                 var result = await executor.ExecuteAsync(@"

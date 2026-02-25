@@ -1,9 +1,10 @@
 using Microsoft.EntityFrameworkCore;
 using Relationship.API.Models;
+using Shared.Temporal;
 
 namespace Relationship.API.Data;
 
-public class RelationshipContext(DbContextOptions<RelationshipContext> options) : DbContext(options)
+public class RelationshipContext(DbContextOptions<RelationshipContext> options, ITemporalContext temporalContext) : DbContext(options)
 {
     public DbSet<Models.Relationship> Relationships { get; set; }
     public DbSet<RelationshipToPerson> RelationshipToPersons { get; set; }
@@ -33,5 +34,26 @@ public class RelationshipContext(DbContextOptions<RelationshipContext> options) 
         {
             entity.HasKey(e => e.RelationshipID);
         });
+
+        // Apply Global Query Filter for Temporal Entities dynamically
+        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+        {
+            if (typeof(ITemporalEntity).IsAssignableFrom(entityType.ClrType))
+            {
+                var method = typeof(RelationshipContext).GetMethod(nameof(SetTemporalFilter), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+                if (method != null)
+                {
+                    method.MakeGenericMethod(entityType.ClrType).Invoke(this, new object[] { modelBuilder });
+                }
+            }
+        }
+    }
+
+    private void SetTemporalFilter<TEntity>(ModelBuilder modelBuilder) where TEntity : class, ITemporalEntity
+    {
+        modelBuilder.Entity<TEntity>().HasQueryFilter(e =>
+            e.ValidStartDate <= temporalContext.CurrentAsOfDate &&
+            e.ValidEndDate >= temporalContext.CurrentAsOfDate
+        );
     }
 }
