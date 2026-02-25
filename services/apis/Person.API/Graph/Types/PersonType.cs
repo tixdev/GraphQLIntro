@@ -9,14 +9,13 @@ public class PersonType : ObjectType<PersonModel>
 {
     protected override void Configure(IObjectTypeDescriptor<PersonModel> descriptor)
     {
-        var method = typeof(PersonType).GetMethod(nameof(GetPersonByIdAsync))!;
-
+        var method = typeof(PersonType).GetMethod(nameof(GetByIdAsync))!;
         descriptor.Key("personID").ResolveReferenceWith(method);
     }
 
     [ReferenceResolver]
-    public static async Task<PersonModel?> GetPersonByIdAsync(int id, PersonByIdDataLoader dataLoader)
+    public static async Task<PersonModel?> GetByIdAsync(int personID, PersonByIdDataLoader dataLoader)
     {
-        return await dataLoader.LoadAsync(id);
+        return await dataLoader.LoadAsync(personID);
     }
 }

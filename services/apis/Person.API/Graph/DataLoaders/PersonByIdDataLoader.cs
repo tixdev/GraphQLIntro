@@ -16,6 +16,10 @@ public class PersonByIdDataLoader(
     {
         var items = await dbContext.Person
             .AsNoTracking()
+            .Include(p => p.NaturalPerson)
+            .Include(p => p.LegalPerson)
+            .Include(p => p.GroupPerson)
+            .Include(p => p.InternalPerson)
             .Where(p => keys.Contains(p.PersonID))
             .ToListAsync(cancellationToken);
 

@@ -862,6 +862,7 @@ type Relationship
   assets: [Asset!]! @join__field(graph: ASSET)
   relationshipID: Int!
   name: RelationshipName @join__field(graph: RELATIONSHIP)
+  persons: [Person!]! @join__field(graph: RELATIONSHIP)
   number: Int! @join__field(graph: RELATIONSHIP)
   pltRelationshipTypeID: Int! @join__field(graph: RELATIONSHIP)
   groupBankID: Int! @join__field(graph: RELATIONSHIP)

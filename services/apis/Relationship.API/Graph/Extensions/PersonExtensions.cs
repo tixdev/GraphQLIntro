@@ -14,9 +14,10 @@ public class PersonExtensions
     public static async Task<PersonExtensions> GetByIdAsync(int personID) =>
         await Task.FromResult(new PersonExtensions { PersonID = personID });
 
+    [GraphQLName("personID")]
     public int PersonID { get; set; }
 
-    [UseOffsetPaging(IncludeTotalCount = true)]
+    [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 200, IncludeTotalCount = true)]
     public async Task<IEnumerable<RelationshipModel>> GetRelationships(
         [Parent] PersonExtensions person,
         RelationshipsByPersonIdDataLoader dataLoader)
