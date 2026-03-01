@@ -31,7 +31,7 @@ public static class GraphQLExtensions
             {
                 var result = await executor.ExecuteAsync(@"
                     query Warmup {
-                        genderCodes(take: 10) {
+                        genderCodes(take: 1, order: { genderCodeID: ASC }) {
                             items {
                                 genderCodeID
                             }
