@@ -5,6 +5,7 @@ using HotChocolate.Types;
 using Asset.API.Graph;
 using Asset.API.Graph.Types;
 using Shared.Temporal;
+using Shared.Extensions;
 
 namespace Asset.API.Extensions;
 
@@ -16,10 +17,7 @@ public static class GraphQLExtensions
             .AddGraphQLServer()
             .AddApolloFederation()
             .AddQueryType<Query>()
-            .AddAutoScaffoldedTypes()
-            .AddTypeExtension(new ObjectTypeExtension(d => d
-                .Name("CollectionSegmentInfo")
-                .Shareable()))
+            .AddAutoScaffoldedTypes(typeof(Query).Assembly)
             .AddProjections()
             .AddFiltering()
             .AddSorting()

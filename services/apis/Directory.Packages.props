@@ -10,6 +10,7 @@
     <PackageVersion Include="HotChocolate.ApolloFederation" Version="15.1.12" />
     <PackageVersion Include="HotChocolate.AspNetCore" Version="15.1.12" />
     <PackageVersion Include="HotChocolate.Data.EntityFramework" Version="15.1.12" />
+    <PackageVersion Include="HotChocolate.Types" Version="15.1.12" />
     <PackageVersion Include="HotChocolate.Types.OffsetPagination" Version="15.1.12" />
     
     <!-- Entity Framework Core Packages -->

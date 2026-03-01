@@ -1,15 +1,14 @@
 using System.Reflection;
 using HotChocolate.Execution.Configuration;
 using HotChocolate.Types;
+using HotChocolate.ApolloFederation.Types;
 
-namespace Balance.API.Extensions;
+namespace Shared.Extensions;
 
 public static class AutoScaffoldExtensions
 {
-    public static IRequestExecutorBuilder AddAutoScaffoldedTypes(this IRequestExecutorBuilder builder)
+    public static IRequestExecutorBuilder AddAutoScaffoldedTypes(this IRequestExecutorBuilder builder, Assembly assembly)
     {
-        var assembly = Assembly.GetExecutingAssembly();
-
         var types = assembly.GetTypes()
             .Where(t => t.IsClass && !t.IsAbstract)
             .Where(t =>
@@ -39,6 +38,11 @@ public static class AutoScaffoldExtensions
                 builder.AddType(type);
             }
         }
+
+        // Automate CollectionSegmentInfo shareable extension
+        builder.AddTypeExtension(new ObjectTypeExtension(d => d
+            .Name("CollectionSegmentInfo")
+            .Shareable()));
 
         return builder;
     }

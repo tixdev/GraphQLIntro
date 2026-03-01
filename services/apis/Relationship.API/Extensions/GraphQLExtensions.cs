@@ -6,6 +6,7 @@ using Relationship.API.Graph.Types;
 using Relationship.API.Graph.ExternalTypeRefs;
 using Relationship.API.Graph.TypeExtensions;
 using Shared.Temporal;
+using Shared.Extensions;
 
 namespace Relationship.API.Extensions;
 
@@ -17,12 +18,7 @@ public static class GraphQLExtensions
             .AddGraphQLServer()
             .AddApolloFederation()
             .AddQueryType<Query>()
-            .AddAutoScaffoldedTypes()
-            .AddTypeExtension<RelationshipToPersonPlausibilityExtensions>()
-            .AddTypeExtension<RelationshipPlausibilityExtensions>()
-            .AddTypeExtension(new ObjectTypeExtension(d => d
-                .Name("CollectionSegmentInfo")
-                .Shareable()))
+            .AddAutoScaffoldedTypes(typeof(Query).Assembly)
             .AddProjections()
             .AddFiltering()
             .AddSorting()

@@ -4,6 +4,7 @@ using HotChocolate.ApolloFederation.Types;
 using Person.API.Graph;
 using Person.API.Graph.Types;
 using Shared.Temporal;
+using Shared.Extensions;
 
 namespace Person.API.Extensions;
 
@@ -15,10 +16,7 @@ public static class GraphQLExtensions
             .AddGraphQLServer()
             .AddApolloFederation()
             .AddQueryType<Query>()
-            .AddTypeExtension(new ObjectTypeExtension(d => d
-                .Name("CollectionSegmentInfo")
-                .Shareable()))
-            .AddAutoScaffoldedTypes()
+            .AddAutoScaffoldedTypes(typeof(Query).Assembly)
             .AddProjections()
             .AddFiltering()
             .AddSorting()

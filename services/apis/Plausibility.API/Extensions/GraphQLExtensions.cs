@@ -3,6 +3,7 @@ using HotChocolate.Execution;
 using HotChocolate.ApolloFederation.Types;
 using Plausibility.API.Graph.Queries;
 using Shared.Temporal;
+using Shared.Extensions;
 using System;
 using System.Linq;
 using HotChocolate.Types;
@@ -21,13 +22,10 @@ public static class GraphQLExtensions
             })
             .AddApolloFederation()
             .AddQueryType<PlausibilityQueries>()
+            .AddAutoScaffoldedTypes(typeof(PlausibilityQueries).Assembly)
             .AddProjections()
             .AddFiltering()
             .AddSorting()
-            .AddAutoScaffoldedTypes()
-            .AddTypeExtension(new ObjectTypeExtension(d => d
-                .Name("CollectionSegmentInfo")
-                .Shareable()))
             .AddHttpRequestInterceptor<TemporalHttpRequestInterceptor>()
             .InitializeOnStartup(warmup: async (executor, ct) =>
             {
