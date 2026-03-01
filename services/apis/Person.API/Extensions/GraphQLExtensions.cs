@@ -15,10 +15,10 @@ public static class GraphQLExtensions
             .AddGraphQLServer()
             .AddApolloFederation()
             .AddQueryType<Query>()
-            .AddTypeExtension<PersonType>()
             .AddTypeExtension(new ObjectTypeExtension(d => d
                 .Name("CollectionSegmentInfo")
                 .Shareable()))
+            .AddAutoScaffoldedTypes()
             .AddProjections()
             .AddFiltering()
             .AddSorting()
@@ -37,8 +37,8 @@ public static class GraphQLExtensions
 
                 if (result is IOperationResult { Errors: { Count: > 0 } errors })
                 {
-                    var errorMessages = string.Join(", ", errors.Select(e => e.Message));
-                    throw new Exception($"[Warmup Failed] GraphQL errors: {errorMessages}");
+                    var errorMessages = string.Join("\n\n", errors.Select(e => e.Exception != null ? e.Exception.ToString() : e.Message));
+                    throw new Exception($"[Warmup Failed] GraphQL errors:\n{errorMessages}");
                 }
             })
             .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);

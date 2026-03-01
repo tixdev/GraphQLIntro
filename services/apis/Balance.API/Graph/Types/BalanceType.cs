@@ -8,7 +8,7 @@ using Balance.API.Data;
 using BalanceModel = Balance.API.Models.Balance;
 using Microsoft.EntityFrameworkCore;
 using Balance.API.Graph.DataLoaders;
-using Balance.API.Graph.Extensions;
+using Balance.API.Graph.ExternalTypeRefs;
 
 namespace Balance.API.Graph.Types;
 

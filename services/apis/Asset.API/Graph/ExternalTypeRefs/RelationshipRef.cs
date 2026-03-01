@@ -5,10 +5,10 @@ using HotChocolate.ApolloFederation.Resolvers;
 using Asset.API.Graph.DataLoaders;
 using AssetModel = Asset.API.Models.Asset;
 
-namespace Asset.API.Graph.Extensions;
+namespace Asset.API.Graph.ExternalTypeRefs;
 
 [ObjectType("Relationship")]
-[HotChocolate.ApolloFederation.Types.Key("relationshipID")]
+[Key("relationshipID")]
 public class RelationshipRef
 {
     [ReferenceResolver]

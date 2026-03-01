@@ -120,6 +120,7 @@ type CollectionSegmentInfo
   @join__type(graph: ASSET)
   @join__type(graph: BALANCE)
   @join__type(graph: PERSON)
+  @join__type(graph: PLAUSIBILITY)
   @join__type(graph: RELATIONSHIP)
 {
   """
@@ -136,11 +137,13 @@ type CollectionSegmentInfo
 """The `DateTime` scalar represents an ISO-8601 compliant date time type."""
 scalar DateTime
   @join__type(graph: PERSON)
+  @join__type(graph: PLAUSIBILITY)
   @join__type(graph: RELATIONSHIP)
   @specifiedBy(url: "https://www.graphql-scalars.com/date-time")
 
 input DateTimeOperationFilterInput
   @join__type(graph: PERSON)
+  @join__type(graph: PLAUSIBILITY)
   @join__type(graph: RELATIONSHIP)
 {
   eq: DateTime
@@ -178,22 +181,176 @@ input DecimalOperationFilterInput
   nlte: Decimal
 }
 
+type EmployeesRangeNumber
+  @join__type(graph: PERSON, key: "employeesRangeNumberID")
+  @join__type(graph: PLAUSIBILITY, key: "employeesRangeNumberID")
+{
+  employeesRangeNumberID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [EmployeesRangeNumberTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input EmployeesRangeNumberFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [EmployeesRangeNumberFilterInput!]
+  or: [EmployeesRangeNumberFilterInput!]
+  employeesRangeNumberID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfEmployeesRangeNumberTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type EmployeesRangeNumbersCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [EmployeesRangeNumber!]
+  totalCount: Int!
+}
+
+input EmployeesRangeNumberSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  employeesRangeNumberID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type EmployeesRangeNumberTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  employeesRangeNumberLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  employeesRangeNumberID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input EmployeesRangeNumberTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [EmployeesRangeNumberTranslationFilterInput!]
+  or: [EmployeesRangeNumberTranslationFilterInput!]
+  employeesRangeNumberLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  employeesRangeNumberID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
+type GenderCode
+  @join__type(graph: PERSON, key: "genderCodeID")
+  @join__type(graph: PLAUSIBILITY, key: "genderCodeID")
+{
+  genderCodeID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [GenderCodeTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input GenderCodeFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [GenderCodeFilterInput!]
+  or: [GenderCodeFilterInput!]
+  genderCodeID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfGenderCodeTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type GenderCodesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [GenderCode!]
+  totalCount: Int!
+}
+
+input GenderCodeSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  genderCodeID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type GenderCodeTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  genderCodeLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  genderCodeID: Int!
+  lifeCycleStateID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input GenderCodeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [GenderCodeTranslationFilterInput!]
+  or: [GenderCodeTranslationFilterInput!]
+  genderCodeLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  genderCodeID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
 type GroupPerson
   @join__type(graph: PERSON)
 {
+  pltJoinTypeID: Int
   groupPersonID: Int!
   agreedName: String
-  groupNameID: Int
-  pltJoinTypeID: Int
   creationDate: LocalDate
-  hasIndividualJointPersons: Boolean!
-  hasOrganizationJointPersons: Boolean!
   languageID: Int
   validStartDate: DateTime!
   validEndDate: DateTime!
   groupBankID: Int!
   person: Person!
   sensibleData: GroupPersonSensibleData
+  joinType: JoinType
 }
 
 input GroupPersonFilterInput
@@ -203,11 +360,8 @@ input GroupPersonFilterInput
   or: [GroupPersonFilterInput!]
   groupPersonID: IntOperationFilterInput
   agreedName: StringOperationFilterInput
-  groupNameID: IntOperationFilterInput
   pltJoinTypeID: IntOperationFilterInput
   creationDate: LocalDateOperationFilterInput
-  hasIndividualJointPersons: BooleanOperationFilterInput
-  hasOrganizationJointPersons: BooleanOperationFilterInput
   languageID: IntOperationFilterInput
   validStartDate: DateTimeOperationFilterInput
   validEndDate: DateTimeOperationFilterInput
@@ -250,11 +404,8 @@ input GroupPersonSortInput
 {
   groupPersonID: SortEnumType
   agreedName: SortEnumType
-  groupNameID: SortEnumType
   pltJoinTypeID: SortEnumType
   creationDate: SortEnumType
-  hasIndividualJointPersons: SortEnumType
-  hasOrganizationJointPersons: SortEnumType
   languageID: SortEnumType
   validStartDate: SortEnumType
   validEndDate: SortEnumType
@@ -266,13 +417,14 @@ input GroupPersonSortInput
 type InternalPerson
   @join__type(graph: PERSON)
 {
+  pltPersonInternalTypeID: Int!
   internalPersonID: Int!
   internalName: String!
-  pltPersonInternalTypeID: Int!
   validStartDate: DateTime!
   validEndDate: DateTime!
   groupBankID: Int!
   person: Person!
+  personInternalType: PersonInternalType
 }
 
 input InternalPersonFilterInput
@@ -305,6 +457,7 @@ input IntOperationFilterInput
   @join__type(graph: ASSET)
   @join__type(graph: BALANCE)
   @join__type(graph: PERSON)
+  @join__type(graph: PLAUSIBILITY)
   @join__type(graph: RELATIONSHIP)
 {
   eq: Int
@@ -327,18 +480,97 @@ enum join__Graph {
   ASSET @join__graph(name: "asset", url: "http://localhost:5013/graphql")
   BALANCE @join__graph(name: "balance", url: "http://localhost:5014/graphql")
   PERSON @join__graph(name: "person", url: "http://localhost:5011/graphql")
+  PLAUSIBILITY @join__graph(name: "plausibility", url: "http://localhost:5015/graphql")
   RELATIONSHIP @join__graph(name: "relationship", url: "http://localhost:5012/graphql")
+}
+
+type JoinType
+  @join__type(graph: PERSON, key: "joinTypeID")
+  @join__type(graph: PLAUSIBILITY, key: "joinTypeID")
+{
+  joinTypeID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [JoinTypeTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input JoinTypeFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [JoinTypeFilterInput!]
+  or: [JoinTypeFilterInput!]
+  joinTypeID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfJoinTypeTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type JoinTypesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [JoinType!]
+  totalCount: Int!
+}
+
+input JoinTypeSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  joinTypeID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type JoinTypeTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  joinTypeLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  joinTypeID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input JoinTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [JoinTypeTranslationFilterInput!]
+  or: [JoinTypeTranslationFilterInput!]
+  joinTypeLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  joinTypeID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
 }
 
 type LegalPerson
   @join__type(graph: PERSON)
 {
+  pltEmployeesRangeNumberID: Int
+  pltPersonOrganizationTypeID: Int
   legalPersonID: Int!
   agreedName: String
   foundationDate: LocalDate
   languageID: Int
-  pltEmployeesRangeNumberID: Int
-  pltPersonOrganizationTypeID: Int
   economicallyExposedLegal: Boolean
   validStartDate: DateTime!
   validEndDate: DateTime!
@@ -347,6 +579,8 @@ type LegalPerson
   complexStructurePurpose: String
   person: Person!
   sensibleData: LegalPersonSensibleData
+  employeesRangeNumber: EmployeesRangeNumber
+  personOrganizationType: PersonOrganizationType
 }
 
 input LegalPersonFilterInput
@@ -373,12 +607,13 @@ input LegalPersonFilterInput
 type LegalPersonSensibleData
   @join__type(graph: PERSON)
 {
+  pltRegisteredOfficeID: Int
   legalPersonID: Int!
   businessNameID: Int!
   businessName: String
-  pltRegisteredOfficeID: Int
   groupBankID: Int!
   legalPerson: LegalPerson!
+  registeredOffice: NationAlpha2FederationStub
 }
 
 input LegalPersonSensibleDataFilterInput
@@ -438,12 +673,174 @@ enum link__Purpose {
   EXECUTION
 }
 
+input ListFilterInputTypeOfEmployeesRangeNumberTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: EmployeesRangeNumberTranslationFilterInput
+  none: EmployeesRangeNumberTranslationFilterInput
+  some: EmployeesRangeNumberTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfGenderCodeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: GenderCodeTranslationFilterInput
+  none: GenderCodeTranslationFilterInput
+  some: GenderCodeTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfJoinTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: JoinTypeTranslationFilterInput
+  none: JoinTypeTranslationFilterInput
+  some: JoinTypeTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfMaritalRegimeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: MaritalRegimeTranslationFilterInput
+  none: MaritalRegimeTranslationFilterInput
+  some: MaritalRegimeTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfNationAlpha2TranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: NationAlpha2TranslationFilterInput
+  none: NationAlpha2TranslationFilterInput
+  some: NationAlpha2TranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfNogaTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: NogaTranslationFilterInput
+  none: NogaTranslationFilterInput
+  some: NogaTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPepTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PepTranslationFilterInput
+  none: PepTranslationFilterInput
+  some: PepTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPersonAcquisitionSourceTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PersonAcquisitionSourceTranslationFilterInput
+  none: PersonAcquisitionSourceTranslationFilterInput
+  some: PersonAcquisitionSourceTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPersonalityTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PersonalityTranslationFilterInput
+  none: PersonalityTranslationFilterInput
+  some: PersonalityTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPersonCodingTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PersonCodingTypeTranslationFilterInput
+  none: PersonCodingTypeTranslationFilterInput
+  some: PersonCodingTypeTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPersonDependentsNumberTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PersonDependentsNumberTranslationFilterInput
+  none: PersonDependentsNumberTranslationFilterInput
+  some: PersonDependentsNumberTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPersonInternalTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PersonInternalTypeTranslationFilterInput
+  none: PersonInternalTypeTranslationFilterInput
+  some: PersonInternalTypeTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPersonMaritalStatusTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PersonMaritalStatusTranslationFilterInput
+  none: PersonMaritalStatusTranslationFilterInput
+  some: PersonMaritalStatusTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPersonNatureTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PersonNatureTranslationFilterInput
+  none: PersonNatureTranslationFilterInput
+  some: PersonNatureTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPersonOrganizationTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PersonOrganizationTypeTranslationFilterInput
+  none: PersonOrganizationTypeTranslationFilterInput
+  some: PersonOrganizationTypeTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPersonProfessionTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PersonProfessionTranslationFilterInput
+  none: PersonProfessionTranslationFilterInput
+  some: PersonProfessionTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPersonToRelationshipRoleTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PersonToRelationshipRoleTranslationFilterInput
+  none: PersonToRelationshipRoleTranslationFilterInput
+  some: PersonToRelationshipRoleTranslationFilterInput
+  any: Boolean
+}
+
 input ListFilterInputTypeOfRelationshipToPersonFilterInput
   @join__type(graph: RELATIONSHIP)
 {
   all: RelationshipToPersonFilterInput
   none: RelationshipToPersonFilterInput
   some: RelationshipToPersonFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfRelationshipTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: RelationshipTypeTranslationFilterInput
+  none: RelationshipTypeTranslationFilterInput
+  some: RelationshipTypeTranslationFilterInput
   any: Boolean
 }
 
@@ -493,20 +890,193 @@ input LongOperationFilterInput
   nlte: Long
 }
 
+type MaritalRegime
+  @join__type(graph: PERSON, key: "maritalRegimeID")
+  @join__type(graph: PLAUSIBILITY, key: "maritalRegimeID")
+{
+  maritalRegimeID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [MaritalRegimeTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input MaritalRegimeFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [MaritalRegimeFilterInput!]
+  or: [MaritalRegimeFilterInput!]
+  maritalRegimeID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfMaritalRegimeTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type MaritalRegimesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [MaritalRegime!]
+  totalCount: Int!
+}
+
+input MaritalRegimeSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  maritalRegimeID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type MaritalRegimeTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  maritalRegimeLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  maritalRegimeID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input MaritalRegimeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [MaritalRegimeTranslationFilterInput!]
+  or: [MaritalRegimeTranslationFilterInput!]
+  maritalRegimeLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  maritalRegimeID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
+type Nation
+  @join__type(graph: PERSON, key: "nationID")
+{
+  nationID: Int!
+}
+
+type Nationality
+  @join__type(graph: PERSON, key: "nationalityID")
+{
+  nationalityID: Int!
+}
+
+type NationAlpha2
+  @join__type(graph: PLAUSIBILITY, key: "nationAlpha2ID")
+{
+  nationAlpha2ID: Int!
+  lifeCycleStateID: Int!
+  code: String!
+  description: String!
+  translations: [NationAlpha2Translation!]!
+}
+
+type NationAlpha2FederationStub
+  @join__type(graph: PERSON)
+{
+  nationAlpha2ID: Int!
+}
+
+input NationAlpha2FilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [NationAlpha2FilterInput!]
+  or: [NationAlpha2FilterInput!]
+  nationAlpha2ID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfNationAlpha2TranslationFilterInput
+}
+
+"""A segment of a collection."""
+type NationAlpha2sCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [NationAlpha2!]
+  totalCount: Int!
+}
+
+input NationAlpha2SortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  nationAlpha2ID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type NationAlpha2Translation
+  @join__type(graph: PLAUSIBILITY)
+{
+  nationAlpha2LanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  nationAlpha2ID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input NationAlpha2TranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [NationAlpha2TranslationFilterInput!]
+  or: [NationAlpha2TranslationFilterInput!]
+  nationAlpha2LanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  nationAlpha2ID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
 type NaturalPerson
   @join__type(graph: PERSON)
 {
-  naturalPersonID: Int!
-  agreedName: String
   pltGenderCodeID: Int
-  familySituationID: Int
   pltPersonMaritalStatusID: Int
   pltMaritalRegimeID: Int
   pltPersonDependentsNumberID: Int
   pltPersonProfessionID: Int
+  pltPepID: Int
+  naturalPersonID: Int!
+  agreedName: String
+  familySituationID: Int
   languageID: Int
   politicallyExposed: Boolean!
-  pltPepID: Int
   economicallyExposed: Boolean
   borderWorker: Boolean!
   pinid: Int!
@@ -518,6 +1088,12 @@ type NaturalPerson
   workOverRetirement: Boolean
   person: Person!
   sensibleData: NaturalPersonSensibleData
+  genderCode: GenderCode
+  personMaritalStatus: PersonMaritalStatus
+  maritalRegime: MaritalRegime
+  personDependentsNumber: PersonDependentsNumber
+  personProfession: PersonProfession
+  pep: Pep
 }
 
 input NaturalPersonFilterInput
@@ -552,17 +1128,20 @@ input NaturalPersonFilterInput
 type NaturalPersonSensibleData
   @join__type(graph: PERSON)
 {
+  pltBirthNationID: Int
+  pltSecondNationalityID: Int
+  pltResidencyID: Int
   naturalPersonID: Int!
   legalSurnameNameID: Int!
   legalSurname: String
   legalName: String
   birthDate: LocalDate
   birthLocation: String
-  pltBirthNationID: Int
-  pltSecondNationalityID: Int
-  pltResidencyID: Int
   groupBankID: Int!
   naturalPerson: NaturalPerson!
+  birthNation: Nation
+  secondNationality: Nationality
+  residency: Residency
 }
 
 input NaturalPersonSensibleDataFilterInput
@@ -626,14 +1205,170 @@ input NaturalPersonSortInput
   sensibleData: NaturalPersonSensibleDataSortInput
 }
 
+type Noga
+  @join__type(graph: PERSON, key: "nogaID")
+  @join__type(graph: PLAUSIBILITY, key: "nogaID")
+{
+  nogaID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [NogaTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input NogaFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [NogaFilterInput!]
+  or: [NogaFilterInput!]
+  nogaID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfNogaTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type NogasCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [Noga!]
+  totalCount: Int!
+}
+
+input NogaSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  nogaID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type NogaTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  nogaLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  nogaID: Int!
+  lifeCycleStateID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input NogaTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [NogaTranslationFilterInput!]
+  or: [NogaTranslationFilterInput!]
+  nogaLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  nogaID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
+type Pep
+  @join__type(graph: PERSON, key: "pepID")
+  @join__type(graph: PLAUSIBILITY, key: "pepID")
+{
+  pepID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PepTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PepFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PepFilterInput!]
+  or: [PepFilterInput!]
+  pepID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPepTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PepsCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [Pep!]
+  totalCount: Int!
+}
+
+input PepSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  pepID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PepTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  pepLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  pepID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input PepTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PepTranslationFilterInput!]
+  or: [PepTranslationFilterInput!]
+  pepLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  pepID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
 type Person
   @join__type(graph: PERSON, key: "personID")
   @join__type(graph: RELATIONSHIP, key: "personID")
 {
-  personID: Int!
-  personNumber: String! @join__field(graph: PERSON)
   pltPersonNatureID: Int! @join__field(graph: PERSON)
   pltPersonCodingTypeID: Int! @join__field(graph: PERSON)
+  personID: Int!
+  personNumber: String! @join__field(graph: PERSON)
   isMigrated: Boolean! @join__field(graph: PERSON)
   groupBankID: Int! @join__field(graph: PERSON)
   caseID: Long @join__field(graph: PERSON)
@@ -643,7 +1378,243 @@ type Person
   internalPerson: InternalPerson @join__field(graph: PERSON)
   groupPerson: GroupPerson @join__field(graph: PERSON)
   personOnlineService: PersonOnlineService @join__field(graph: PERSON)
+  personNature: PersonNature @join__field(graph: PERSON)
+  personCodingType: PersonCodingType @join__field(graph: PERSON)
   relationships(skip: Int, take: Int): RelationshipsCollectionSegment @join__field(graph: RELATIONSHIP)
+}
+
+type PersonAcquisitionSource
+  @join__type(graph: PERSON, key: "personAcquisitionSourceID")
+  @join__type(graph: PLAUSIBILITY, key: "personAcquisitionSourceID")
+{
+  personAcquisitionSourceID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PersonAcquisitionSourceTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PersonAcquisitionSourceFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonAcquisitionSourceFilterInput!]
+  or: [PersonAcquisitionSourceFilterInput!]
+  personAcquisitionSourceID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPersonAcquisitionSourceTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PersonAcquisitionSourcesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PersonAcquisitionSource!]
+  totalCount: Int!
+}
+
+input PersonAcquisitionSourceSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  personAcquisitionSourceID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PersonAcquisitionSourceTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  personAcquisitionSourceLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  personAcquisitionSourceID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input PersonAcquisitionSourceTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonAcquisitionSourceTranslationFilterInput!]
+  or: [PersonAcquisitionSourceTranslationFilterInput!]
+  personAcquisitionSourceLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  personAcquisitionSourceID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
+type Personality
+  @join__type(graph: PERSON, key: "personalityID")
+  @join__type(graph: PLAUSIBILITY, key: "personalityID")
+{
+  personalityID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PersonalityTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PersonalityFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonalityFilterInput!]
+  or: [PersonalityFilterInput!]
+  personalityID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPersonalityTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PersonalitysCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [Personality!]
+  totalCount: Int!
+}
+
+input PersonalitySortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  personalityID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PersonalityTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  personalityLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  personalityID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input PersonalityTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonalityTranslationFilterInput!]
+  or: [PersonalityTranslationFilterInput!]
+  personalityLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  personalityID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
+type PersonCodingType
+  @join__type(graph: PERSON, key: "personCodingTypeID")
+  @join__type(graph: PLAUSIBILITY, key: "personCodingTypeID")
+{
+  personCodingTypeID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PersonCodingTypeTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PersonCodingTypeFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonCodingTypeFilterInput!]
+  or: [PersonCodingTypeFilterInput!]
+  personCodingTypeID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPersonCodingTypeTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PersonCodingTypesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PersonCodingType!]
+  totalCount: Int!
+}
+
+input PersonCodingTypeSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  personCodingTypeID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PersonCodingTypeTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  personCodingTypeLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  personCodingTypeID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input PersonCodingTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonCodingTypeTranslationFilterInput!]
+  or: [PersonCodingTypeTranslationFilterInput!]
+  personCodingTypeLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  personCodingTypeID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
 }
 
 """A segment of a collection."""
@@ -658,20 +1629,100 @@ type PersonCollectionSegment
   totalCount: Int!
 }
 
+type PersonDependentsNumber
+  @join__type(graph: PERSON, key: "personDependentsNumberID")
+  @join__type(graph: PLAUSIBILITY, key: "personDependentsNumberID")
+{
+  personDependentsNumberID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PersonDependentsNumberTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PersonDependentsNumberFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonDependentsNumberFilterInput!]
+  or: [PersonDependentsNumberFilterInput!]
+  personDependentsNumberID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPersonDependentsNumberTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PersonDependentsNumbersCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PersonDependentsNumber!]
+  totalCount: Int!
+}
+
+input PersonDependentsNumberSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  personDependentsNumberID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PersonDependentsNumberTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  personDependentsNumberLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  personDependentsNumberID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input PersonDependentsNumberTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonDependentsNumberTranslationFilterInput!]
+  or: [PersonDependentsNumberTranslationFilterInput!]
+  personDependentsNumberLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  personDependentsNumberID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
 type PersonDetail
   @join__type(graph: PERSON)
 {
+  pltPersonAcquisitionSourceID: Int
+  pltPersonalityID: Int
   personDetailID: Int!
   personID: Int!
   basicDataID: Int!
-  pltPersonAcquisitionSourceID: Int
-  pltPersonalityID: Int
   mainOfficer: String
   deputyOfficer: String
   groupBankID: Int!
   caseID: Long
   person: Person!
   sensibleData: PersonDetailSensibleData
+  personAcquisitionSource: PersonAcquisitionSource
+  personality: Personality
 }
 
 input PersonDetailFilterInput
@@ -695,11 +1746,13 @@ input PersonDetailFilterInput
 type PersonDetailSensibleData
   @join__type(graph: PERSON)
 {
-  personDetailID: Int!
   pltNationalityID: Int
   pltNogaID: Int
+  personDetailID: Int!
   groupBankID: Int!
   personDetail: PersonDetail!
+  nationality: Nationality
+  noga: Noga
 }
 
 input PersonDetailSensibleDataFilterInput
@@ -758,6 +1811,240 @@ input PersonFilterInput
   internalPerson: InternalPersonFilterInput
   groupPerson: GroupPersonFilterInput
   personOnlineService: PersonOnlineServiceFilterInput
+}
+
+type PersonInternalType
+  @join__type(graph: PERSON, key: "personInternalTypeID")
+  @join__type(graph: PLAUSIBILITY, key: "personInternalTypeID")
+{
+  personInternalTypeID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PersonInternalTypeTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PersonInternalTypeFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonInternalTypeFilterInput!]
+  or: [PersonInternalTypeFilterInput!]
+  personInternalTypeID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPersonInternalTypeTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PersonInternalTypesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PersonInternalType!]
+  totalCount: Int!
+}
+
+input PersonInternalTypeSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  personInternalTypeID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PersonInternalTypeTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  personInternalTypeLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  personInternalTypeID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input PersonInternalTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonInternalTypeTranslationFilterInput!]
+  or: [PersonInternalTypeTranslationFilterInput!]
+  personInternalTypeLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  personInternalTypeID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
+type PersonMaritalStatus
+  @join__type(graph: PERSON, key: "personMaritalStatusID")
+  @join__type(graph: PLAUSIBILITY, key: "personMaritalStatusID")
+{
+  personMaritalStatusID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PersonMaritalStatusTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PersonMaritalStatusFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonMaritalStatusFilterInput!]
+  or: [PersonMaritalStatusFilterInput!]
+  personMaritalStatusID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPersonMaritalStatusTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PersonMaritalStatussCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PersonMaritalStatus!]
+  totalCount: Int!
+}
+
+input PersonMaritalStatusSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  personMaritalStatusID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PersonMaritalStatusTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  personMaritalStatusLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  personMaritalStatusID: Int!
+  lifeCycleStateID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input PersonMaritalStatusTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonMaritalStatusTranslationFilterInput!]
+  or: [PersonMaritalStatusTranslationFilterInput!]
+  personMaritalStatusLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  personMaritalStatusID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
+type PersonNature
+  @join__type(graph: PERSON, key: "personNatureID")
+  @join__type(graph: PLAUSIBILITY, key: "personNatureID")
+{
+  personNatureID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PersonNatureTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PersonNatureFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonNatureFilterInput!]
+  or: [PersonNatureFilterInput!]
+  personNatureID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPersonNatureTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PersonNaturesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PersonNature!]
+  totalCount: Int!
+}
+
+input PersonNatureSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  personNatureID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PersonNatureTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  personNatureLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  personNatureID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input PersonNatureTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonNatureTranslationFilterInput!]
+  or: [PersonNatureTranslationFilterInput!]
+  personNatureLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  personNatureID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
 }
 
 type PersonOnlineService
@@ -825,6 +2112,162 @@ input PersonOnlineServiceSortInput
   person: PersonSortInput
 }
 
+type PersonOrganizationType
+  @join__type(graph: PERSON, key: "personOrganizationTypeID")
+  @join__type(graph: PLAUSIBILITY, key: "personOrganizationTypeID")
+{
+  personOrganizationTypeID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PersonOrganizationTypeTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PersonOrganizationTypeFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonOrganizationTypeFilterInput!]
+  or: [PersonOrganizationTypeFilterInput!]
+  personOrganizationTypeID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPersonOrganizationTypeTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PersonOrganizationTypesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PersonOrganizationType!]
+  totalCount: Int!
+}
+
+input PersonOrganizationTypeSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  personOrganizationTypeID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PersonOrganizationTypeTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  personOrganizationTypeLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  personOrganizationTypeID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input PersonOrganizationTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonOrganizationTypeTranslationFilterInput!]
+  or: [PersonOrganizationTypeTranslationFilterInput!]
+  personOrganizationTypeLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  personOrganizationTypeID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
+type PersonProfession
+  @join__type(graph: PERSON, key: "personProfessionID")
+  @join__type(graph: PLAUSIBILITY, key: "personProfessionID")
+{
+  personProfessionID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PersonProfessionTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PersonProfessionFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonProfessionFilterInput!]
+  or: [PersonProfessionFilterInput!]
+  personProfessionID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPersonProfessionTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PersonProfessionsCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PersonProfession!]
+  totalCount: Int!
+}
+
+input PersonProfessionSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  personProfessionID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PersonProfessionTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  personProfessionLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  personProfessionID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input PersonProfessionTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonProfessionTranslationFilterInput!]
+  or: [PersonProfessionTranslationFilterInput!]
+  personProfessionLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  personProfessionID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
 input PersonSortInput
   @join__type(graph: PERSON)
 {
@@ -843,15 +2286,112 @@ input PersonSortInput
   personOnlineService: PersonOnlineServiceSortInput
 }
 
+type PersonToRelationshipRole
+  @join__type(graph: PLAUSIBILITY, key: "personToRelationshipRoleID")
+  @join__type(graph: RELATIONSHIP, key: "personToRelationshipRoleID")
+{
+  personToRelationshipRoleID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PersonToRelationshipRoleTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PersonToRelationshipRoleFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonToRelationshipRoleFilterInput!]
+  or: [PersonToRelationshipRoleFilterInput!]
+  personToRelationshipRoleID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPersonToRelationshipRoleTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PersonToRelationshipRolesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PersonToRelationshipRole!]
+  totalCount: Int!
+}
+
+input PersonToRelationshipRoleSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  personToRelationshipRoleID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PersonToRelationshipRoleTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  personToRelationshipRoleLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  personToRelationshipRoleID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input PersonToRelationshipRoleTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PersonToRelationshipRoleTranslationFilterInput!]
+  or: [PersonToRelationshipRoleTranslationFilterInput!]
+  personToRelationshipRoleLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  personToRelationshipRoleID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
 type Query
   @join__type(graph: ASSET)
   @join__type(graph: BALANCE)
   @join__type(graph: PERSON)
+  @join__type(graph: PLAUSIBILITY)
   @join__type(graph: RELATIONSHIP)
 {
   asset(skip: Int, take: Int, where: AssetFilterInput, order: [AssetSortInput!]): AssetCollectionSegment @join__field(graph: ASSET)
   balance(skip: Int, take: Int, where: BalanceFilterInput, order: [BalanceSortInput!]): BalanceCollectionSegment @join__field(graph: BALANCE)
   person(skip: Int, take: Int, where: PersonFilterInput, order: [PersonSortInput!]): PersonCollectionSegment @join__field(graph: PERSON)
+  employeesRangeNumbers(skip: Int, take: Int, where: EmployeesRangeNumberFilterInput, order: [EmployeesRangeNumberSortInput!]): EmployeesRangeNumbersCollectionSegment @join__field(graph: PLAUSIBILITY)
+  genderCodes(skip: Int, take: Int, where: GenderCodeFilterInput, order: [GenderCodeSortInput!]): GenderCodesCollectionSegment @join__field(graph: PLAUSIBILITY)
+  joinTypes(skip: Int, take: Int, where: JoinTypeFilterInput, order: [JoinTypeSortInput!]): JoinTypesCollectionSegment @join__field(graph: PLAUSIBILITY)
+  maritalRegimes(skip: Int, take: Int, where: MaritalRegimeFilterInput, order: [MaritalRegimeSortInput!]): MaritalRegimesCollectionSegment @join__field(graph: PLAUSIBILITY)
+  nationAlpha2s(skip: Int, take: Int, where: NationAlpha2FilterInput, order: [NationAlpha2SortInput!]): NationAlpha2sCollectionSegment @join__field(graph: PLAUSIBILITY)
+  nogas(skip: Int, take: Int, where: NogaFilterInput, order: [NogaSortInput!]): NogasCollectionSegment @join__field(graph: PLAUSIBILITY)
+  peps(skip: Int, take: Int, where: PepFilterInput, order: [PepSortInput!]): PepsCollectionSegment @join__field(graph: PLAUSIBILITY)
+  personAcquisitionSources(skip: Int, take: Int, where: PersonAcquisitionSourceFilterInput, order: [PersonAcquisitionSourceSortInput!]): PersonAcquisitionSourcesCollectionSegment @join__field(graph: PLAUSIBILITY)
+  personalitys(skip: Int, take: Int, where: PersonalityFilterInput, order: [PersonalitySortInput!]): PersonalitysCollectionSegment @join__field(graph: PLAUSIBILITY)
+  personCodingTypes(skip: Int, take: Int, where: PersonCodingTypeFilterInput, order: [PersonCodingTypeSortInput!]): PersonCodingTypesCollectionSegment @join__field(graph: PLAUSIBILITY)
+  personDependentsNumbers(skip: Int, take: Int, where: PersonDependentsNumberFilterInput, order: [PersonDependentsNumberSortInput!]): PersonDependentsNumbersCollectionSegment @join__field(graph: PLAUSIBILITY)
+  personInternalTypes(skip: Int, take: Int, where: PersonInternalTypeFilterInput, order: [PersonInternalTypeSortInput!]): PersonInternalTypesCollectionSegment @join__field(graph: PLAUSIBILITY)
+  personMaritalStatuss(skip: Int, take: Int, where: PersonMaritalStatusFilterInput, order: [PersonMaritalStatusSortInput!]): PersonMaritalStatussCollectionSegment @join__field(graph: PLAUSIBILITY)
+  personNatures(skip: Int, take: Int, where: PersonNatureFilterInput, order: [PersonNatureSortInput!]): PersonNaturesCollectionSegment @join__field(graph: PLAUSIBILITY)
+  personOrganizationTypes(skip: Int, take: Int, where: PersonOrganizationTypeFilterInput, order: [PersonOrganizationTypeSortInput!]): PersonOrganizationTypesCollectionSegment @join__field(graph: PLAUSIBILITY)
+  personProfessions(skip: Int, take: Int, where: PersonProfessionFilterInput, order: [PersonProfessionSortInput!]): PersonProfessionsCollectionSegment @join__field(graph: PLAUSIBILITY)
+  personToRelationshipRoles(skip: Int, take: Int, where: PersonToRelationshipRoleFilterInput, order: [PersonToRelationshipRoleSortInput!]): PersonToRelationshipRolesCollectionSegment @join__field(graph: PLAUSIBILITY)
+  relationshipTypes(skip: Int, take: Int, where: RelationshipTypeFilterInput, order: [RelationshipTypeSortInput!]): RelationshipTypesCollectionSegment @join__field(graph: PLAUSIBILITY)
   relationship(skip: Int, take: Int, where: RelationshipFilterInput, order: [RelationshipSortInput!]): RelationshipCollectionSegment @join__field(graph: RELATIONSHIP)
 }
 
@@ -863,10 +2403,11 @@ type Relationship
   relationshipID: Int!
   name: RelationshipName @join__field(graph: RELATIONSHIP)
   persons: [Person!]! @join__field(graph: RELATIONSHIP)
-  number: Int! @join__field(graph: RELATIONSHIP)
   pltRelationshipTypeID: Int! @join__field(graph: RELATIONSHIP)
+  number: Int! @join__field(graph: RELATIONSHIP)
   groupBankID: Int! @join__field(graph: RELATIONSHIP)
   relationshipToPersons: [RelationshipToPerson!]! @join__field(graph: RELATIONSHIP)
+  relationshipType: RelationshipType @join__field(graph: RELATIONSHIP)
 }
 
 """A segment of a collection."""
@@ -949,14 +2490,15 @@ input RelationshipSortInput
 type RelationshipToPerson
   @join__type(graph: RELATIONSHIP)
 {
+  pltPersonToRelationshipRoleID: Int!
   relationshipToPersonID: Int!
   relationshipID: Int!
   personID: Int!
-  pltPersonToRelationshipRoleID: Int!
   groupBankID: Int!
   validStartDate: DateTime!
   validEndDate: DateTime!
   relationship: Relationship!
+  personToRelationshipRole: PersonToRelationshipRole
 }
 
 input RelationshipToPersonFilterInput
@@ -974,20 +2516,106 @@ input RelationshipToPersonFilterInput
   relationship: RelationshipFilterInput
 }
 
+type RelationshipType
+  @join__type(graph: PLAUSIBILITY, key: "relationshipTypeID")
+  @join__type(graph: RELATIONSHIP, key: "relationshipTypeID")
+{
+  relationshipTypeID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [RelationshipTypeTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input RelationshipTypeFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [RelationshipTypeFilterInput!]
+  or: [RelationshipTypeFilterInput!]
+  relationshipTypeID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfRelationshipTypeTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type RelationshipTypesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [RelationshipType!]
+  totalCount: Int!
+}
+
+input RelationshipTypeSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  relationshipTypeID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type RelationshipTypeTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  relationshipTypeLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  relationshipTypeID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime
+}
+
+input RelationshipTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [RelationshipTypeTranslationFilterInput!]
+  or: [RelationshipTypeTranslationFilterInput!]
+  relationshipTypeLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  relationshipTypeID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+}
+
+type Residency
+  @join__type(graph: PERSON, key: "residencyID")
+{
+  residencyID: Int!
+}
+
 enum SortEnumType
   @join__type(graph: ASSET)
   @join__type(graph: BALANCE)
   @join__type(graph: PERSON)
+  @join__type(graph: PLAUSIBILITY)
   @join__type(graph: RELATIONSHIP)
 {
-  ASC @join__enumValue(graph: ASSET) @join__enumValue(graph: BALANCE) @join__enumValue(graph: PERSON) @join__enumValue(graph: RELATIONSHIP)
-  DESC @join__enumValue(graph: ASSET) @join__enumValue(graph: BALANCE) @join__enumValue(graph: PERSON) @join__enumValue(graph: RELATIONSHIP)
+  ASC @join__enumValue(graph: ASSET) @join__enumValue(graph: BALANCE) @join__enumValue(graph: PERSON) @join__enumValue(graph: PLAUSIBILITY) @join__enumValue(graph: RELATIONSHIP)
+  DESC @join__enumValue(graph: ASSET) @join__enumValue(graph: BALANCE) @join__enumValue(graph: PERSON) @join__enumValue(graph: PLAUSIBILITY) @join__enumValue(graph: RELATIONSHIP)
 }
 
 input StringOperationFilterInput
   @join__type(graph: ASSET)
   @join__type(graph: BALANCE)
   @join__type(graph: PERSON)
+  @join__type(graph: PLAUSIBILITY)
   @join__type(graph: RELATIONSHIP)
 {
   and: [StringOperationFilterInput!]

@@ -10,4 +10,5 @@
   <Project Path="Asset.API/Asset.API.csproj" />
   <Project Path="Balance.API/Balance.API.csproj" />
   <Project Path="Gateway.IntegrationTests/Gateway.IntegrationTests.csproj" />
+  <Project Path="Plausibility.API/Plausibility.API.csproj" />
 </Solution>

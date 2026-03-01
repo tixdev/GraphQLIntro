@@ -1,15 +1,16 @@
 using Microsoft.EntityFrameworkCore;
 using Relationship.API.Data;
-using Relationship.API.Graph.Extensions;
+using Relationship.API.Graph.ExternalTypeRefs;
+using Relationship.API.Graph.TypeExtensions;
 
 namespace Relationship.API.Graph.DataLoaders;
 
 public class PersonsByRelationshipIdDataLoader(
     IBatchScheduler batchScheduler,
     DataLoaderOptions options,
-    RelationshipContext dbContext) : GroupedDataLoader<int, PersonExtensions>(batchScheduler, options)
+    RelationshipContext dbContext) : GroupedDataLoader<int, PersonRef>(batchScheduler, options)
 {
-    protected override async Task<ILookup<int, PersonExtensions>> LoadGroupedBatchAsync(
+    protected override async Task<ILookup<int, PersonRef>> LoadGroupedBatchAsync(
         IReadOnlyList<int> keys,
         CancellationToken cancellationToken)
     {
@@ -22,6 +23,6 @@ public class PersonsByRelationshipIdDataLoader(
 
         return items
             .DistinctBy(x => new { x.RelationshipID, x.PersonID })
-            .ToLookup(x => x.RelationshipID, x => new PersonExtensions { PersonID = x.PersonID });
+            .ToLookup(x => x.RelationshipID, x => new PersonRef { PersonID = x.PersonID });
     }
 }

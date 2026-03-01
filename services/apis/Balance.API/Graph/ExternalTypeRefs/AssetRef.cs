@@ -5,7 +5,7 @@ using HotChocolate.ApolloFederation.Resolvers;
 using Balance.API.Graph.DataLoaders;
 using BalanceModel = Balance.API.Models.Balance;
 
-namespace Balance.API.Graph.Extensions;
+namespace Balance.API.Graph.ExternalTypeRefs;
 
 [ObjectType("Asset")]
 [HotChocolate.ApolloFederation.Types.Key("assetID")]

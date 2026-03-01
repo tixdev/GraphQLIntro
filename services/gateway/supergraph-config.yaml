@@ -16,3 +16,7 @@ subgraphs:
     routing_url: http://localhost:5014/graphql
     schema:
       subgraph_url: http://localhost:5014/graphql
+  plausibility:
+    routing_url: http://localhost:5015/graphql
+    schema:
+      subgraph_url: http://localhost:5015/graphql

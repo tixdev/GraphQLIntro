@@ -8,7 +8,7 @@ using Asset.API.Data;
 using AssetModel = Asset.API.Models.Asset;
 using Microsoft.EntityFrameworkCore;
 using Asset.API.Graph.DataLoaders;
-using Asset.API.Graph.Extensions;
+using Asset.API.Graph.ExternalTypeRefs;
 
 namespace Asset.API.Graph.Types;
 

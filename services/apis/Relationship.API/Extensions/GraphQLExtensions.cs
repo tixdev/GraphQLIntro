@@ -3,7 +3,8 @@ using HotChocolate.Execution;
 using HotChocolate.ApolloFederation.Types;
 using Relationship.API.Graph;
 using Relationship.API.Graph.Types;
-using Relationship.API.Graph.Extensions;
+using Relationship.API.Graph.ExternalTypeRefs;
+using Relationship.API.Graph.TypeExtensions;
 using Shared.Temporal;
 
 namespace Relationship.API.Extensions;
@@ -17,6 +18,8 @@ public static class GraphQLExtensions
             .AddApolloFederation()
             .AddQueryType<Query>()
             .AddAutoScaffoldedTypes()
+            .AddTypeExtension<RelationshipToPersonPlausibilityExtensions>()
+            .AddTypeExtension<RelationshipPlausibilityExtensions>()
             .AddTypeExtension(new ObjectTypeExtension(d => d
                 .Name("CollectionSegmentInfo")
                 .Shareable()))

@@ -1,25 +1,22 @@
-using HotChocolate.ApolloFederation.Types;
 using HotChocolate.ApolloFederation.Resolvers;
 using Relationship.API.Graph.DataLoaders;
 using RelationshipModel = Relationship.API.Models.Relationship;
-using HotChocolate.Types;
 
-namespace Relationship.API.Graph.Extensions;
+namespace Relationship.API.Graph.ExternalTypeRefs;
 
 [ObjectType("Person")]
-[Key("personID")]
-public class PersonExtensions
+[HotChocolate.ApolloFederation.Types.Key("personID")]
+public class PersonRef
 {
     [ReferenceResolver]
-    public static async Task<PersonExtensions> GetByIdAsync(int personID) =>
-        await Task.FromResult(new PersonExtensions { PersonID = personID });
+    public static async Task<PersonRef> GetByIdAsync(int personID)
+        => await Task.FromResult(new PersonRef { PersonID = personID });
 
-    [GraphQLName("personID")]
     public int PersonID { get; set; }
 
     [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 200, IncludeTotalCount = true)]
     public async Task<IEnumerable<RelationshipModel>> GetRelationships(
-        [Parent] PersonExtensions person,
+        [Parent] PersonRef person,
         RelationshipsByPersonIdDataLoader dataLoader)
     {
         var results = await dataLoader.LoadAsync(person.PersonID);

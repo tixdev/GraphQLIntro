@@ -11,6 +11,9 @@ public class PersonType : ObjectType<PersonModel>
     {
         var method = typeof(PersonType).GetMethod(nameof(GetByIdAsync))!;
         descriptor.Key("personID").ResolveReferenceWith(method);
+
+        descriptor.Field(t => t.PltPersonNatureID).IsProjected();
+        descriptor.Field(t => t.PltPersonCodingTypeID).IsProjected();
     }
 
     [ReferenceResolver]
