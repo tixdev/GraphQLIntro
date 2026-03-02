@@ -14,5 +14,5 @@ public class LegalPersonSensibleData
     public int GroupBankID { get; set; }
 
     // Navigation
-    public LegalPerson LegalPerson { get; set; } = null!;
+    public LegalPerson? LegalPerson { get; set; }
 }

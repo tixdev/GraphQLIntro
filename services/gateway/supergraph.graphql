@@ -376,7 +376,7 @@ type GroupPersonSensibleData
   groupPersonID: Int!
   name: String
   groupBankID: Int!
-  groupPerson: GroupPerson!
+  groupPerson: GroupPerson
 }
 
 input GroupPersonSensibleDataFilterInput
@@ -612,7 +612,7 @@ type LegalPersonSensibleData
   businessNameID: Int!
   businessName: String
   groupBankID: Int!
-  legalPerson: LegalPerson!
+  legalPerson: LegalPerson
   registeredOffice: NationAlpha2FederationStub
 }
 
@@ -1138,7 +1138,7 @@ type NaturalPersonSensibleData
   birthDate: LocalDate
   birthLocation: String
   groupBankID: Int!
-  naturalPerson: NaturalPerson!
+  naturalPerson: NaturalPerson
   birthNation: Nation
   secondNationality: Nationality
   residency: Residency

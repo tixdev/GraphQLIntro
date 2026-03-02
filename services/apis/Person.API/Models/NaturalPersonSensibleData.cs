@@ -19,5 +19,5 @@ public class NaturalPersonSensibleData
     public int GroupBankID { get; set; }
 
     // Navigation
-    public NaturalPerson NaturalPerson { get; set; } = null!;
+    public NaturalPerson? NaturalPerson { get; set; }
 }

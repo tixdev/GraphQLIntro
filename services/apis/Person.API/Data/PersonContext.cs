@@ -62,7 +62,8 @@ public class PersonContext(DbContextOptions<PersonContext> options, ITemporalCon
             e.ToTable("NaturalPersonSensibleData", "Person");
             e.HasKey(p => p.NaturalPersonID);
             e.HasOne(p => p.NaturalPerson).WithOne(p => p.SensibleData)
-                .HasForeignKey<NaturalPersonSensibleData>(p => p.NaturalPersonID);
+                .HasForeignKey<NaturalPersonSensibleData>(p => p.NaturalPersonID)
+                .IsRequired(false);
         });
 
         // LegalPerson — 1:1 with Person (LegalPersonID = PersonID)
@@ -80,7 +81,8 @@ public class PersonContext(DbContextOptions<PersonContext> options, ITemporalCon
             e.ToTable("LegalPersonSensibleData", "Person");
             e.HasKey(p => p.LegalPersonID);
             e.HasOne(p => p.LegalPerson).WithOne(p => p.SensibleData)
-                .HasForeignKey<LegalPersonSensibleData>(p => p.LegalPersonID);
+                .HasForeignKey<LegalPersonSensibleData>(p => p.LegalPersonID)
+                .IsRequired(false);
         });
 
         // InternalPerson — 1:1 with Person (InternalPersonID = PersonID)
@@ -107,7 +109,8 @@ public class PersonContext(DbContextOptions<PersonContext> options, ITemporalCon
             e.ToTable("GroupPersonSensibleData", "Person");
             e.HasKey(p => p.GroupPersonID);
             e.HasOne(p => p.GroupPerson).WithOne(p => p.SensibleData)
-                .HasForeignKey<GroupPersonSensibleData>(p => p.GroupPersonID);
+                .HasForeignKey<GroupPersonSensibleData>(p => p.GroupPersonID)
+                .IsRequired(false);
         });
 
         // PersonOnlineService — 1:1 with Person

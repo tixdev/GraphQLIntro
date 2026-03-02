@@ -12,5 +12,5 @@ public class GroupPersonSensibleData
     public int GroupBankID { get; set; }
 
     // Navigation
-    public GroupPerson GroupPerson { get; set; } = null!;
+    public GroupPerson? GroupPerson { get; set; }
 }
