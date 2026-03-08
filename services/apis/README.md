@@ -5,6 +5,7 @@ Questo documento definisce lo standard per la creazione di grafi, tipi, estensio
 ## 1. Struttura delle Cartelle
 Ogni microservizio deve organizzare la cartella `Graph` come segue:
 - `Graph/Types/`: Classi `ObjectType<T>` per le entità proprietarie del servizio.
+- `Graph/Resolvers/`: Classi pure contenenti la logica di risoluzione dei campi (Separation of Concerns).
 - `Graph/TypeExtensions/`: Estensioni di tipi locali per aggiungere campi o riferimenti verso altri servizi (es. risoluzione di Federation Stubs).
 - `Graph/ExternalTypeRefs/`: Estensioni di tipi appartenenti ad altri servizi (Federation Reference).
 - `Graph/DataLoaders/`: Implementazioni individuali di `BatchDataLoader` o `GroupedDataLoader`.
@@ -225,3 +226,21 @@ Per garantire che il grafo sia ultra-performante e non sovraccarichi il database
 ### 6. Mapping esplicito (`Include`) nei DataLoader
 *   **Regola**: All'interno del `LoadBatchAsync` del DataLoader (che opera con `.AsNoTracking()`), usa esplicitamente `.Include()` e `.ThenInclude()` per popolare i dati satellite (es. `SensibleData`).
 *   **Perché**: Senza tracking e senza proiezioni lato root, EF Core non popola automaticamente le relazioni annidate. All'interno del loader, l'overfetching verso tabelle strettamente collegate 1:1 è accettabile e consigliato per minimizzare le query.
+
+---
+
+## 12. Logica di Risoluzione: La cartella `Resolvers`
+
+Per mantenere gli oggetti di tipo (`ObjectType<T>`) snelli e focalizzati sulla sola definizione dello schema, la logica di calcolo o di fetching dei dati deve essere spostata in classi dedicate nella cartella `Graph/Resolvers/`.
+
+### Vantaggi della separazione:
+1.  **Single Responsibility**: Il file `Type.cs` si occupa solo del *contratto* (nomi dei campi, tipi, autorizzazioni), mentre il file `Resolver.cs` si occupa della *logica* (chiamate a DataLoader, calcoli complessi).
+2.  **Clean Code**: Evita che i file descriptor diventino "monoliti" da migliaia di righe difficili da leggere e manutenere.
+3.  **Testabilità**: Le classi resolver possono essere testate unitariamente in modo più semplice rispetto a un intero engine GraphQL.
+4.  **Iniezione delle Dipendenze**: I resolver permettono di iniettare servizi (come `DataLoader` o `DbContext`) direttamente nei parametri del metodo tramite l'attributo `[Service]`, rendendo il codice estremamente dichiarativo.
+
+**Esempio di utilizzo nel Descriptor:**
+```csharp
+descriptor.Field(t => t.NaturalPerson)
+    .ResolveWith<PersonResolvers>(r => r.GetNaturalPersonAsync(default!, default!));
+```
