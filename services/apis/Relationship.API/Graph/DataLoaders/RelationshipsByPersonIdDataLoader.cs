@@ -18,11 +18,12 @@ public class RelationshipsByPersonIdDataLoader(
             .AsNoTracking()
             .Where(rtp => keys.Contains(rtp.PersonID) && rtp.ValidEndDate > now)
             .Include(rtp => rtp.Relationship)
-            .ThenInclude(r => r.Name)
-            .Select(rtp => new { rtp.PersonID, rtp.Relationship })
+                .ThenInclude(r => r.Name)
             .ToListAsync(cancellationToken);
 
         return items
+            .Where(rtp => rtp.Relationship != null)
+            .Select(rtp => new { rtp.PersonID, rtp.Relationship })
             .DistinctBy(x => new { x.PersonID, x.Relationship.RelationshipID })
             .ToLookup(x => x.PersonID, x => x.Relationship);
     }

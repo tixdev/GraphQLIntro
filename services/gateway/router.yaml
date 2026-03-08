@@ -11,4 +11,8 @@ headers:
   all:
     request:
       - propagate:
-          named: x-as-of-date
+          named: x-temporal-mode
+      - propagate:
+          named: x-temporal-range-start
+      - propagate:
+          named: x-temporal-range-end

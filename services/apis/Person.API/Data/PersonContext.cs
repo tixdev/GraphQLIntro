@@ -139,8 +139,14 @@ public class PersonContext(DbContextOptions<PersonContext> options, ITemporalCon
     private void SetTemporalFilter<TEntity>(ModelBuilder modelBuilder) where TEntity : class, ITemporalEntity
     {
         modelBuilder.Entity<TEntity>().HasQueryFilter(e =>
-            e.ValidStartDate <= temporalContext.CurrentAsOfDate &&
-            e.ValidEndDate >= temporalContext.CurrentAsOfDate
+            temporalContext.Mode == TemporalFilterMode.All ||
+            (temporalContext.Mode == TemporalFilterMode.AsOf 
+                && e.ValidStartDate <= temporalContext.CurrentAsOfDate 
+                && e.ValidEndDate >= temporalContext.CurrentAsOfDate) ||
+            (temporalContext.Mode == TemporalFilterMode.ActiveBetween 
+                && temporalContext.IsRangeStartProvided 
+                && e.ValidStartDate <= temporalContext.SafeRangeEnd 
+                && e.ValidEndDate >= temporalContext.SafeRangeStart)
         );
     }
 }

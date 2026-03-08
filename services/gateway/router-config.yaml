@@ -13,3 +13,15 @@ sandbox:
 
 homepage:
   enabled: false # Redirects root (/) to Sandbox
+
+include_subgraph_errors:
+  all: true
+headers:
+  all:
+    request:
+      - propagate:
+          named: x-temporal-mode
+      - propagate:
+          named: x-temporal-range-start
+      - propagate:
+          named: x-temporal-range-end
