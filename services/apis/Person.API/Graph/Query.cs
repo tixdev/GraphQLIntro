@@ -7,7 +7,9 @@ namespace Person.API.Graph;
 public class Query
 {
     [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 256, IncludeTotalCount = true)]
+    [UseProjection]
     [UseFiltering]
     [UseSorting]
-    public IQueryable<PersonModel> GetPerson([Service] PersonContext context) => context.Person.AsNoTracking();
+    public IQueryable<PersonModel> GetPerson([Service] PersonContext context) =>
+        context.Person.AsNoTracking().AsSplitQuery();
 }

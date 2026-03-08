@@ -195,3 +195,33 @@ public class PersonType : ObjectType<Person.API.Models.Person>
 }
 ```
 In questo modo, permettiamo la navigazione GraphQL fluida e indolore, accettando un minimo compromesso di "overfetching" per queste singole colonne quando non richieste direttamente.
+
+---
+
+## 11. GraphQL Performance: Le "Regole d'Oro"
+
+Per garantire che il grafo sia ultra-performante e non sovraccarichi il database, segui queste regole architettoniche consolidate:
+
+### 1. Root Query & Proiezioni (Selettività delle Colonne)
+*   **Regola**: Sulla query principale (es. `person`) usa sempre `[UseProjection]`.
+*   **Perché**: Assicura che EF Core generi una `SELECT` solo per le colonne scalari richieste (es. `PersonID`, `PersonNumber`), evitando il costoso `SELECT *`.
+
+### 2. Disattivazione Auto-JOIN (`IsProjected(false)`)
+*   **Regola**: Tutte le navigation property (1:1 o 1:N) che hanno un resolver/DataLoader dedicato devono essere marcate obbligatoriamente con `.IsProjected(false)` nel descrittore del tipo (`PersonType.cs`).
+*   **Perché**: Impedisce a `[UseProjection]` di iniettare dei `LEFT JOIN` nella query root. Senza questo, EF Core scaricherebbe i dati delle relazioni due volte (una nella query root via JOIN e una nel DataLoader via query separata).
+
+### 3. Granularità dei DataLoader (Evitare l'Overfetching del DB)
+*   **Regola**: Non creare un unico DataLoader monolitico (es. `PersonById`). Suddividilo in loader granulari per ogni dominio/natura (`NaturalPersonByPersonId`, `InternalPersonByPersonId`, etc.).
+*   **Perché**: Se il client chiede solo `internalPerson`, il DB interroga solo la tabella specifica. Questo riduce la complessità dei piani di esecuzione SQL e previene il caricamento di tabelle inutilizzate.
+
+### 4. Risoluzione dell'N+1 via Batching
+*   **Regola**: Usa sempre i `DataLoader` per le relazioni.
+*   **Perché**: HotChocolate raggruppa gli ID ed esegue **una sola query SQL aggiuntiva** per ogni tipo di relazione richiesta (`WHERE ID IN (...)`), garantendo che il numero di query totali sia costante (`1 + N_Relazioni`) e non proporzionale al numero di record restituiti.
+
+### 5. Ciclo di Vita `Transient` per il DbContext
+*   **Regola**: Se il `DbContext` ha dipendenze `Scoped` (es. `ITemporalContext` per filtri temporali via header) ed è usato in DataLoader paralleli, **deve** essere registrato come `ServiceLifetime.Transient`.
+*   **Perché**: I DataLoader girano in parallelo. Il ciclo di vita `Transient` garantisce thread-safety totale evitando collisioni sul Context. Il pooling fisico delle connessioni rimane gestito in modo sicuro ed efficiente da ADO.NET.
+
+### 6. Mapping esplicito (`Include`) nei DataLoader
+*   **Regola**: All'interno del `LoadBatchAsync` del DataLoader (che opera con `.AsNoTracking()`), usa esplicitamente `.Include()` e `.ThenInclude()` per popolare i dati satellite (es. `SensibleData`).
+*   **Perché**: Senza tracking e senza proiezioni lato root, EF Core non popola automaticamente le relazioni annidate. All'interno del loader, l'overfetching verso tabelle strettamente collegate 1:1 è accettabile e consigliato per minimizzare le query.

@@ -5,6 +5,9 @@ using Person.API.Graph;
 using Person.API.Graph.Types;
 using Shared.Temporal;
 using Shared.Extensions;
+using Microsoft.EntityFrameworkCore;
+using Person.API.Data;
+using HotChocolate.Execution.Configuration;
 
 namespace Person.API.Extensions;
 

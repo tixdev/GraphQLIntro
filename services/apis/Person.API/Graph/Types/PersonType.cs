@@ -1,6 +1,7 @@
 using HotChocolate.ApolloFederation.Types;
 using HotChocolate.ApolloFederation.Resolvers;
 using Person.API.Graph.DataLoaders;
+using Person.API.Graph.Resolvers;
 using PersonModel = Person.API.Models.Person;
 
 namespace Person.API.Graph.Types;
@@ -14,6 +15,22 @@ public class PersonType : ObjectType<PersonModel>
 
         descriptor.Field(t => t.PltPersonNatureID).IsProjected();
         descriptor.Field(t => t.PltPersonCodingTypeID).IsProjected();
+        
+        descriptor.Field(t => t.NaturalPerson)
+            .ResolveWith<PersonResolvers>(r => r.GetNaturalPersonAsync(default!, default!))
+            .IsProjected(false);
+            
+        descriptor.Field(t => t.LegalPerson)
+            .ResolveWith<PersonResolvers>(r => r.GetLegalPersonAsync(default!, default!))
+            .IsProjected(false);
+            
+        descriptor.Field(t => t.InternalPerson)
+            .ResolveWith<PersonResolvers>(r => r.GetInternalPersonAsync(default!, default!))
+            .IsProjected(false);
+            
+        descriptor.Field(t => t.GroupPerson)
+            .ResolveWith<PersonResolvers>(r => r.GetGroupPersonAsync(default!, default!))
+            .IsProjected(false);
     }
 
     [ReferenceResolver]
