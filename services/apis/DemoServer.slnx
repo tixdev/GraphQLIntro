@@ -1,5 +1,6 @@
 <Solution>
   <Project Path="Person.API/Person.API.csproj" />
+  <Project Path="Product.API/Product.API.csproj" />
   <Project Path="Relationship.API/Relationship.API.csproj" />
   <Folder Name="/Infrastructure/">
     <File Path="decision_flow.svg" />

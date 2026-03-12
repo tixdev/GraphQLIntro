@@ -20,3 +20,7 @@ subgraphs:
     routing_url: http://localhost:5015/graphql
     schema:
       subgraph_url: http://localhost:5015/graphql
+  product:
+    routing_url: http://localhost:5016/graphql
+    schema:
+      subgraph_url: http://localhost:5016/graphql

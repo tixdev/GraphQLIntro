@@ -818,6 +818,7 @@ input BalanceSortInput
 input BooleanOperationFilterInput
   @join__type(graph: ASSET)
   @join__type(graph: PERSON)
+  @join__type(graph: PRODUCT)
 {
   eq: Boolean
   neq: Boolean
@@ -829,6 +830,7 @@ type CollectionSegmentInfo
   @join__type(graph: BALANCE)
   @join__type(graph: PERSON)
   @join__type(graph: PLAUSIBILITY)
+  @join__type(graph: PRODUCT)
   @join__type(graph: RELATIONSHIP)
 {
   """
@@ -847,6 +849,7 @@ scalar DateTime
   @join__type(graph: ASSET)
   @join__type(graph: PERSON)
   @join__type(graph: PLAUSIBILITY)
+  @join__type(graph: PRODUCT)
   @join__type(graph: RELATIONSHIP)
   @specifiedBy(url: "https://www.graphql-scalars.com/date-time")
 
@@ -854,6 +857,7 @@ input DateTimeOperationFilterInput
   @join__type(graph: ASSET)
   @join__type(graph: PERSON)
   @join__type(graph: PLAUSIBILITY)
+  @join__type(graph: PRODUCT)
   @join__type(graph: RELATIONSHIP)
 {
   eq: DateTime
@@ -1049,6 +1053,12 @@ input GenderCodeTranslationFilterInput
   validEndDate: DateTimeOperationFilterInput
 }
 
+type GroupBank
+  @join__type(graph: PRODUCT)
+{
+  groupBankId: Int!
+}
+
 type GroupPerson
   @join__type(graph: PERSON)
 {
@@ -1170,6 +1180,7 @@ input IntOperationFilterInput
   @join__type(graph: BALANCE)
   @join__type(graph: PERSON)
   @join__type(graph: PLAUSIBILITY)
+  @join__type(graph: PRODUCT)
   @join__type(graph: RELATIONSHIP)
 {
   eq: Int
@@ -1193,6 +1204,7 @@ enum join__Graph {
   BALANCE @join__graph(name: "balance", url: "http://localhost:5014/graphql")
   PERSON @join__graph(name: "person", url: "http://localhost:5011/graphql")
   PLAUSIBILITY @join__graph(name: "plausibility", url: "http://localhost:5015/graphql")
+  PRODUCT @join__graph(name: "product", url: "http://localhost:5016/graphql")
   RELATIONSHIP @join__graph(name: "relationship", url: "http://localhost:5012/graphql")
 }
 
@@ -1272,6 +1284,12 @@ input JoinTypeTranslationFilterInput
   noteDescription: StringOperationFilterInput
   validStartDate: DateTimeOperationFilterInput
   validEndDate: DateTimeOperationFilterInput
+}
+
+type Language
+  @join__type(graph: PRODUCT)
+{
+  languageId: Int!
 }
 
 type LegalPerson
@@ -1769,6 +1787,123 @@ input ListFilterInputTypeOfPltPowerOfSignatureTranslationFilterInput
   all: PltPowerOfSignatureTranslationFilterInput
   none: PltPowerOfSignatureTranslationFilterInput
   some: PltPowerOfSignatureTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfProductDescriptionFilterInput
+  @join__type(graph: PRODUCT)
+{
+  all: ProductDescriptionFilterInput
+  none: ProductDescriptionFilterInput
+  some: ProductDescriptionFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfProductDetailFilterInput
+  @join__type(graph: PRODUCT)
+{
+  all: ProductDetailFilterInput
+  none: ProductDetailFilterInput
+  some: ProductDetailFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfProductDocumentFilterInput
+  @join__type(graph: PRODUCT)
+{
+  all: ProductDocumentFilterInput
+  none: ProductDocumentFilterInput
+  some: ProductDocumentFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfProductDocumentMailingFilterInput
+  @join__type(graph: PRODUCT)
+{
+  all: ProductDocumentMailingFilterInput
+  none: ProductDocumentMailingFilterInput
+  some: ProductDocumentMailingFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfProductDocumentTypeFilterInput
+  @join__type(graph: PRODUCT)
+{
+  all: ProductDocumentTypeFilterInput
+  none: ProductDocumentTypeFilterInput
+  some: ProductDocumentTypeFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfProductGroupDescriptionFilterInput
+  @join__type(graph: PRODUCT)
+{
+  all: ProductGroupDescriptionFilterInput
+  none: ProductGroupDescriptionFilterInput
+  some: ProductGroupDescriptionFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfProductGroupDetailFilterInput
+  @join__type(graph: PRODUCT)
+{
+  all: ProductGroupDetailFilterInput
+  none: ProductGroupDetailFilterInput
+  some: ProductGroupDetailFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfProductGroupLifeCycleStatusFilterInput
+  @join__type(graph: PRODUCT)
+{
+  all: ProductGroupLifeCycleStatusFilterInput
+  none: ProductGroupLifeCycleStatusFilterInput
+  some: ProductGroupLifeCycleStatusFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfProductGroupToProductFilterInput
+  @join__type(graph: PRODUCT)
+{
+  all: ProductGroupToProductFilterInput
+  none: ProductGroupToProductFilterInput
+  some: ProductGroupToProductFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfProductLifeCycleStatusFilterInput
+  @join__type(graph: PRODUCT)
+{
+  all: ProductLifeCycleStatusFilterInput
+  none: ProductLifeCycleStatusFilterInput
+  some: ProductLifeCycleStatusFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfProductRoleAllowedFilterInput
+  @join__type(graph: PRODUCT)
+{
+  all: ProductRoleAllowedFilterInput
+  none: ProductRoleAllowedFilterInput
+  some: ProductRoleAllowedFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfProductToConditionFilterInput
+  @join__type(graph: PRODUCT)
+{
+  all: ProductToConditionFilterInput
+  none: ProductToConditionFilterInput
+  some: ProductToConditionFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfProductToProductFilterInput
+  @join__type(graph: PRODUCT)
+{
+  all: ProductToProductFilterInput
+  none: ProductToProductFilterInput
+  some: ProductToProductFilterInput
   any: Boolean
 }
 
@@ -4206,11 +4341,546 @@ input PltPowerOfSignatureTranslationFilterInput
   powerOfSignature: PltPowerOfSignatureFilterInput
 }
 
+type Product
+  @join__type(graph: PRODUCT, key: "productId")
+{
+  productId: ID!
+  productCode: String!
+  groupBankId: Int!
+  productDescription(skip: Int, take: Int): ProductDescriptionCollectionSegment
+  productDetail(skip: Int, take: Int): ProductDetailCollectionSegment
+  productToProductProduct(skip: Int, take: Int): ProductToProductProductCollectionSegment
+  productDocument(skip: Int, take: Int): ProductDocumentCollectionSegment
+  productRoleAllowed(skip: Int, take: Int): ProductRoleAllowedCollectionSegment
+  productToCondition(skip: Int, take: Int): ProductToConditionCollectionSegment
+  productLifeCycleStatus(skip: Int, take: Int): ProductLifeCycleStatusCollectionSegment
+  groupBank: GroupBank!
+}
+
+"""A segment of a collection."""
+type ProductCollectionSegment
+  @join__type(graph: PRODUCT)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [Product!]
+  totalCount: Int!
+}
+
+type ProductDescription
+  @join__type(graph: PRODUCT)
+{
+  productDescriptionId: ID!
+  productId: Int!
+  description: String!
+  languageId: Int!
+  language: Language!
+}
+
+"""A segment of a collection."""
+type ProductDescriptionCollectionSegment
+  @join__type(graph: PRODUCT)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [ProductDescription]
+  totalCount: Int!
+}
+
+input ProductDescriptionFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductDescriptionFilterInput!]
+  or: [ProductDescriptionFilterInput!]
+  productDescriptionId: IntOperationFilterInput
+  productId: IntOperationFilterInput
+  description: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  languageId: IntOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  product: ProductFilterInput
+}
+
+type ProductDetail
+  @join__type(graph: PRODUCT)
+{
+  productDetailId: ID!
+  productId: Int!
+  pltStructureId: Int!
+  pltClassId: Int!
+  pltSubclassId: Int!
+  pltFamilyId: Int!
+  pltMarketId: Int!
+  groupBankId: Int!
+  sellStartDate: DateTime
+  validEndDate: DateTime!
+  notes: String
+}
+
+"""A segment of a collection."""
+type ProductDetailCollectionSegment
+  @join__type(graph: PRODUCT)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [ProductDetail]
+  totalCount: Int!
+}
+
+input ProductDetailFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductDetailFilterInput!]
+  or: [ProductDetailFilterInput!]
+  productDetailId: IntOperationFilterInput
+  productId: IntOperationFilterInput
+  pltStructureId: IntOperationFilterInput
+  pltClassId: IntOperationFilterInput
+  pltSubclassId: IntOperationFilterInput
+  pltFamilyId: IntOperationFilterInput
+  pltMarketId: IntOperationFilterInput
+  molteplicity: BooleanOperationFilterInput
+  sellStartDate: DateTimeOperationFilterInput
+  notes: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  pltAreaId: IntOperationFilterInput
+  product: ProductFilterInput
+}
+
+type ProductDocument
+  @join__type(graph: PRODUCT)
+{
+  productDocumentId: ID!
+  productId: Int!
+  pltFormId: Int!
+  validEndDate: DateTime!
+}
+
+"""A segment of a collection."""
+type ProductDocumentCollectionSegment
+  @join__type(graph: PRODUCT)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [ProductDocument]
+  totalCount: Int!
+}
+
+input ProductDocumentFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductDocumentFilterInput!]
+  or: [ProductDocumentFilterInput!]
+  productDocumentId: IntOperationFilterInput
+  productId: IntOperationFilterInput
+  pltFormId: IntOperationFilterInput
+  pltFormUseCaseId: IntOperationFilterInput
+  useCaseGridRowCommand: StringOperationFilterInput
+  pltOptionId: IntOperationFilterInput
+  applicabilityIfSigned: IntOperationFilterInput
+  applicabilityIfMigrated: IntOperationFilterInput
+  pltArchiveId: IntOperationFilterInput
+  copyNumber: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  product: ProductFilterInput
+}
+
+input ProductDocumentMailingFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductDocumentMailingFilterInput!]
+  or: [ProductDocumentMailingFilterInput!]
+  productDocumentMailingId: IntOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  productId: IntOperationFilterInput
+  pltMailingDocumentTypeId: IntOperationFilterInput
+  minEditions: IntOperationFilterInput
+  maxEditions: IntOperationFilterInput
+  minCopies: IntOperationFilterInput
+  maxCopies: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  automaticManagement: BooleanOperationFilterInput
+  product: ProductFilterInput
+}
+
+input ProductDocumentTypeFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductDocumentTypeFilterInput!]
+  or: [ProductDocumentTypeFilterInput!]
+  productDocumentTypeId: IntOperationFilterInput
+  productId: IntOperationFilterInput
+  pltDocumentTypeId: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  product: ProductFilterInput
+}
+
+input ProductFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductFilterInput!]
+  or: [ProductFilterInput!]
+  productId: IntOperationFilterInput
+  productCode: StringOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  productDescription: ListFilterInputTypeOfProductDescriptionFilterInput
+  productDetail: ListFilterInputTypeOfProductDetailFilterInput
+  productDocument: ListFilterInputTypeOfProductDocumentFilterInput
+  productDocumentMailing: ListFilterInputTypeOfProductDocumentMailingFilterInput
+  productDocumentType: ListFilterInputTypeOfProductDocumentTypeFilterInput
+  productGroupToProduct: ListFilterInputTypeOfProductGroupToProductFilterInput
+  productLifeCycleStatus: ListFilterInputTypeOfProductLifeCycleStatusFilterInput
+  productRoleAllowed: ListFilterInputTypeOfProductRoleAllowedFilterInput
+  productToCondition: ListFilterInputTypeOfProductToConditionFilterInput
+  productToProductParentProduct: ListFilterInputTypeOfProductToProductFilterInput
+  productToProductProduct: ListFilterInputTypeOfProductToProductFilterInput
+  productToProductProductChild: ListFilterInputTypeOfProductToProductFilterInput
+}
+
+type ProductGroup
+  @join__type(graph: PRODUCT)
+{
+  productGroupId: ID!
+  productGroupCode: String!
+  groupBankId: Int!
+  productGroupDescription: [ProductGroupDescription]
+  productGroupDetail(skip: Int, take: Int): ProductGroupDetailCollectionSegment
+  productGroupLifeCycleStatus(skip: Int, take: Int): ProductGroupLifeCycleStatusCollectionSegment
+  productGroupToProduct: [ProductGroupToProduct]
+}
+
+type ProductGroupDescription
+  @join__type(graph: PRODUCT)
+{
+  productGroupDescriptionId: ID!
+  productGroupId: Int!
+  languageId: Int!
+  description: String!
+  validEndDate: DateTime!
+}
+
+input ProductGroupDescriptionFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductGroupDescriptionFilterInput!]
+  or: [ProductGroupDescriptionFilterInput!]
+  productGroupDescriptionId: IntOperationFilterInput
+  productGroupId: IntOperationFilterInput
+  description: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  languageId: IntOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  productGroup: ProductGroupFilterInput
+}
+
+type ProductGroupDetail
+  @join__type(graph: PRODUCT)
+{
+  productGroupDetailId: ID!
+  productGroupId: Int!
+  groupBankId: Int!
+  validEndDate: DateTime!
+}
+
+"""A segment of a collection."""
+type ProductGroupDetailCollectionSegment
+  @join__type(graph: PRODUCT)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [ProductGroupDetail]
+  totalCount: Int!
+}
+
+input ProductGroupDetailFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductGroupDetailFilterInput!]
+  or: [ProductGroupDetailFilterInput!]
+  productGroupDetailId: IntOperationFilterInput
+  productGroupId: IntOperationFilterInput
+  pltGroupTypeId: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  productGroup: ProductGroupFilterInput
+}
+
+input ProductGroupFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductGroupFilterInput!]
+  or: [ProductGroupFilterInput!]
+  productGroupId: IntOperationFilterInput
+  productGroupCode: StringOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  productGroupDescription: ListFilterInputTypeOfProductGroupDescriptionFilterInput
+  productGroupDetail: ListFilterInputTypeOfProductGroupDetailFilterInput
+  productGroupLifeCycleStatus: ListFilterInputTypeOfProductGroupLifeCycleStatusFilterInput
+  productGroupToProduct: ListFilterInputTypeOfProductGroupToProductFilterInput
+}
+
+type ProductGroupLifeCycleStatus
+  @join__type(graph: PRODUCT)
+{
+  productGroupLifeCycleStatusId: ID!
+  productGroupId: Int!
+  pltProductGroupStatusId: Int!
+  validEndDate: DateTime!
+}
+
+"""A segment of a collection."""
+type ProductGroupLifeCycleStatusCollectionSegment
+  @join__type(graph: PRODUCT)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [ProductGroupLifeCycleStatus]
+  totalCount: Int!
+}
+
+input ProductGroupLifeCycleStatusFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductGroupLifeCycleStatusFilterInput!]
+  or: [ProductGroupLifeCycleStatusFilterInput!]
+  productGroupLifeCycleStatusId: IntOperationFilterInput
+  productGroupId: IntOperationFilterInput
+  pltProductGroupStatusId: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  productGroup: ProductGroupFilterInput
+}
+
+type ProductGroupToProduct
+  @join__type(graph: PRODUCT)
+{
+  productGroupToProductId: ID!
+  productId: Int!
+  productGroupId: Int!
+  groupBankId: Int!
+  product: Product
+  productGroup: ProductGroup
+}
+
+input ProductGroupToProductFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductGroupToProductFilterInput!]
+  or: [ProductGroupToProductFilterInput!]
+  productGroupToProductId: IntOperationFilterInput
+  productGroupId: IntOperationFilterInput
+  productId: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  product: ProductFilterInput
+  productGroup: ProductGroupFilterInput
+}
+
+type ProductLifeCycleStatus
+  @join__type(graph: PRODUCT)
+{
+  productLifeCycleStatusId: ID!
+  productId: Int!
+  pltProductStatusId: Int!
+  validEndDate: DateTime!
+  productStatus: ProductStatus!
+}
+
+"""A segment of a collection."""
+type ProductLifeCycleStatusCollectionSegment
+  @join__type(graph: PRODUCT)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [ProductLifeCycleStatus]
+  totalCount: Int!
+}
+
+input ProductLifeCycleStatusFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductLifeCycleStatusFilterInput!]
+  or: [ProductLifeCycleStatusFilterInput!]
+  productLifeCycleStatusId: IntOperationFilterInput
+  productId: IntOperationFilterInput
+  pltProductStatusId: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  product: ProductFilterInput
+}
+
+type ProductRoleAllowed
+  @join__type(graph: PRODUCT)
+{
+  productRoleAllowedId: ID!
+  productId: Int!
+  pltRoleAllowedId: Int!
+}
+
+"""A segment of a collection."""
+type ProductRoleAllowedCollectionSegment
+  @join__type(graph: PRODUCT)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [ProductRoleAllowed]
+  totalCount: Int!
+}
+
+input ProductRoleAllowedFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductRoleAllowedFilterInput!]
+  or: [ProductRoleAllowedFilterInput!]
+  productRoleAllowedId: IntOperationFilterInput
+  productId: IntOperationFilterInput
+  pltRoleAllowedId: IntOperationFilterInput
+  molteplicity: BooleanOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  product: ProductFilterInput
+}
+
+input ProductSortInput
+  @join__type(graph: PRODUCT)
+{
+  productId: SortEnumType
+  productCode: SortEnumType
+  groupBankId: SortEnumType
+}
+
+type ProductStatus
+  @join__type(graph: PRODUCT)
+{
+  productStatusId: Int!
+}
+
+type ProductToCondition
+  @join__type(graph: PRODUCT)
+{
+  productToConditionId: ID!
+  productId: Int!
+  conditionId: Int!
+  validEndDate: DateTime!
+}
+
+"""A segment of a collection."""
+type ProductToConditionCollectionSegment
+  @join__type(graph: PRODUCT)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [ProductToCondition]
+  totalCount: Int!
+}
+
+input ProductToConditionFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductToConditionFilterInput!]
+  or: [ProductToConditionFilterInput!]
+  productToConditionId: IntOperationFilterInput
+  productId: IntOperationFilterInput
+  conditionId: IntOperationFilterInput
+  conditionValueId: IntOperationFilterInput
+  pltApplicabilityId: IntOperationFilterInput
+  pltObligatorinessId: IntOperationFilterInput
+  modifiability: BooleanOperationFilterInput
+  ordinal: IntOperationFilterInput
+  ordinalType: IntOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  businessStartDate: DateTimeOperationFilterInput
+  businessEndDate: DateTimeOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  caseId: IntOperationFilterInput
+  product: ProductFilterInput
+}
+
+type ProductToProduct
+  @join__type(graph: PRODUCT)
+{
+  productToProductId: ID!
+  productId: Int!
+  parentProductId: Int
+  productChildId: Int
+  pltRoleId: Int
+  pltModeId: Int
+  product: Product
+  parentProduct: Product
+  productChild: Product
+}
+
+input ProductToProductFilterInput
+  @join__type(graph: PRODUCT)
+{
+  and: [ProductToProductFilterInput!]
+  or: [ProductToProductFilterInput!]
+  productToProductId: IntOperationFilterInput
+  productId: IntOperationFilterInput
+  productChildId: IntOperationFilterInput
+  pltRoleId: IntOperationFilterInput
+  pltModeId: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankId: IntOperationFilterInput
+  parentProductId: IntOperationFilterInput
+  pltAssetToAssetLinkId: IntOperationFilterInput
+  parentProduct: ProductFilterInput
+  product: ProductFilterInput
+  productChild: ProductFilterInput
+}
+
+"""A segment of a collection."""
+type ProductToProductProductCollectionSegment
+  @join__type(graph: PRODUCT)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [ProductToProduct]
+  totalCount: Int!
+}
+
 type Query
   @join__type(graph: ASSET)
   @join__type(graph: BALANCE)
   @join__type(graph: PERSON)
   @join__type(graph: PLAUSIBILITY)
+  @join__type(graph: PRODUCT)
   @join__type(graph: RELATIONSHIP)
 {
   asset(skip: Int, take: Int, where: AssetFilterInput, order: [AssetSortInput!]): AssetCollectionSegment @join__field(graph: ASSET)
@@ -4245,6 +4915,8 @@ type Query
   personProfessions(skip: Int, take: Int, where: PersonProfessionFilterInput, order: [PersonProfessionSortInput!]): PersonProfessionsCollectionSegment @join__field(graph: PLAUSIBILITY)
   personToRelationshipRoles(skip: Int, take: Int, where: PersonToRelationshipRoleFilterInput, order: [PersonToRelationshipRoleSortInput!]): PersonToRelationshipRolesCollectionSegment @join__field(graph: PLAUSIBILITY)
   relationshipTypes(skip: Int, take: Int, where: RelationshipTypeFilterInput, order: [RelationshipTypeSortInput!]): RelationshipTypesCollectionSegment @join__field(graph: PLAUSIBILITY)
+  product(skip: Int, take: Int, where: ProductFilterInput, order: [ProductSortInput!]): ProductCollectionSegment @join__field(graph: PRODUCT)
+  productById(productId: Int!): Product @join__field(graph: PRODUCT)
   relationship(skip: Int, take: Int, where: RelationshipFilterInput, order: [RelationshipSortInput!]): RelationshipCollectionSegment @join__field(graph: RELATIONSHIP)
 }
 
@@ -4458,10 +5130,11 @@ enum SortEnumType
   @join__type(graph: BALANCE)
   @join__type(graph: PERSON)
   @join__type(graph: PLAUSIBILITY)
+  @join__type(graph: PRODUCT)
   @join__type(graph: RELATIONSHIP)
 {
-  ASC @join__enumValue(graph: ASSET) @join__enumValue(graph: BALANCE) @join__enumValue(graph: PERSON) @join__enumValue(graph: PLAUSIBILITY) @join__enumValue(graph: RELATIONSHIP)
-  DESC @join__enumValue(graph: ASSET) @join__enumValue(graph: BALANCE) @join__enumValue(graph: PERSON) @join__enumValue(graph: PLAUSIBILITY) @join__enumValue(graph: RELATIONSHIP)
+  ASC @join__enumValue(graph: ASSET) @join__enumValue(graph: BALANCE) @join__enumValue(graph: PERSON) @join__enumValue(graph: PLAUSIBILITY) @join__enumValue(graph: PRODUCT) @join__enumValue(graph: RELATIONSHIP)
+  DESC @join__enumValue(graph: ASSET) @join__enumValue(graph: BALANCE) @join__enumValue(graph: PERSON) @join__enumValue(graph: PLAUSIBILITY) @join__enumValue(graph: PRODUCT) @join__enumValue(graph: RELATIONSHIP)
 }
 
 input StringOperationFilterInput
@@ -4469,6 +5142,7 @@ input StringOperationFilterInput
   @join__type(graph: BALANCE)
   @join__type(graph: PERSON)
   @join__type(graph: PLAUSIBILITY)
+  @join__type(graph: PRODUCT)
   @join__type(graph: RELATIONSHIP)
 {
   and: [StringOperationFilterInput!]
