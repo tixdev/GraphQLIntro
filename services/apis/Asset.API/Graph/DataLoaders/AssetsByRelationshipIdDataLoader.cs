@@ -1,35 +1,23 @@
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
-using GreenDonut;
 using Microsoft.EntityFrameworkCore;
 using Asset.API.Data;
 using AssetModel = Asset.API.Models.Asset;
 
 namespace Asset.API.Graph.DataLoaders;
 
-public class AssetsByRelationshipIdDataLoader : GroupedDataLoader<int, AssetModel>
+public class AssetsByRelationshipIdDataLoader(
+    IBatchScheduler batchScheduler,
+    DataLoaderOptions options,
+    AssetContext dbContext)
+    : GroupedDataLoader<int, AssetModel>(batchScheduler, options)
 {
-    private readonly AssetContext _dbContext;
-
-    public AssetsByRelationshipIdDataLoader(
-        IBatchScheduler batchScheduler,
-        DataLoaderOptions options,
-        AssetContext dbContext)
-        : base(batchScheduler, options)
-    {
-        _dbContext = dbContext;
-    }
-
     protected override async Task<ILookup<int, AssetModel>> LoadGroupedBatchAsync(
         IReadOnlyList<int> keys,
         CancellationToken cancellationToken)
     {
-        var items = await _dbContext.Assets
-            .Where(r => keys.Contains(r.RelationshipId))
+        var items = await dbContext.Asset
+            .Where(r => keys.Contains(r.RelationshipID))
             .ToListAsync(cancellationToken);
 
-        return items.ToLookup(r => r.RelationshipId);
+        return items.ToLookup(r => r.RelationshipID);
     }
 }

@@ -23,13 +23,74 @@ type Asset
   @join__type(graph: ASSET, key: "assetID")
   @join__type(graph: BALANCE, key: "assetID")
 {
-  relationshipId: Int! @join__field(graph: ASSET)
+  relationshipID: Int! @join__field(graph: ASSET)
+  pltAssetTypeID: Int! @join__field(graph: ASSET)
+  assetAlternativeCodes(skip: Int, take: Int): AssetAlternativeCodesCollectionSegment @join__field(graph: ASSET)
+  assetDates(skip: Int, take: Int): AssetDatesCollectionSegment @join__field(graph: ASSET)
+  assetDebitCards(skip: Int, take: Int): AssetDebitCardsCollectionSegment @join__field(graph: ASSET)
+  assetDetails(skip: Int, take: Int): AssetDetailsCollectionSegment @join__field(graph: ASSET)
+  assetIntermediaries(skip: Int, take: Int): AssetIntermediariesCollectionSegment @join__field(graph: ASSET)
+  assetLifeCycleStatuses(skip: Int, take: Int): AssetLifeCycleStatusesCollectionSegment @join__field(graph: ASSET)
+  assetNotes(skip: Int, take: Int): AssetNotesCollectionSegment @join__field(graph: ASSET)
+  assetOthers(skip: Int, take: Int): AssetOthersCollectionSegment @join__field(graph: ASSET)
+  assetSafetyBoxes(skip: Int, take: Int): AssetSafetyBoxesCollectionSegment @join__field(graph: ASSET)
+  assetToConditions(skip: Int, take: Int): AssetToConditionsCollectionSegment @join__field(graph: ASSET)
+  assetToPeople(skip: Int, take: Int): AssetToPeopleCollectionSegment @join__field(graph: ASSET)
+  assetToRelationships(skip: Int, take: Int): AssetToRelationshipsCollectionSegment @join__field(graph: ASSET)
+  assetVisaDebitCards(skip: Int, take: Int): AssetVisaDebitCardsCollectionSegment @join__field(graph: ASSET)
   relationship: Relationship @join__field(graph: ASSET)
+  assetType: PltAssetType @join__field(graph: ASSET)
   assetID: Int!
-  name: String! @join__field(graph: ASSET)
-  type: String! @join__field(graph: ASSET)
-  number: String! @join__field(graph: ASSET)
+  productID: Int! @join__field(graph: ASSET)
+  number: Int! @join__field(graph: ASSET)
+  groupBankID: Int! @join__field(graph: ASSET)
+  isMigrated: Boolean! @join__field(graph: ASSET)
+  assetToAssetAssetNavigations: [AssetToAsset!]! @join__field(graph: ASSET)
+  assetToAssetAssets: [AssetToAsset!]! @join__field(graph: ASSET)
   balances: [Balance!]! @join__field(graph: BALANCE)
+}
+
+type AssetAlternativeCode
+  @join__type(graph: ASSET)
+{
+  assetAlternativeCode: PltAssetAlternativeCode
+  assetAlternativeCodeID: Int!
+  assetID: Int!
+  alternativeCode: String!
+  pltAssetAlternativeCodeID: Int!
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  asset: Asset!
+}
+
+input AssetAlternativeCodeFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetAlternativeCodeFilterInput!]
+  or: [AssetAlternativeCodeFilterInput!]
+  assetAlternativeCodeID: IntOperationFilterInput
+  assetID: IntOperationFilterInput
+  alternativeCode: StringOperationFilterInput
+  pltAssetAlternativeCodeID: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  asset: AssetFilterInput
+}
+
+"""A segment of a collection."""
+type AssetAlternativeCodesCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [AssetAlternativeCode!]
+  totalCount: Int!
 }
 
 """A segment of a collection."""
@@ -44,26 +105,672 @@ type AssetCollectionSegment
   totalCount: Int!
 }
 
+type AssetDate
+  @join__type(graph: ASSET)
+{
+  businessDateType: PltBusinessDateType
+  assetDateID: Int!
+  assetID: Int!
+  pltBusinessDateTypeID: Int!
+  date: DateTime!
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  asset: Asset!
+}
+
+input AssetDateFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetDateFilterInput!]
+  or: [AssetDateFilterInput!]
+  assetDateID: IntOperationFilterInput
+  assetID: IntOperationFilterInput
+  pltBusinessDateTypeID: IntOperationFilterInput
+  date: DateTimeOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  asset: AssetFilterInput
+}
+
+"""A segment of a collection."""
+type AssetDatesCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [AssetDate!]
+  totalCount: Int!
+}
+
+type AssetDebitCard
+  @join__type(graph: ASSET)
+{
+  assetDebitCardID: Int!
+  assetID: Int!
+  number: Int!
+  progressiveNumber: Int!
+  header1: String!
+  header2: String!
+  firstOpeningDate: DateTime!
+  cardValidityStartDate: DateTime!
+  cardValidityEndDate: DateTime!
+  currencyID: Int!
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  asset: Asset!
+  assetDebitCardLimits: [AssetDebitCardLimit!]!
+}
+
+input AssetDebitCardFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetDebitCardFilterInput!]
+  or: [AssetDebitCardFilterInput!]
+  assetDebitCardID: IntOperationFilterInput
+  assetID: IntOperationFilterInput
+  number: IntOperationFilterInput
+  progressiveNumber: IntOperationFilterInput
+  header1: StringOperationFilterInput
+  header2: StringOperationFilterInput
+  firstOpeningDate: DateTimeOperationFilterInput
+  cardValidityStartDate: DateTimeOperationFilterInput
+  cardValidityEndDate: DateTimeOperationFilterInput
+  currencyID: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  asset: AssetFilterInput
+  assetDebitCardLimits: ListFilterInputTypeOfAssetDebitCardLimitFilterInput
+}
+
+type AssetDebitCardLimit
+  @join__type(graph: ASSET)
+{
+  debitCardLimit: PltDebitCardLimit
+  assetDebitCardLimitID: Int!
+  assetDebitCardID: Int!
+  pltDebitCardLimitID: Int!
+  limitAmount: Decimal!
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  assetDebitCard: AssetDebitCard!
+}
+
+input AssetDebitCardLimitFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetDebitCardLimitFilterInput!]
+  or: [AssetDebitCardLimitFilterInput!]
+  assetDebitCardLimitID: IntOperationFilterInput
+  assetDebitCardID: IntOperationFilterInput
+  pltDebitCardLimitID: IntOperationFilterInput
+  limitAmount: DecimalOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  assetDebitCard: AssetDebitCardFilterInput
+}
+
+"""A segment of a collection."""
+type AssetDebitCardsCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [AssetDebitCard!]
+  totalCount: Int!
+}
+
+type AssetDetail
+  @join__type(graph: ASSET)
+{
+  assetDetailID: Int!
+  assetID: Int!
+  name: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  asset: Asset!
+}
+
+input AssetDetailFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetDetailFilterInput!]
+  or: [AssetDetailFilterInput!]
+  assetDetailID: IntOperationFilterInput
+  assetID: IntOperationFilterInput
+  name: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  asset: AssetFilterInput
+}
+
+"""A segment of a collection."""
+type AssetDetailsCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [AssetDetail!]
+  totalCount: Int!
+}
+
 input AssetFilterInput
   @join__type(graph: ASSET)
 {
   and: [AssetFilterInput!]
   or: [AssetFilterInput!]
   assetID: IntOperationFilterInput
-  relationshipId: IntOperationFilterInput
-  name: StringOperationFilterInput
-  type: StringOperationFilterInput
-  number: StringOperationFilterInput
+  productID: IntOperationFilterInput
+  relationshipID: IntOperationFilterInput
+  pltAssetTypeID: IntOperationFilterInput
+  number: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  isMigrated: BooleanOperationFilterInput
+  assetAlternativeCodes: ListFilterInputTypeOfAssetAlternativeCodeFilterInput
+  assetDates: ListFilterInputTypeOfAssetDateFilterInput
+  assetDebitCards: ListFilterInputTypeOfAssetDebitCardFilterInput
+  assetDetails: ListFilterInputTypeOfAssetDetailFilterInput
+  assetIntermediaries: ListFilterInputTypeOfAssetIntermediaryFilterInput
+  assetLifeCycleStatuses: ListFilterInputTypeOfAssetLifeCycleStatusFilterInput
+  assetNotes: ListFilterInputTypeOfAssetNoteFilterInput
+  assetOthers: ListFilterInputTypeOfAssetOtherFilterInput
+  assetSafetyBoxes: ListFilterInputTypeOfAssetSafetyBoxFilterInput
+  assetToAssetAssetNavigations: ListFilterInputTypeOfAssetToAssetFilterInput
+  assetToAssetAssets: ListFilterInputTypeOfAssetToAssetFilterInput
+  assetToConditions: ListFilterInputTypeOfAssetToConditionFilterInput
+  assetToPeople: ListFilterInputTypeOfAssetToPersonFilterInput
+  assetToRelationships: ListFilterInputTypeOfAssetToRelationshipFilterInput
+  assetVisaDebitCards: ListFilterInputTypeOfAssetVisaDebitCardFilterInput
+}
+
+"""A segment of a collection."""
+type AssetIntermediariesCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [AssetIntermediary!]
+  totalCount: Int!
+}
+
+type AssetIntermediary
+  @join__type(graph: ASSET)
+{
+  assetIntermediaryID: Int!
+  assetID: Int!
+  contractDate: DateTime
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  asset: Asset!
+}
+
+input AssetIntermediaryFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetIntermediaryFilterInput!]
+  or: [AssetIntermediaryFilterInput!]
+  assetIntermediaryID: IntOperationFilterInput
+  assetID: IntOperationFilterInput
+  contractDate: DateTimeOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  asset: AssetFilterInput
+}
+
+type AssetLifeCycleStatus
+  @join__type(graph: ASSET)
+{
+  assetStatus: PltAssetStatus
+  assetStatusReason: PltAssetStatusReason
+  assetLifeCycleStatusID: Int!
+  assetID: Int!
+  pltAssetStatusID: Int!
+  pltAssetStatusReasonID: Int
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  asset: Asset!
+}
+
+"""A segment of a collection."""
+type AssetLifeCycleStatusesCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [AssetLifeCycleStatus!]
+  totalCount: Int!
+}
+
+input AssetLifeCycleStatusFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetLifeCycleStatusFilterInput!]
+  or: [AssetLifeCycleStatusFilterInput!]
+  assetLifeCycleStatusID: IntOperationFilterInput
+  assetID: IntOperationFilterInput
+  pltAssetStatusID: IntOperationFilterInput
+  pltAssetStatusReasonID: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  asset: AssetFilterInput
+}
+
+type AssetNote
+  @join__type(graph: ASSET)
+{
+  assetNoteType: PltAssetNoteType
+  assetNoteID: Int!
+  assetID: Int!
+  pltAssetNoteTypeID: Int!
+  description: String
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  asset: Asset!
+}
+
+input AssetNoteFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetNoteFilterInput!]
+  or: [AssetNoteFilterInput!]
+  assetNoteID: IntOperationFilterInput
+  assetID: IntOperationFilterInput
+  pltAssetNoteTypeID: IntOperationFilterInput
+  description: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  asset: AssetFilterInput
+}
+
+"""A segment of a collection."""
+type AssetNotesCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [AssetNote!]
+  totalCount: Int!
+}
+
+type AssetOther
+  @join__type(graph: ASSET)
+{
+  assetOtherID: Int!
+  assetID: Int!
+  othersValidityStartDate: DateTime
+  othersValidityEndDate: DateTime
+  amount: Decimal!
+  currencyID: Int!
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  asset: Asset!
+}
+
+input AssetOtherFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetOtherFilterInput!]
+  or: [AssetOtherFilterInput!]
+  assetOtherID: IntOperationFilterInput
+  assetID: IntOperationFilterInput
+  othersValidityStartDate: DateTimeOperationFilterInput
+  othersValidityEndDate: DateTimeOperationFilterInput
+  amount: DecimalOperationFilterInput
+  currencyID: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  asset: AssetFilterInput
+}
+
+"""A segment of a collection."""
+type AssetOthersCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [AssetOther!]
+  totalCount: Int!
+}
+
+type AssetSafetyBox
+  @join__type(graph: ASSET)
+{
+  assetSafetyBoxID: Int!
+  assetID: Int!
+  safetyBoxValidityStartDate: DateTime
+  safetyBoxValidityEndDate: DateTime
+  recurrenceBillingDate: DateTime!
+  bailementAmount: Decimal!
+  currencyID: Int!
+  sealNumber: Int!
+  safetyBoxID: Int!
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  asset: Asset!
+}
+
+"""A segment of a collection."""
+type AssetSafetyBoxesCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [AssetSafetyBox!]
+  totalCount: Int!
+}
+
+input AssetSafetyBoxFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetSafetyBoxFilterInput!]
+  or: [AssetSafetyBoxFilterInput!]
+  assetSafetyBoxID: IntOperationFilterInput
+  assetID: IntOperationFilterInput
+  safetyBoxValidityStartDate: DateTimeOperationFilterInput
+  safetyBoxValidityEndDate: DateTimeOperationFilterInput
+  recurrenceBillingDate: DateTimeOperationFilterInput
+  bailementAmount: DecimalOperationFilterInput
+  currencyID: IntOperationFilterInput
+  sealNumber: IntOperationFilterInput
+  safetyBoxID: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  asset: AssetFilterInput
+}
+
+"""A segment of a collection."""
+type AssetsCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [Asset!]
+  totalCount: Int!
 }
 
 input AssetSortInput
   @join__type(graph: ASSET)
 {
   assetID: SortEnumType
-  relationshipId: SortEnumType
-  name: SortEnumType
-  type: SortEnumType
+  productID: SortEnumType
+  relationshipID: SortEnumType
+  pltAssetTypeID: SortEnumType
   number: SortEnumType
+  groupBankID: SortEnumType
+  isMigrated: SortEnumType
+}
+
+type AssetToAsset
+  @join__type(graph: ASSET)
+{
+  assetToAssetLink: PltAssetToAssetLink
+  assetToAssetID: Int!
+  assetID: Int!
+  assetChildID: Int!
+  pltAssetToAssetLinkID: Int!
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  asset: Asset!
+  assetNavigation: Asset!
+}
+
+input AssetToAssetFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetToAssetFilterInput!]
+  or: [AssetToAssetFilterInput!]
+  assetToAssetID: IntOperationFilterInput
+  assetID: IntOperationFilterInput
+  assetChildID: IntOperationFilterInput
+  pltAssetToAssetLinkID: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  asset: AssetFilterInput
+  assetNavigation: AssetFilterInput
+}
+
+type AssetToCondition
+  @join__type(graph: ASSET)
+{
+  assetToConditionID: Int!
+  assetID: Int!
+  conditionID: Int!
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  codeID: Int
+  codeValueID: Int
+  caseID: Long
+  asset: Asset!
+}
+
+input AssetToConditionFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetToConditionFilterInput!]
+  or: [AssetToConditionFilterInput!]
+  assetToConditionID: IntOperationFilterInput
+  assetID: IntOperationFilterInput
+  conditionID: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  codeID: IntOperationFilterInput
+  codeValueID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  asset: AssetFilterInput
+}
+
+"""A segment of a collection."""
+type AssetToConditionsCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [AssetToCondition!]
+  totalCount: Int!
+}
+
+"""A segment of a collection."""
+type AssetToPeopleCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [AssetToPerson!]
+  totalCount: Int!
+}
+
+type AssetToPerson
+  @join__type(graph: ASSET)
+{
+  assetToPersonLink: PltAssetToPersonLink
+  powerOfSignature: PltPowerOfSignature
+  assetToPersonID: Int!
+  assetID: Int!
+  personID: Int!
+  pltAssetToPersonLinkID: Int!
+  pltPowerOfSignatureID: Int
+  signatoriesNumber: Int
+  instructions: String
+  onBehalfOf: Int
+  powerStartDate: LocalDate
+  powerEndDate: LocalDate
+  deleteReason: String
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  asset: Asset!
+}
+
+input AssetToPersonFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetToPersonFilterInput!]
+  or: [AssetToPersonFilterInput!]
+  assetToPersonID: IntOperationFilterInput
+  assetID: IntOperationFilterInput
+  personID: IntOperationFilterInput
+  pltAssetToPersonLinkID: IntOperationFilterInput
+  pltPowerOfSignatureID: IntOperationFilterInput
+  signatoriesNumber: IntOperationFilterInput
+  instructions: StringOperationFilterInput
+  onBehalfOf: IntOperationFilterInput
+  powerStartDate: LocalDateOperationFilterInput
+  powerEndDate: LocalDateOperationFilterInput
+  deleteReason: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  asset: AssetFilterInput
+}
+
+type AssetToRelationship
+  @join__type(graph: ASSET)
+{
+  assetToRelationshipLink: PltAssetToRelationshipLink
+  assetToRelationshipID: Int!
+  assetID: Int!
+  relationshipID: Int!
+  pltAssetToRelationshipLinkID: Int!
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  asset: Asset!
+}
+
+input AssetToRelationshipFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetToRelationshipFilterInput!]
+  or: [AssetToRelationshipFilterInput!]
+  assetToRelationshipID: IntOperationFilterInput
+  assetID: IntOperationFilterInput
+  relationshipID: IntOperationFilterInput
+  pltAssetToRelationshipLinkID: IntOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  asset: AssetFilterInput
+}
+
+"""A segment of a collection."""
+type AssetToRelationshipsCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [AssetToRelationship!]
+  totalCount: Int!
+}
+
+type AssetVisaDebitCard
+  @join__type(graph: ASSET)
+{
+  assetVisaDebitCardID: Int!
+  assetID: Int!
+  cornerCardID: String!
+  migrated: Boolean!
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  asset: Asset!
+}
+
+input AssetVisaDebitCardFilterInput
+  @join__type(graph: ASSET)
+{
+  and: [AssetVisaDebitCardFilterInput!]
+  or: [AssetVisaDebitCardFilterInput!]
+  assetVisaDebitCardID: IntOperationFilterInput
+  assetID: IntOperationFilterInput
+  cornerCardID: StringOperationFilterInput
+  migrated: BooleanOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  asset: AssetFilterInput
+}
+
+"""A segment of a collection."""
+type AssetVisaDebitCardsCollectionSegment
+  @join__type(graph: ASSET)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [AssetVisaDebitCard!]
+  totalCount: Int!
 }
 
 type Balance
@@ -109,6 +816,7 @@ input BalanceSortInput
 }
 
 input BooleanOperationFilterInput
+  @join__type(graph: ASSET)
   @join__type(graph: PERSON)
 {
   eq: Boolean
@@ -136,12 +844,14 @@ type CollectionSegmentInfo
 
 """The `DateTime` scalar represents an ISO-8601 compliant date time type."""
 scalar DateTime
+  @join__type(graph: ASSET)
   @join__type(graph: PERSON)
   @join__type(graph: PLAUSIBILITY)
   @join__type(graph: RELATIONSHIP)
   @specifiedBy(url: "https://www.graphql-scalars.com/date-time")
 
 input DateTimeOperationFilterInput
+  @join__type(graph: ASSET)
   @join__type(graph: PERSON)
   @join__type(graph: PLAUSIBILITY)
   @join__type(graph: RELATIONSHIP)
@@ -162,9 +872,11 @@ input DateTimeOperationFilterInput
 
 """The `Decimal` scalar type represents a decimal floating-point number."""
 scalar Decimal
+  @join__type(graph: ASSET)
   @join__type(graph: BALANCE)
 
 input DecimalOperationFilterInput
+  @join__type(graph: ASSET)
   @join__type(graph: BALANCE)
 {
   eq: Decimal
@@ -673,6 +1385,141 @@ enum link__Purpose {
   EXECUTION
 }
 
+input ListFilterInputTypeOfAssetAlternativeCodeFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetAlternativeCodeFilterInput
+  none: AssetAlternativeCodeFilterInput
+  some: AssetAlternativeCodeFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAssetDateFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetDateFilterInput
+  none: AssetDateFilterInput
+  some: AssetDateFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAssetDebitCardFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetDebitCardFilterInput
+  none: AssetDebitCardFilterInput
+  some: AssetDebitCardFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAssetDebitCardLimitFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetDebitCardLimitFilterInput
+  none: AssetDebitCardLimitFilterInput
+  some: AssetDebitCardLimitFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAssetDetailFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetDetailFilterInput
+  none: AssetDetailFilterInput
+  some: AssetDetailFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAssetIntermediaryFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetIntermediaryFilterInput
+  none: AssetIntermediaryFilterInput
+  some: AssetIntermediaryFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAssetLifeCycleStatusFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetLifeCycleStatusFilterInput
+  none: AssetLifeCycleStatusFilterInput
+  some: AssetLifeCycleStatusFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAssetNoteFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetNoteFilterInput
+  none: AssetNoteFilterInput
+  some: AssetNoteFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAssetOtherFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetOtherFilterInput
+  none: AssetOtherFilterInput
+  some: AssetOtherFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAssetSafetyBoxFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetSafetyBoxFilterInput
+  none: AssetSafetyBoxFilterInput
+  some: AssetSafetyBoxFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAssetToAssetFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetToAssetFilterInput
+  none: AssetToAssetFilterInput
+  some: AssetToAssetFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAssetToConditionFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetToConditionFilterInput
+  none: AssetToConditionFilterInput
+  some: AssetToConditionFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAssetToPersonFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetToPersonFilterInput
+  none: AssetToPersonFilterInput
+  some: AssetToPersonFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAssetToRelationshipFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetToRelationshipFilterInput
+  none: AssetToRelationshipFilterInput
+  some: AssetToRelationshipFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfAssetVisaDebitCardFilterInput
+  @join__type(graph: ASSET)
+{
+  all: AssetVisaDebitCardFilterInput
+  none: AssetVisaDebitCardFilterInput
+  some: AssetVisaDebitCardFilterInput
+  any: Boolean
+}
+
 input ListFilterInputTypeOfEmployeesRangeNumberTranslationFilterInput
   @join__type(graph: PLAUSIBILITY)
 {
@@ -826,6 +1673,105 @@ input ListFilterInputTypeOfPersonToRelationshipRoleTranslationFilterInput
   any: Boolean
 }
 
+input ListFilterInputTypeOfPltAssetAlternativeCodeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PltAssetAlternativeCodeTranslationFilterInput
+  none: PltAssetAlternativeCodeTranslationFilterInput
+  some: PltAssetAlternativeCodeTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPltAssetNoteTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PltAssetNoteTypeTranslationFilterInput
+  none: PltAssetNoteTypeTranslationFilterInput
+  some: PltAssetNoteTypeTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPltAssetStatusReasonTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PltAssetStatusReasonTranslationFilterInput
+  none: PltAssetStatusReasonTranslationFilterInput
+  some: PltAssetStatusReasonTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPltAssetStatusTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PltAssetStatusTranslationFilterInput
+  none: PltAssetStatusTranslationFilterInput
+  some: PltAssetStatusTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPltAssetToAssetLinkTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PltAssetToAssetLinkTranslationFilterInput
+  none: PltAssetToAssetLinkTranslationFilterInput
+  some: PltAssetToAssetLinkTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPltAssetToPersonLinkTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PltAssetToPersonLinkTranslationFilterInput
+  none: PltAssetToPersonLinkTranslationFilterInput
+  some: PltAssetToPersonLinkTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPltAssetToRelationshipLinkTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PltAssetToRelationshipLinkTranslationFilterInput
+  none: PltAssetToRelationshipLinkTranslationFilterInput
+  some: PltAssetToRelationshipLinkTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPltAssetTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PltAssetTypeTranslationFilterInput
+  none: PltAssetTypeTranslationFilterInput
+  some: PltAssetTypeTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPltBusinessDateTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PltBusinessDateTypeTranslationFilterInput
+  none: PltBusinessDateTypeTranslationFilterInput
+  some: PltBusinessDateTypeTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPltDebitCardLimitTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PltDebitCardLimitTranslationFilterInput
+  none: PltDebitCardLimitTranslationFilterInput
+  some: PltDebitCardLimitTranslationFilterInput
+  any: Boolean
+}
+
+input ListFilterInputTypeOfPltPowerOfSignatureTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  all: PltPowerOfSignatureTranslationFilterInput
+  none: PltPowerOfSignatureTranslationFilterInput
+  some: PltPowerOfSignatureTranslationFilterInput
+  any: Boolean
+}
+
 input ListFilterInputTypeOfRelationshipToPersonFilterInput
   @join__type(graph: RELATIONSHIP)
 {
@@ -848,9 +1794,11 @@ input ListFilterInputTypeOfRelationshipTypeTranslationFilterInput
 The `LocalDate` scalar type represents a ISO date string, represented as UTF-8 character sequences YYYY-MM-DD. The scalar follows the specification defined in RFC3339
 """
 scalar LocalDate
+  @join__type(graph: ASSET)
   @join__type(graph: PERSON)
 
 input LocalDateOperationFilterInput
+  @join__type(graph: ASSET)
   @join__type(graph: PERSON)
 {
   eq: LocalDate
@@ -871,9 +1819,11 @@ input LocalDateOperationFilterInput
 The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1.
 """
 scalar Long
+  @join__type(graph: ASSET)
   @join__type(graph: PERSON)
 
 input LongOperationFilterInput
+  @join__type(graph: ASSET)
   @join__type(graph: PERSON)
 {
   eq: Long
@@ -2364,6 +3314,898 @@ input PersonToRelationshipRoleTranslationFilterInput
   validEndDate: DateTimeOperationFilterInput
 }
 
+type PltAssetAlternativeCode
+  @join__type(graph: ASSET, key: "assetAlternativeCodeID")
+  @join__type(graph: PLAUSIBILITY, key: "assetAlternativeCodeID")
+{
+  assetAlternativeCodeID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PltAssetAlternativeCodeTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PltAssetAlternativeCodeFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetAlternativeCodeFilterInput!]
+  or: [PltAssetAlternativeCodeFilterInput!]
+  assetAlternativeCodeID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPltAssetAlternativeCodeTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PltAssetAlternativeCodesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PltAssetAlternativeCode!]
+  totalCount: Int!
+}
+
+input PltAssetAlternativeCodeSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetAlternativeCodeID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PltAssetAlternativeCodeTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetAlternativeCodeLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  assetAlternativeCodeID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String
+  validStartDate: DateTime!
+  validEndDate: DateTime
+  assetAlternativeCode: PltAssetAlternativeCode!
+}
+
+input PltAssetAlternativeCodeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetAlternativeCodeTranslationFilterInput!]
+  or: [PltAssetAlternativeCodeTranslationFilterInput!]
+  assetAlternativeCodeLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  assetAlternativeCodeID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  assetAlternativeCode: PltAssetAlternativeCodeFilterInput
+}
+
+type PltAssetNoteType
+  @join__type(graph: ASSET, key: "assetNoteTypeID")
+  @join__type(graph: PLAUSIBILITY, key: "assetNoteTypeID")
+{
+  assetNoteTypeID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PltAssetNoteTypeTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PltAssetNoteTypeFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetNoteTypeFilterInput!]
+  or: [PltAssetNoteTypeFilterInput!]
+  assetNoteTypeID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPltAssetNoteTypeTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PltAssetNoteTypesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PltAssetNoteType!]
+  totalCount: Int!
+}
+
+input PltAssetNoteTypeSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetNoteTypeID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PltAssetNoteTypeTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetNoteTypeLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  assetNoteTypeID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String
+  validStartDate: DateTime!
+  validEndDate: DateTime
+  assetNoteType: PltAssetNoteType!
+}
+
+input PltAssetNoteTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetNoteTypeTranslationFilterInput!]
+  or: [PltAssetNoteTypeTranslationFilterInput!]
+  assetNoteTypeLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  assetNoteTypeID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  assetNoteType: PltAssetNoteTypeFilterInput
+}
+
+type PltAssetStatus
+  @join__type(graph: ASSET, key: "assetStatusID")
+  @join__type(graph: PLAUSIBILITY, key: "assetStatusID")
+{
+  assetStatusID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PltAssetStatusTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PltAssetStatusFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetStatusFilterInput!]
+  or: [PltAssetStatusFilterInput!]
+  assetStatusID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPltAssetStatusTranslationFilterInput
+}
+
+type PltAssetStatusReason
+  @join__type(graph: ASSET, key: "assetStatusReasonID")
+  @join__type(graph: PLAUSIBILITY, key: "assetStatusReasonID")
+{
+  assetStatusReasonID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PltAssetStatusReasonTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PltAssetStatusReasonFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetStatusReasonFilterInput!]
+  or: [PltAssetStatusReasonFilterInput!]
+  assetStatusReasonID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPltAssetStatusReasonTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PltAssetStatusReasonsCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PltAssetStatusReason!]
+  totalCount: Int!
+}
+
+input PltAssetStatusReasonSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetStatusReasonID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PltAssetStatusReasonTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetStatusReasonLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  assetStatusReasonID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String
+  validStartDate: DateTime!
+  validEndDate: DateTime
+  assetStatusReason: PltAssetStatusReason!
+}
+
+input PltAssetStatusReasonTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetStatusReasonTranslationFilterInput!]
+  or: [PltAssetStatusReasonTranslationFilterInput!]
+  assetStatusReasonLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  assetStatusReasonID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  assetStatusReason: PltAssetStatusReasonFilterInput
+}
+
+"""A segment of a collection."""
+type PltAssetStatussCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PltAssetStatus!]
+  totalCount: Int!
+}
+
+input PltAssetStatusSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetStatusID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PltAssetStatusTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetStatusLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  assetStatusID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String
+  validStartDate: DateTime!
+  validEndDate: DateTime
+  assetStatus: PltAssetStatus!
+}
+
+input PltAssetStatusTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetStatusTranslationFilterInput!]
+  or: [PltAssetStatusTranslationFilterInput!]
+  assetStatusLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  assetStatusID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  assetStatus: PltAssetStatusFilterInput
+}
+
+type PltAssetToAssetLink
+  @join__type(graph: ASSET, key: "assetToAssetLinkID")
+  @join__type(graph: PLAUSIBILITY, key: "assetToAssetLinkID")
+{
+  assetToAssetLinkID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PltAssetToAssetLinkTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PltAssetToAssetLinkFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetToAssetLinkFilterInput!]
+  or: [PltAssetToAssetLinkFilterInput!]
+  assetToAssetLinkID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPltAssetToAssetLinkTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PltAssetToAssetLinksCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PltAssetToAssetLink!]
+  totalCount: Int!
+}
+
+input PltAssetToAssetLinkSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetToAssetLinkID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PltAssetToAssetLinkTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetToAssetLinkLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  assetToAssetLinkID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  reverseCode: String!
+  reverseDescription: String!
+  noteDescription: String
+  validStartDate: DateTime!
+  validEndDate: DateTime
+  assetToAssetLink: PltAssetToAssetLink!
+}
+
+input PltAssetToAssetLinkTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetToAssetLinkTranslationFilterInput!]
+  or: [PltAssetToAssetLinkTranslationFilterInput!]
+  assetToAssetLinkLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  assetToAssetLinkID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  reverseCode: StringOperationFilterInput
+  reverseDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  assetToAssetLink: PltAssetToAssetLinkFilterInput
+}
+
+type PltAssetToPersonLink
+  @join__type(graph: ASSET, key: "assetToPersonLinkID")
+  @join__type(graph: PLAUSIBILITY, key: "assetToPersonLinkID")
+{
+  assetToPersonLinkID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PltAssetToPersonLinkTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PltAssetToPersonLinkFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetToPersonLinkFilterInput!]
+  or: [PltAssetToPersonLinkFilterInput!]
+  assetToPersonLinkID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPltAssetToPersonLinkTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PltAssetToPersonLinksCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PltAssetToPersonLink!]
+  totalCount: Int!
+}
+
+input PltAssetToPersonLinkSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetToPersonLinkID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PltAssetToPersonLinkTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetToPersonLinkLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  assetToPersonLinkID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  reverseCode: String!
+  reverseDescription: String!
+  noteDescription: String
+  validStartDate: DateTime!
+  validEndDate: DateTime
+  assetToPersonLink: PltAssetToPersonLink!
+}
+
+input PltAssetToPersonLinkTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetToPersonLinkTranslationFilterInput!]
+  or: [PltAssetToPersonLinkTranslationFilterInput!]
+  assetToPersonLinkLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  assetToPersonLinkID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  reverseCode: StringOperationFilterInput
+  reverseDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  assetToPersonLink: PltAssetToPersonLinkFilterInput
+}
+
+type PltAssetToRelationshipLink
+  @join__type(graph: ASSET, key: "assetToRelationshipLinkID")
+  @join__type(graph: PLAUSIBILITY, key: "assetToRelationshipLinkID")
+{
+  assetToRelationshipLinkID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PltAssetToRelationshipLinkTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PltAssetToRelationshipLinkFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetToRelationshipLinkFilterInput!]
+  or: [PltAssetToRelationshipLinkFilterInput!]
+  assetToRelationshipLinkID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPltAssetToRelationshipLinkTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PltAssetToRelationshipLinksCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PltAssetToRelationshipLink!]
+  totalCount: Int!
+}
+
+input PltAssetToRelationshipLinkSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetToRelationshipLinkID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PltAssetToRelationshipLinkTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetToRelationshipLinkLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  assetToRelationshipLinkID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  reverseCode: String!
+  reverseDescription: String!
+  noteDescription: String
+  validStartDate: DateTime!
+  validEndDate: DateTime
+  assetToRelationshipLink: PltAssetToRelationshipLink!
+}
+
+input PltAssetToRelationshipLinkTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetToRelationshipLinkTranslationFilterInput!]
+  or: [PltAssetToRelationshipLinkTranslationFilterInput!]
+  assetToRelationshipLinkLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  assetToRelationshipLinkID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  reverseCode: StringOperationFilterInput
+  reverseDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  assetToRelationshipLink: PltAssetToRelationshipLinkFilterInput
+}
+
+type PltAssetType
+  @join__type(graph: ASSET, key: "assetTypeID")
+  @join__type(graph: PLAUSIBILITY, key: "assetTypeID")
+{
+  assetTypeID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PltAssetTypeTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PltAssetTypeFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetTypeFilterInput!]
+  or: [PltAssetTypeFilterInput!]
+  assetTypeID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPltAssetTypeTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PltAssetTypesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PltAssetType!]
+  totalCount: Int!
+}
+
+input PltAssetTypeSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetTypeID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PltAssetTypeTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  assetTypeLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  assetTypeID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String
+  validStartDate: DateTime!
+  validEndDate: DateTime
+  assetType: PltAssetType!
+}
+
+input PltAssetTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltAssetTypeTranslationFilterInput!]
+  or: [PltAssetTypeTranslationFilterInput!]
+  assetTypeLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  assetTypeID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  assetType: PltAssetTypeFilterInput
+}
+
+type PltBusinessDateType
+  @join__type(graph: ASSET, key: "businessDateTypeID")
+  @join__type(graph: PLAUSIBILITY, key: "businessDateTypeID")
+{
+  businessDateTypeID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PltBusinessDateTypeTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PltBusinessDateTypeFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltBusinessDateTypeFilterInput!]
+  or: [PltBusinessDateTypeFilterInput!]
+  businessDateTypeID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPltBusinessDateTypeTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PltBusinessDateTypesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PltBusinessDateType!]
+  totalCount: Int!
+}
+
+input PltBusinessDateTypeSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  businessDateTypeID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PltBusinessDateTypeTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  businessDateTypeLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  businessDateTypeID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String
+  validStartDate: DateTime!
+  validEndDate: DateTime
+  businessDateType: PltBusinessDateType!
+}
+
+input PltBusinessDateTypeTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltBusinessDateTypeTranslationFilterInput!]
+  or: [PltBusinessDateTypeTranslationFilterInput!]
+  businessDateTypeLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  businessDateTypeID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  businessDateType: PltBusinessDateTypeFilterInput
+}
+
+type PltDebitCardLimit
+  @join__type(graph: ASSET, key: "debitCardLimitID")
+  @join__type(graph: PLAUSIBILITY, key: "debitCardLimitID")
+{
+  debitCardLimitID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PltDebitCardLimitTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PltDebitCardLimitFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltDebitCardLimitFilterInput!]
+  or: [PltDebitCardLimitFilterInput!]
+  debitCardLimitID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPltDebitCardLimitTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PltDebitCardLimitsCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PltDebitCardLimit!]
+  totalCount: Int!
+}
+
+input PltDebitCardLimitSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  debitCardLimitID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PltDebitCardLimitTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  debitCardLimitLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  debitCardLimitID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String
+  validStartDate: DateTime!
+  validEndDate: DateTime
+  debitCardLimit: PltDebitCardLimit!
+}
+
+input PltDebitCardLimitTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltDebitCardLimitTranslationFilterInput!]
+  or: [PltDebitCardLimitTranslationFilterInput!]
+  debitCardLimitLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  debitCardLimitID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  debitCardLimit: PltDebitCardLimitFilterInput
+}
+
+type PltPowerOfSignature
+  @join__type(graph: ASSET, key: "powerOfSignatureID")
+  @join__type(graph: PLAUSIBILITY, key: "powerOfSignatureID")
+{
+  powerOfSignatureID: Int!
+  lifeCycleStateID: Int! @join__field(graph: PLAUSIBILITY)
+  code: String! @join__field(graph: PLAUSIBILITY)
+  description: String! @join__field(graph: PLAUSIBILITY)
+  translations: [PltPowerOfSignatureTranslation!]! @join__field(graph: PLAUSIBILITY)
+}
+
+input PltPowerOfSignatureFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltPowerOfSignatureFilterInput!]
+  or: [PltPowerOfSignatureFilterInput!]
+  powerOfSignatureID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  description: StringOperationFilterInput
+  translations: ListFilterInputTypeOfPltPowerOfSignatureTranslationFilterInput
+}
+
+"""A segment of a collection."""
+type PltPowerOfSignaturesCollectionSegment
+  @join__type(graph: PLAUSIBILITY)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PltPowerOfSignature!]
+  totalCount: Int!
+}
+
+input PltPowerOfSignatureSortInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  powerOfSignatureID: SortEnumType
+  lifeCycleStateID: SortEnumType
+  code: SortEnumType
+  description: SortEnumType
+}
+
+type PltPowerOfSignatureTranslation
+  @join__type(graph: PLAUSIBILITY)
+{
+  powerOfSignatureLanguageID: Int!
+  groupBankID: Int!
+  languageID: Int!
+  lifeCycleStateID: Int!
+  powerOfSignatureID: Int!
+  code: String!
+  shortDescription: String!
+  longDescription: String!
+  noteDescription: String
+  validStartDate: DateTime!
+  validEndDate: DateTime
+  powerOfSignature: PltPowerOfSignature!
+}
+
+input PltPowerOfSignatureTranslationFilterInput
+  @join__type(graph: PLAUSIBILITY)
+{
+  and: [PltPowerOfSignatureTranslationFilterInput!]
+  or: [PltPowerOfSignatureTranslationFilterInput!]
+  powerOfSignatureLanguageID: IntOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  languageID: IntOperationFilterInput
+  lifeCycleStateID: IntOperationFilterInput
+  powerOfSignatureID: IntOperationFilterInput
+  code: StringOperationFilterInput
+  shortDescription: StringOperationFilterInput
+  longDescription: StringOperationFilterInput
+  noteDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  powerOfSignature: PltPowerOfSignatureFilterInput
+}
+
 type Query
   @join__type(graph: ASSET)
   @join__type(graph: BALANCE)
@@ -2374,6 +4216,17 @@ type Query
   asset(skip: Int, take: Int, where: AssetFilterInput, order: [AssetSortInput!]): AssetCollectionSegment @join__field(graph: ASSET)
   balance(skip: Int, take: Int, where: BalanceFilterInput, order: [BalanceSortInput!]): BalanceCollectionSegment @join__field(graph: BALANCE)
   person(skip: Int, take: Int, where: PersonFilterInput, order: [PersonSortInput!]): PersonCollectionSegment @join__field(graph: PERSON)
+  pltAssetAlternativeCodes(skip: Int, take: Int, where: PltAssetAlternativeCodeFilterInput, order: [PltAssetAlternativeCodeSortInput!]): PltAssetAlternativeCodesCollectionSegment @join__field(graph: PLAUSIBILITY)
+  pltAssetNoteTypes(skip: Int, take: Int, where: PltAssetNoteTypeFilterInput, order: [PltAssetNoteTypeSortInput!]): PltAssetNoteTypesCollectionSegment @join__field(graph: PLAUSIBILITY)
+  pltAssetStatuss(skip: Int, take: Int, where: PltAssetStatusFilterInput, order: [PltAssetStatusSortInput!]): PltAssetStatussCollectionSegment @join__field(graph: PLAUSIBILITY)
+  pltAssetStatusReasons(skip: Int, take: Int, where: PltAssetStatusReasonFilterInput, order: [PltAssetStatusReasonSortInput!]): PltAssetStatusReasonsCollectionSegment @join__field(graph: PLAUSIBILITY)
+  pltAssetToAssetLinks(skip: Int, take: Int, where: PltAssetToAssetLinkFilterInput, order: [PltAssetToAssetLinkSortInput!]): PltAssetToAssetLinksCollectionSegment @join__field(graph: PLAUSIBILITY)
+  pltAssetToPersonLinks(skip: Int, take: Int, where: PltAssetToPersonLinkFilterInput, order: [PltAssetToPersonLinkSortInput!]): PltAssetToPersonLinksCollectionSegment @join__field(graph: PLAUSIBILITY)
+  pltAssetToRelationshipLinks(skip: Int, take: Int, where: PltAssetToRelationshipLinkFilterInput, order: [PltAssetToRelationshipLinkSortInput!]): PltAssetToRelationshipLinksCollectionSegment @join__field(graph: PLAUSIBILITY)
+  pltAssetTypes(skip: Int, take: Int, where: PltAssetTypeFilterInput, order: [PltAssetTypeSortInput!]): PltAssetTypesCollectionSegment @join__field(graph: PLAUSIBILITY)
+  pltBusinessDateTypes(skip: Int, take: Int, where: PltBusinessDateTypeFilterInput, order: [PltBusinessDateTypeSortInput!]): PltBusinessDateTypesCollectionSegment @join__field(graph: PLAUSIBILITY)
+  pltDebitCardLimits(skip: Int, take: Int, where: PltDebitCardLimitFilterInput, order: [PltDebitCardLimitSortInput!]): PltDebitCardLimitsCollectionSegment @join__field(graph: PLAUSIBILITY)
+  pltPowerOfSignatures(skip: Int, take: Int, where: PltPowerOfSignatureFilterInput, order: [PltPowerOfSignatureSortInput!]): PltPowerOfSignaturesCollectionSegment @join__field(graph: PLAUSIBILITY)
   employeesRangeNumbers(skip: Int, take: Int, where: EmployeesRangeNumberFilterInput, order: [EmployeesRangeNumberSortInput!]): EmployeesRangeNumbersCollectionSegment @join__field(graph: PLAUSIBILITY)
   genderCodes(skip: Int, take: Int, where: GenderCodeFilterInput, order: [GenderCodeSortInput!]): GenderCodesCollectionSegment @join__field(graph: PLAUSIBILITY)
   joinTypes(skip: Int, take: Int, where: JoinTypeFilterInput, order: [JoinTypeSortInput!]): JoinTypesCollectionSegment @join__field(graph: PLAUSIBILITY)
@@ -2399,7 +4252,7 @@ type Relationship
   @join__type(graph: ASSET, key: "relationshipID")
   @join__type(graph: RELATIONSHIP, key: "relationshipID")
 {
-  assets: [Asset!]! @join__field(graph: ASSET)
+  assets(skip: Int, take: Int): AssetsCollectionSegment @join__field(graph: ASSET)
   relationshipID: Int!
   name: RelationshipName @join__field(graph: RELATIONSHIP)
   persons: [Person!]! @join__field(graph: RELATIONSHIP)

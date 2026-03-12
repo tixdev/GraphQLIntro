@@ -43,6 +43,28 @@ public class PlausibilityDbContext : DbContext
     public DbSet<PersonToRelationshipRoleTranslation> PersonToRelationshipRoleTranslations { get; set; } = null!;
     public DbSet<RelationshipType> RelationshipTypes { get; set; } = null!;
     public DbSet<RelationshipTypeTranslation> RelationshipTypeTranslations { get; set; } = null!;
+    public DbSet<AssetAlternativeCode> AssetAlternativeCodes { get; set; } = null!;
+    public DbSet<AssetAlternativeCodeTranslation> AssetAlternativeCodeTranslations { get; set; } = null!;
+    public DbSet<AssetNoteType> AssetNoteTypes { get; set; } = null!;
+    public DbSet<AssetNoteTypeTranslation> AssetNoteTypeTranslations { get; set; } = null!;
+    public DbSet<AssetStatus> AssetStatuss { get; set; } = null!;
+    public DbSet<AssetStatusTranslation> AssetStatusTranslations { get; set; } = null!;
+    public DbSet<AssetStatusReason> AssetStatusReasons { get; set; } = null!;
+    public DbSet<AssetStatusReasonTranslation> AssetStatusReasonTranslations { get; set; } = null!;
+    public DbSet<AssetToAssetLink> AssetToAssetLinks { get; set; } = null!;
+    public DbSet<AssetToAssetLinkTranslation> AssetToAssetLinkTranslations { get; set; } = null!;
+    public DbSet<AssetToPersonLink> AssetToPersonLinks { get; set; } = null!;
+    public DbSet<AssetToPersonLinkTranslation> AssetToPersonLinkTranslations { get; set; } = null!;
+    public DbSet<AssetToRelationshipLink> AssetToRelationshipLinks { get; set; } = null!;
+    public DbSet<AssetToRelationshipLinkTranslation> AssetToRelationshipLinkTranslations { get; set; } = null!;
+    public DbSet<AssetType> AssetTypes { get; set; } = null!;
+    public DbSet<AssetTypeTranslation> AssetTypeTranslations { get; set; } = null!;
+    public DbSet<BusinessDateType> BusinessDateTypes { get; set; } = null!;
+    public DbSet<BusinessDateTypeTranslation> BusinessDateTypeTranslations { get; set; } = null!;
+    public DbSet<DebitCardLimit> DebitCardLimits { get; set; } = null!;
+    public DbSet<DebitCardLimitTranslation> DebitCardLimitTranslations { get; set; } = null!;
+    public DbSet<PowerOfSignature> PowerOfSignatures { get; set; } = null!;
+    public DbSet<PowerOfSignatureTranslation> PowerOfSignatureTranslations { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -137,5 +159,60 @@ public class PlausibilityDbContext : DbContext
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.RelationshipTypeID);
+
+        modelBuilder.Entity<AssetAlternativeCode>()
+            .HasMany(e => e.Translations)
+            .WithOne(t => t.AssetAlternativeCode)
+            .HasForeignKey(e => e.AssetAlternativeCodeID);
+
+        modelBuilder.Entity<AssetNoteType>()
+            .HasMany(e => e.Translations)
+            .WithOne(t => t.AssetNoteType)
+            .HasForeignKey(e => e.AssetNoteTypeID);
+
+        modelBuilder.Entity<AssetStatus>()
+            .HasMany(e => e.Translations)
+            .WithOne(t => t.AssetStatus)
+            .HasForeignKey(e => e.AssetStatusID);
+
+        modelBuilder.Entity<AssetStatusReason>()
+            .HasMany(e => e.Translations)
+            .WithOne(t => t.AssetStatusReason)
+            .HasForeignKey(e => e.AssetStatusReasonID);
+
+        modelBuilder.Entity<AssetToAssetLink>()
+            .HasMany(e => e.Translations)
+            .WithOne(t => t.AssetToAssetLink)
+            .HasForeignKey(e => e.AssetToAssetLinkID);
+
+        modelBuilder.Entity<AssetToPersonLink>()
+            .HasMany(e => e.Translations)
+            .WithOne(t => t.AssetToPersonLink)
+            .HasForeignKey(e => e.AssetToPersonLinkID);
+
+        modelBuilder.Entity<AssetToRelationshipLink>()
+            .HasMany(e => e.Translations)
+            .WithOne(t => t.AssetToRelationshipLink)
+            .HasForeignKey(e => e.AssetToRelationshipLinkID);
+
+        modelBuilder.Entity<AssetType>()
+            .HasMany(e => e.Translations)
+            .WithOne(t => t.AssetType)
+            .HasForeignKey(e => e.AssetTypeID);
+
+        modelBuilder.Entity<BusinessDateType>()
+            .HasMany(e => e.Translations)
+            .WithOne(t => t.BusinessDateType)
+            .HasForeignKey(e => e.BusinessDateTypeID);
+
+        modelBuilder.Entity<DebitCardLimit>()
+            .HasMany(e => e.Translations)
+            .WithOne(t => t.DebitCardLimit)
+            .HasForeignKey(e => e.DebitCardLimitID);
+
+        modelBuilder.Entity<PowerOfSignature>()
+            .HasMany(e => e.Translations)
+            .WithOne(t => t.PowerOfSignature)
+            .HasForeignKey(e => e.PowerOfSignatureID);
     }
 }

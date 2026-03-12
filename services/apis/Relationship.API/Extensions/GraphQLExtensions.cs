@@ -1,10 +1,5 @@
-using Microsoft.Extensions.DependencyInjection;
 using HotChocolate.Execution;
-using HotChocolate.ApolloFederation.Types;
 using Relationship.API.Graph;
-using Relationship.API.Graph.Types;
-using Relationship.API.Graph.ExternalTypeRefs;
-using Relationship.API.Graph.TypeExtensions;
 using Shared.Temporal;
 using Shared.Extensions;
 

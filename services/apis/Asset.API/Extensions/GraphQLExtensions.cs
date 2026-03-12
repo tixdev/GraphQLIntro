@@ -1,9 +1,5 @@
-using Microsoft.Extensions.DependencyInjection;
 using HotChocolate.Execution;
-using HotChocolate.ApolloFederation.Types;
-using HotChocolate.Types;
 using Asset.API.Graph;
-using Asset.API.Graph.Types;
 using Shared.Temporal;
 using Shared.Extensions;
 
@@ -21,7 +17,25 @@ public static class GraphQLExtensions
             .AddProjections()
             .AddFiltering()
             .AddSorting()
-            .AddHttpRequestInterceptor<TemporalHttpRequestInterceptor>();
+            .AddHttpRequestInterceptor<TemporalHttpRequestInterceptor>()
+            .InitializeOnStartup(warmup: async (executor, ct) =>
+            {
+                var result = await executor.ExecuteAsync(@"
+                    query Warmup {
+                        asset(take: 1, order: { assetID: ASC }) {
+                            items {
+                                assetID
+                            }
+                        }
+                    }", ct);
+
+                if (result is IOperationResult { Errors: { Count: > 0 } errors })
+                {
+                    var errorMessages = string.Join(", ", errors.Select(e => e.Message));
+                    throw new Exception($"[Warmup Failed] GraphQL errors: {errorMessages}");
+                }
+            })
+            .ModifyRequestOptions(opt => opt.IncludeExceptionDetails = true);
 
         return services;
     }

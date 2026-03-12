@@ -6,6 +6,116 @@ namespace Plausibility.API.Graph.Queries;
 
 public class PlausibilityQueries
 {
+    [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 256, IncludeTotalCount = true)]
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    [GraphQLName("pltAssetAlternativeCodes")]
+    public IQueryable<AssetAlternativeCode> GetAssetAlternativeCodes(PlausibilityDbContext context)
+    {
+        return context.AssetAlternativeCodes.Include(x => x.Translations);
+    }
+
+    [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 256, IncludeTotalCount = true)]
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    [GraphQLName("pltAssetNoteTypes")]
+    public IQueryable<AssetNoteType> GetAssetNoteTypes(PlausibilityDbContext context)
+    {
+        return context.AssetNoteTypes.Include(x => x.Translations);
+    }
+
+    [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 256, IncludeTotalCount = true)]
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    [GraphQLName("pltAssetStatuss")]
+    public IQueryable<AssetStatus> GetAssetStatuss(PlausibilityDbContext context)
+    {
+        return context.AssetStatuss.Include(x => x.Translations);
+    }
+
+    [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 256, IncludeTotalCount = true)]
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    [GraphQLName("pltAssetStatusReasons")]
+    public IQueryable<AssetStatusReason> GetAssetStatusReasons(PlausibilityDbContext context)
+    {
+        return context.AssetStatusReasons.Include(x => x.Translations);
+    }
+
+    [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 256, IncludeTotalCount = true)]
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    [GraphQLName("pltAssetToAssetLinks")]
+    public IQueryable<AssetToAssetLink> GetAssetToAssetLinks(PlausibilityDbContext context)
+    {
+        return context.AssetToAssetLinks.Include(x => x.Translations);
+    }
+
+    [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 256, IncludeTotalCount = true)]
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    [GraphQLName("pltAssetToPersonLinks")]
+    public IQueryable<AssetToPersonLink> GetAssetToPersonLinks(PlausibilityDbContext context)
+    {
+        return context.AssetToPersonLinks.Include(x => x.Translations);
+    }
+
+    [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 256, IncludeTotalCount = true)]
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    [GraphQLName("pltAssetToRelationshipLinks")]
+    public IQueryable<AssetToRelationshipLink> GetAssetToRelationshipLinks(PlausibilityDbContext context)
+    {
+        return context.AssetToRelationshipLinks.Include(x => x.Translations);
+    }
+
+    [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 256, IncludeTotalCount = true)]
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    [GraphQLName("pltAssetTypes")]
+    public IQueryable<AssetType> GetAssetTypes(PlausibilityDbContext context)
+    {
+        return context.AssetTypes.Include(x => x.Translations);
+    }
+
+    [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 256, IncludeTotalCount = true)]
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    [GraphQLName("pltBusinessDateTypes")]
+    public IQueryable<BusinessDateType> GetBusinessDateTypes(PlausibilityDbContext context)
+    {
+        return context.BusinessDateTypes.Include(x => x.Translations);
+    }
+
+    [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 256, IncludeTotalCount = true)]
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    [GraphQLName("pltDebitCardLimits")]
+    public IQueryable<DebitCardLimit> GetDebitCardLimits(PlausibilityDbContext context)
+    {
+        return context.DebitCardLimits.Include(x => x.Translations);
+    }
+
+    [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 256, IncludeTotalCount = true)]
+    [UseProjection]
+    [UseFiltering]
+    [UseSorting]
+    [GraphQLName("pltPowerOfSignatures")]
+    public IQueryable<PowerOfSignature> GetPowerOfSignatures(PlausibilityDbContext context)
+    {
+        return context.PowerOfSignatures.Include(x => x.Translations);
+    }
+
 
     [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 256, IncludeTotalCount = true)]
     [UseProjection]

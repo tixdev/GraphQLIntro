@@ -64,15 +64,16 @@ Usa questa guida per capire esattamente **quali file** creare e **che tipo** di 
 
 ---
 
-## 6. Registrazione Tipi ed Estensioni (AutoScaffolding)
+## 6. Registrazione Tipi ed Estensioni (AutoScaffolding) e Inizializzazione
 
 Per mantenere il codice pulito e omogeneo, **tutti i microservizi DEVONO** utilizzare la convention dell'*auto-scaffolding* per registrare i propri tipi ed estensioni GraphQL all'interno del file di setup (`Extensions/GraphQLExtensions.cs`).
 
 Invece di chiamare ripetutamente `.AddTypeExtension<...>()` manuali:
 1. Crea/assicurati che esista il file `Extensions/AutoScaffoldExtensions.cs` contenente il metodo di estensione `AddAutoScaffoldedTypes()`.
 2. Chiama `.AddAutoScaffoldedTypes()` sulla configurazione GraphQL Server (di solito subito dopo la registrazione della query).
+3. **Requisito Obbligatorio**: Aggiungi SEMPRE la chiamata `.InitializeOnStartup()` alla fine della catena di configurazione di HotChocolate. Questo permette di pre-caricare e validare lo schema al momento dell'avvio del pod, evitando che la prima richiesta GraphQL subisca penalità di latenza o vada in timeout. Opzionalmente, è consigliabile includere una query di *warmup*.
 
-Questa convenzione garantisce che nessun tipo configurato o aggiornato venga per errore escluso dal grafo federato.
+Questa convenzione garantisce che nessun tipo configurato o aggiornato venga per errore escluso dal grafo federato e che l'avvio a freddo sia rapido.
 
 ---
 
@@ -208,8 +209,8 @@ Per garantire che il grafo sia ultra-performante e non sovraccarichi il database
 *   **Perché**: Assicura che EF Core generi una `SELECT` solo per le colonne scalari richieste (es. `PersonID`, `PersonNumber`), evitando il costoso `SELECT *`.
 
 ### 2. Disattivazione Auto-JOIN (`IsProjected(false)`)
-*   **Regola**: Tutte le navigation property (1:1 o 1:N) che hanno un resolver/DataLoader dedicato devono essere marcate obbligatoriamente con `.IsProjected(false)` nel descrittore del tipo (`PersonType.cs`).
-*   **Perché**: Impedisce a `[UseProjection]` di iniettare dei `LEFT JOIN` nella query root. Senza questo, EF Core scaricherebbe i dati delle relazioni due volte (una nella query root via JOIN e una nel DataLoader via query separata).
+*   **Regola**: Tutte le navigation property - **sia quelle singole (1:1) che le collezioni (1:N)** - che hanno un resolver/DataLoader dedicato devono essere marcate obbligatoriamente con `.IsProjected(false)` nel descrittore del tipo (`PersonType.cs`).
+*   **Perché**: Impedisce a `[UseProjection]` di iniettare dei `LEFT JOIN` nella query root. Senza questo, EF Core scaricherebbe i dati delle relazioni due volte (una nella query root via JOIN e una nel DataLoader via query separata). Nel caso specifico delle collezioni (1:N), un mancato `.IsProjected(false)` può causare query SQL pesantissime o avvisi/errori di EF Core per proiezioni complesse non supportate (es. *Cartesian Explosion*).
 
 ### 3. Granularità dei DataLoader (Evitare l'Overfetching del DB)
 *   **Regola**: Non creare un unico DataLoader monolitico (es. `PersonById`). Suddividilo in loader granulari per ogni dominio/natura (`NaturalPersonByPersonId`, `InternalPersonByPersonId`, etc.).

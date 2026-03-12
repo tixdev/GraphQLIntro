@@ -1,5 +1,3 @@
-using HotChocolate;
-using HotChocolate.Types;
 using HotChocolate.ApolloFederation.Types;
 using HotChocolate.ApolloFederation.Resolvers;
 using Asset.API.Graph.DataLoaders;
@@ -9,6 +7,7 @@ namespace Asset.API.Graph.ExternalTypeRefs;
 
 [ObjectType("Relationship")]
 [Key("relationshipID")]
+[GraphQLName("Relationship")]
 public class RelationshipRef
 {
     [ReferenceResolver]
@@ -17,10 +16,12 @@ public class RelationshipRef
 
     public int RelationshipID { get; set; }
 
-    public async Task<AssetModel[]> GetAssets(
+    [UseOffsetPaging(IncludeTotalCount = true)]
+    public async Task<IEnumerable<AssetModel>> GetAssets(
         [Parent] RelationshipRef relationship,
         AssetsByRelationshipIdDataLoader dataLoader)
     {
-        return await dataLoader.LoadAsync(relationship.RelationshipID);
+        var results = await dataLoader.LoadAsync(relationship.RelationshipID);
+        return results ?? Array.Empty<AssetModel>();
     }
 }

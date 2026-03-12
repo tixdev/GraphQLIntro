@@ -1,4 +1,3 @@
-using HotChocolate.Types;
 using Relationship.API.Models;
 
 namespace Relationship.API.Graph.Types;

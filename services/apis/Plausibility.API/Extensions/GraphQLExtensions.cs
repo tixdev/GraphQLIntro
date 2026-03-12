@@ -1,12 +1,7 @@
-using Microsoft.Extensions.DependencyInjection;
 using HotChocolate.Execution;
-using HotChocolate.ApolloFederation.Types;
 using Plausibility.API.Graph.Queries;
 using Shared.Temporal;
 using Shared.Extensions;
-using System;
-using System.Linq;
-using HotChocolate.Types;
 
 namespace Plausibility.API.Extensions;
 

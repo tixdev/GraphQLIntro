@@ -25,3 +25,6 @@ headers:
           named: x-temporal-range-start
       - propagate:
           named: x-temporal-range-end
+
+plugins:
+  experimental.expose_query_plan: true
