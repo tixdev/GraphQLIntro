@@ -23,6 +23,8 @@ type Asset
   @join__type(graph: ASSET, key: "assetID")
   @join__type(graph: BALANCE, key: "assetID")
 {
+  assetID: Int!
+  groupBankID: Int! @join__field(graph: ASSET)
   relationshipID: Int! @join__field(graph: ASSET)
   pltAssetTypeID: Int! @join__field(graph: ASSET)
   assetAlternativeCodes(skip: Int, take: Int): AssetAlternativeCodesCollectionSegment @join__field(graph: ASSET)
@@ -40,10 +42,8 @@ type Asset
   assetVisaDebitCards(skip: Int, take: Int): AssetVisaDebitCardsCollectionSegment @join__field(graph: ASSET)
   relationship: Relationship @join__field(graph: ASSET)
   assetType: PltAssetType @join__field(graph: ASSET)
-  assetID: Int!
   productID: Int! @join__field(graph: ASSET)
   number: Int! @join__field(graph: ASSET)
-  groupBankID: Int! @join__field(graph: ASSET)
   isMigrated: Boolean! @join__field(graph: ASSET)
   assetToAssetAssetNavigations: [AssetToAsset!]! @join__field(graph: ASSET)
   assetToAssetAssets: [AssetToAsset!]! @join__field(graph: ASSET)
