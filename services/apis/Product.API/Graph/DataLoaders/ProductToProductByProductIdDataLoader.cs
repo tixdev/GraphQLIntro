@@ -4,25 +4,16 @@ using Product.API.Models;
 
 namespace Product.API.Graph.DataLoaders;
 
-public class ProductToProductByProductIdDataLoader : GroupedDataLoader<int, ProductToProduct>
+public class ProductToProductByProductIdDataLoader(
+    IBatchScheduler batchScheduler,
+    DataLoaderOptions options,
+    ProductDbContext dbContext)
+    : GroupedDataLoader<int, ProductToProduct>(batchScheduler, options)
 {
-    private readonly IDbContextFactory<ProductDbContext> _dbContextFactory;
-
-    public ProductToProductByProductIdDataLoader(
-        IDbContextFactory<ProductDbContext> dbContextFactory,
-        IBatchScheduler batchScheduler,
-        DataLoaderOptions? options = null)
-        : base(batchScheduler, options)
-    {
-        _dbContextFactory = dbContextFactory;
-    }
-
     protected override async Task<ILookup<int, ProductToProduct>> LoadGroupedBatchAsync(
         IReadOnlyList<int> keys,
         CancellationToken cancellationToken)
     {
-        await using var dbContext = await _dbContextFactory.CreateDbContextAsync(cancellationToken);
-
         var results = await dbContext.ProductToProduct
             .AsNoTracking()
             .Where(t => keys.Contains(t.ProductId))

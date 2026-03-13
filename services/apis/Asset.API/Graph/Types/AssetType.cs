@@ -18,6 +18,7 @@ public class AssetType : ObjectType<AssetModel>
         descriptor.Field(t => t.GroupBankID).IsProjected();
         descriptor.Field(t => t.RelationshipID).IsProjected(true);
         descriptor.Field(t => t.PltAssetTypeID).IsProjected(true);
+        descriptor.Field(t => t.ProductID).IsProjected(true);
 
         descriptor.Field(t => t.AssetAlternativeCodes).IsProjected(false);
         descriptor.Field(t => t.AssetDates).IsProjected(false);
@@ -73,6 +74,7 @@ public class AssetType : ObjectType<AssetModel>
             .ResolveWith<AssetResolvers>(r => r.GetAssetAlternativeCodes(default!, default!));
 
         descriptor.Field("relationship")
+            .IsProjected(false)
             .Resolve(ctx =>
             {
                 var parent = ctx.Parent<AssetModel>();
@@ -80,10 +82,19 @@ public class AssetType : ObjectType<AssetModel>
             });
 
         descriptor.Field("assetType")
+            .IsProjected(false)
             .Resolve(ctx =>
             {
                 var parent = ctx.Parent<AssetModel>();
                 return new PltAssetTypeRef { AssetTypeID = parent.PltAssetTypeID };
+            });
+
+        descriptor.Field("product")
+            .IsProjected(false)
+            .Resolve(ctx =>
+            {
+                var parent = ctx.Parent<AssetModel>();
+                return new ProductRef { ProductId = parent.ProductID };
             });
     }
 

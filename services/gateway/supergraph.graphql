@@ -27,6 +27,7 @@ type Asset
   groupBankID: Int! @join__field(graph: ASSET)
   relationshipID: Int! @join__field(graph: ASSET)
   pltAssetTypeID: Int! @join__field(graph: ASSET)
+  productID: Int! @join__field(graph: ASSET)
   assetAlternativeCodes(skip: Int, take: Int): AssetAlternativeCodesCollectionSegment @join__field(graph: ASSET)
   assetDates(skip: Int, take: Int): AssetDatesCollectionSegment @join__field(graph: ASSET)
   assetDebitCards(skip: Int, take: Int): AssetDebitCardsCollectionSegment @join__field(graph: ASSET)
@@ -42,7 +43,7 @@ type Asset
   assetVisaDebitCards(skip: Int, take: Int): AssetVisaDebitCardsCollectionSegment @join__field(graph: ASSET)
   relationship: Relationship @join__field(graph: ASSET)
   assetType: PltAssetType @join__field(graph: ASSET)
-  productID: Int! @join__field(graph: ASSET)
+  product: Product @join__field(graph: ASSET)
   number: Int! @join__field(graph: ASSET)
   isMigrated: Boolean! @join__field(graph: ASSET)
   assetToAssetAssetNavigations: [AssetToAsset!]! @join__field(graph: ASSET)
@@ -4342,19 +4343,21 @@ input PltPowerOfSignatureTranslationFilterInput
 }
 
 type Product
+  @join__type(graph: ASSET, key: "productId")
   @join__type(graph: PRODUCT, key: "productId")
 {
+  assets(skip: Int, take: Int): AssetsCollectionSegment @join__field(graph: ASSET)
   productId: ID!
-  productCode: String!
-  groupBankId: Int!
-  productDescription(skip: Int, take: Int): ProductDescriptionCollectionSegment
-  productDetail(skip: Int, take: Int): ProductDetailCollectionSegment
-  productToProductProduct(skip: Int, take: Int): ProductToProductProductCollectionSegment
-  productDocument(skip: Int, take: Int): ProductDocumentCollectionSegment
-  productRoleAllowed(skip: Int, take: Int): ProductRoleAllowedCollectionSegment
-  productToCondition(skip: Int, take: Int): ProductToConditionCollectionSegment
-  productLifeCycleStatus(skip: Int, take: Int): ProductLifeCycleStatusCollectionSegment
-  groupBank: GroupBank!
+  productCode: String! @join__field(graph: PRODUCT)
+  groupBankId: Int! @join__field(graph: PRODUCT)
+  productDescription(skip: Int, take: Int): ProductDescriptionCollectionSegment @join__field(graph: PRODUCT)
+  productDetail(skip: Int, take: Int): ProductDetailCollectionSegment @join__field(graph: PRODUCT)
+  productToProductProduct(skip: Int, take: Int): ProductToProductProductCollectionSegment @join__field(graph: PRODUCT)
+  productDocument(skip: Int, take: Int): ProductDocumentCollectionSegment @join__field(graph: PRODUCT)
+  productRoleAllowed(skip: Int, take: Int): ProductRoleAllowedCollectionSegment @join__field(graph: PRODUCT)
+  productToCondition(skip: Int, take: Int): ProductToConditionCollectionSegment @join__field(graph: PRODUCT)
+  productLifeCycleStatus(skip: Int, take: Int): ProductLifeCycleStatusCollectionSegment @join__field(graph: PRODUCT)
+  groupBank: GroupBank! @join__field(graph: PRODUCT)
 }
 
 """A segment of a collection."""

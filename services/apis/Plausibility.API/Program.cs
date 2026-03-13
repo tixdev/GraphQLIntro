@@ -5,8 +5,9 @@ using Plausibility.API.Extensions;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("Dynacos");
-builder.Services.AddDbContextPool<PlausibilityDbContext>(options =>
-   options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<PlausibilityDbContext>(options =>
+   options.UseSqlServer(connectionString),
+   ServiceLifetime.Transient);
 
 builder.Services.AddScoped<Shared.Temporal.ITemporalContext, Shared.Temporal.TemporalContext>();
 
