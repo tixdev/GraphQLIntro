@@ -20,6 +20,8 @@ public class RelationshipByIdDataLoader(
             .Where(r => keys.Contains(r.RelationshipID))
             .ToListAsync(cancellationToken);
 
-        return items.ToDictionary(r => r.RelationshipID);
+        return items
+            .DistinctBy(r => r.RelationshipID)
+            .ToDictionary(r => r.RelationshipID);
     }
 }
