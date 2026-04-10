@@ -28,3 +28,18 @@ headers:
 
 plugins:
   experimental.expose_query_plan: true
+
+telemetry:
+  exporters:
+    tracing:
+      common:
+        service_name: "apollo-router"
+      otlp:
+        enabled: true
+        endpoint: "http://localhost:4317"
+    metrics:
+      common:
+        service_name: "apollo-router"
+      otlp:
+        enabled: true
+        endpoint: "http://localhost:4317"

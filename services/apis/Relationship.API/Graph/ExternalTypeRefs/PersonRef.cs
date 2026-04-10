@@ -12,6 +12,7 @@ public class PersonRef
     public static async Task<PersonRef> GetByIdAsync(int personID)
         => await Task.FromResult(new PersonRef { PersonID = personID });
 
+    [GraphQLName("personID")]
     public int PersonID { get; set; }
 
     [UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 200, IncludeTotalCount = true)]

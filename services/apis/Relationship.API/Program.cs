@@ -2,12 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using Relationship.API.Data;
 using Relationship.API.Extensions;
 using Shared.Temporal;
+using Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ITemporalContext, TemporalContext>();
 
 builder.Services.AddSingleton<TestMetrics>();
+builder.Services.AddApiServiceOpenTelemetry("Relationship.API");
 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>

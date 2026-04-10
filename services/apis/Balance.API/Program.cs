@@ -3,10 +3,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Balance.API.Data;
 using Balance.API.Extensions;
+using Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddSingleton<TestMetrics>();
+builder.Services.AddApiServiceOpenTelemetry("Balance.API");
 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>

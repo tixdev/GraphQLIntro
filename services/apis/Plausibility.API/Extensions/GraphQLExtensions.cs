@@ -21,6 +21,7 @@ public static class GraphQLExtensions
             .AddProjections()
             .AddFiltering()
             .AddSorting()
+            .AddInstrumentation()
             .AddHttpRequestInterceptor<TemporalHttpRequestInterceptor>()
             .InitializeOnStartup(warmup: async (executor, ct) =>
             {

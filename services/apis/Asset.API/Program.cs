@@ -2,12 +2,14 @@ using Microsoft.EntityFrameworkCore;
 using Asset.API.Data;
 using Asset.API.Extensions;
 using Shared.Temporal;
+using Shared.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ITemporalContext, TemporalContext>();
 
 builder.Services.AddSingleton<TestMetrics>();
+builder.Services.AddApiServiceOpenTelemetry("Asset.API");
 
 builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>

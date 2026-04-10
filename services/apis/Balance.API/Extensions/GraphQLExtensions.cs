@@ -19,7 +19,9 @@ public static class GraphQLExtensions
             .AddAutoScaffoldedTypes(typeof(Query).Assembly)
             .AddProjections()
             .AddFiltering()
-            .AddSorting();
+            .AddSorting()
+            .AddInstrumentation()
+            .InitializeOnStartup(warmup: async (executor, ct) => { /* Add warmup logic here if needed */ });
 
         return services;
     }

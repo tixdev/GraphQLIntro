@@ -3354,6 +3354,18 @@ input PersonProfessionTranslationFilterInput
   validEndDate: DateTimeOperationFilterInput
 }
 
+"""A segment of a collection."""
+type PersonsCollectionSegment
+  @join__type(graph: RELATIONSHIP)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [Person!]
+  totalCount: Int!
+}
+
 input PersonSortInput
   @join__type(graph: PERSON)
 {
@@ -4930,7 +4942,7 @@ type Relationship
   assets(skip: Int, take: Int): AssetsCollectionSegment @join__field(graph: ASSET)
   relationshipID: Int!
   name: RelationshipName @join__field(graph: RELATIONSHIP)
-  persons: [Person!]! @join__field(graph: RELATIONSHIP)
+  persons(skip: Int, take: Int): PersonsCollectionSegment @join__field(graph: RELATIONSHIP)
   pltRelationshipTypeID: Int! @join__field(graph: RELATIONSHIP)
   number: Int! @join__field(graph: RELATIONSHIP)
   groupBankID: Int! @join__field(graph: RELATIONSHIP)

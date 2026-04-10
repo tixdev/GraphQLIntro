@@ -16,3 +16,17 @@ headers:
           named: x-temporal-range-start
       - propagate:
           named: x-temporal-range-end
+
+telemetry:
+  exporters:
+    tracing:
+      common:
+        service_name: "apollo-router-local"
+      stdout:
+        enabled: true
+    metrics:
+      common:
+        service_name: "apollo-router-local"
+      prometheus:
+        enabled: true
+        listen: 0.0.0.0:9090
