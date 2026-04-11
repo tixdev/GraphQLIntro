@@ -98,3 +98,10 @@ public class PersonDetailSensibleDataPlausibilityExtensions
     public NogaFederationStub? GetNoga([Parent] PersonDetailSensibleData model)
         => model.PltNogaID != null ? new NogaFederationStub { NogaID =  model.PltNogaID.Value } : null;
 }
+
+[ExtendObjectType(typeof(PersonName))]
+public class PersonNamePlausibilityExtensions
+{
+    public PersonNameTypeFederationStub? GetPersonNameType([Parent] PersonName model)
+        => model.PltPersonNameTypeID != 0 ? new PersonNameTypeFederationStub { PersonNameTypeID = model.PltPersonNameTypeID } : null;
+}

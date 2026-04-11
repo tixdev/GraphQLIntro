@@ -22,4 +22,5 @@ public class Person
     public InternalPerson? InternalPerson { get; set; }
     public GroupPerson? GroupPerson { get; set; }
     public PersonOnlineService? PersonOnlineService { get; set; }
+    public ICollection<PersonName> PersonName { get; set; } = new List<PersonName>();
 }

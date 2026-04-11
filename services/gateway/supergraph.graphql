@@ -1656,6 +1656,15 @@ input ListFilterInputTypeOfPersonMaritalStatusTranslationFilterInput
   any: Boolean
 }
 
+input ListFilterInputTypeOfPersonNameFilterInput
+  @join__type(graph: PERSON)
+{
+  all: PersonNameFilterInput
+  none: PersonNameFilterInput
+  some: PersonNameFilterInput
+  any: Boolean
+}
+
 input ListFilterInputTypeOfPersonNatureTranslationFilterInput
   @join__type(graph: PLAUSIBILITY)
 {
@@ -2457,6 +2466,7 @@ type Person
   legalPerson: LegalPerson @join__field(graph: PERSON)
   internalPerson: InternalPerson @join__field(graph: PERSON)
   groupPerson: GroupPerson @join__field(graph: PERSON)
+  personName(skip: Int, take: Int): PersonNameCollectionSegment @join__field(graph: PERSON)
   personID: Int!
   personNumber: String! @join__field(graph: PERSON)
   isMigrated: Boolean! @join__field(graph: PERSON)
@@ -2897,6 +2907,7 @@ input PersonFilterInput
   internalPerson: InternalPersonFilterInput
   groupPerson: GroupPersonFilterInput
   personOnlineService: PersonOnlineServiceFilterInput
+  personName: ListFilterInputTypeOfPersonNameFilterInput
 }
 
 type PersonInternalType
@@ -3053,6 +3064,54 @@ input PersonMaritalStatusTranslationFilterInput
   noteDescription: StringOperationFilterInput
   validStartDate: DateTimeOperationFilterInput
   validEndDate: DateTimeOperationFilterInput
+}
+
+type PersonName
+  @join__type(graph: PERSON)
+{
+  pltPersonNameTypeID: Int!
+  personNameID: Int!
+  personID: Int!
+  personNameDescription: String!
+  groupBankID: Int!
+  caseID: Long
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  personNameType: PersonNameType
+}
+
+"""A segment of a collection."""
+type PersonNameCollectionSegment
+  @join__type(graph: PERSON)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PersonName!]
+  totalCount: Int!
+}
+
+input PersonNameFilterInput
+  @join__type(graph: PERSON)
+{
+  and: [PersonNameFilterInput!]
+  or: [PersonNameFilterInput!]
+  personNameID: IntOperationFilterInput
+  personID: IntOperationFilterInput
+  pltPersonNameTypeID: IntOperationFilterInput
+  personNameDescription: StringOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  person: PersonFilterInput
+}
+
+type PersonNameType
+  @join__type(graph: PERSON, key: "personNameTypeID")
+{
+  personNameTypeID: Int!
 }
 
 type PersonNature

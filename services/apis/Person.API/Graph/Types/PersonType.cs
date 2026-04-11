@@ -31,6 +31,10 @@ public class PersonType : ObjectType<PersonModel>
         descriptor.Field(t => t.GroupPerson)
             .ResolveWith<PersonResolvers>(r => r.GetGroupPersonAsync(default!, default!))
             .IsProjected(false);
+            
+        descriptor.Field(t => t.PersonName)
+            .ResolveWith<PersonResolvers>(r => r.GetPersonNameAsync(default!, default!))
+            .IsProjected(false);
     }
 
     [ReferenceResolver]

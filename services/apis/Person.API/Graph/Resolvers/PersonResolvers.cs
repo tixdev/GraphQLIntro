@@ -26,4 +26,11 @@ public class PersonResolvers
     {
         return await dataLoader.LoadAsync(person.PersonID);
     }
+
+    [HotChocolate.Types.UseOffsetPaging(DefaultPageSize = 10, MaxPageSize = 200, IncludeTotalCount = true)]
+    public async Task<IEnumerable<PersonName>> GetPersonNameAsync([HotChocolate.Parent] PersonModel person, PersonNameByPersonIdDataLoader dataLoader)
+    {
+        var results = await dataLoader.LoadAsync(person.PersonID);
+        return results ?? Array.Empty<PersonName>();
+    }
 }

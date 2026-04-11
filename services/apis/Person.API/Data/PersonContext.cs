@@ -17,6 +17,7 @@ public class PersonContext(DbContextOptions<PersonContext> options, ITemporalCon
     public DbSet<GroupPerson> GroupPerson { get; set; }
     public DbSet<GroupPersonSensibleData> GroupPersonSensibleData { get; set; }
     public DbSet<PersonOnlineService> PersonOnlineService { get; set; }
+    public DbSet<PersonName> PersonName { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -120,6 +121,15 @@ public class PersonContext(DbContextOptions<PersonContext> options, ITemporalCon
             e.HasKey(p => p.PersonOnlineServiceID);
             e.HasOne(p => p.Person).WithOne(p => p.PersonOnlineService)
                 .HasForeignKey<PersonOnlineService>(p => p.PersonID);
+        });
+
+        // PersonName — 1:N with Person
+        modelBuilder.Entity<PersonName>(e =>
+        {
+            e.ToTable("PersonName", "Person");
+            e.HasKey(p => p.PersonNameID);
+            e.HasOne(p => p.Person).WithMany(p => p.PersonName)
+                .HasForeignKey(p => p.PersonID);
         });
 
         // Apply Global Query Filter for Temporal Entities dynamically
