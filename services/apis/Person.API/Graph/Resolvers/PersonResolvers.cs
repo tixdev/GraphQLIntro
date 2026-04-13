@@ -33,4 +33,9 @@ public class PersonResolvers
         var results = await dataLoader.LoadAsync(person.PersonID);
         return results ?? Array.Empty<PersonName>();
     }
+
+    public async Task<PersonDetail?> GetPersonDetailAsync([Parent] PersonModel person, PersonDetailByPersonIdDataLoader dataLoader)
+    {
+        return await dataLoader.LoadAsync(person.PersonID);
+    }
 }

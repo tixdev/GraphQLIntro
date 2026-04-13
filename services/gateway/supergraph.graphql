@@ -2460,19 +2460,19 @@ type Person
   @join__type(graph: PERSON, key: "personID")
   @join__type(graph: RELATIONSHIP, key: "personID")
 {
+  personID: Int!
   pltPersonNatureID: Int! @join__field(graph: PERSON)
   pltPersonCodingTypeID: Int! @join__field(graph: PERSON)
   naturalPerson: NaturalPerson @join__field(graph: PERSON)
   legalPerson: LegalPerson @join__field(graph: PERSON)
   internalPerson: InternalPerson @join__field(graph: PERSON)
   groupPerson: GroupPerson @join__field(graph: PERSON)
+  personDetail: PersonDetail @join__field(graph: PERSON)
   personName(skip: Int, take: Int): PersonNameCollectionSegment @join__field(graph: PERSON)
-  personID: Int!
   personNumber: String! @join__field(graph: PERSON)
   isMigrated: Boolean! @join__field(graph: PERSON)
   groupBankID: Int! @join__field(graph: PERSON)
   caseID: Long @join__field(graph: PERSON)
-  personDetail: PersonDetail @join__field(graph: PERSON)
   personOnlineService: PersonOnlineService @join__field(graph: PERSON)
   personNature: PersonNature @join__field(graph: PERSON)
   personCodingType: PersonCodingType @join__field(graph: PERSON)

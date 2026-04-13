@@ -20,7 +20,8 @@ public static class OpenTelemetryExtensions
                     .SetResourceBuilder(resourceBuilder)
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
-                    .AddHotChocolateInstrumentation()
+                    //.AddHotChocolateInstrumentation()
+                    .AddEntityFrameworkCoreInstrumentation(options => options.SetDbStatementForText = true)
                     .AddOtlpExporter()
                     .AddConsoleExporter();
             })
