@@ -40,11 +40,16 @@ WHERE ValidStartDate <= @QueryMaxStartDate AND ValidEndDate > @QueryMinEndDate
 
 In `TemporalContext.cs`, we calculate the optimal boundaries (`QueryMaxStartDate` and `QueryMinEndDate`) in C# based on the requested mode. This guarantees an extremely simple and perfectly indexable statement for SQL Server.
 
+#### The "Magic Date" (Active Records)
+
+A key element of this implementation is the concept of the **"Magic Date"** for active records. In the database, a record that is currently active (not expired) has its `ValidEndDate` set to the maximum possible date value (`9999-12-31 23:59:59.9999999` in SQL Server).
+When the user does not provide any temporal headers, the system defaults to querying "Active" records. To achieve this without adding an `IF` statement or an `OR` in the SQL, we pass `DateTime.MaxValue` as the upper bound, and `DateTime.MaxValue.AddTicks(-1)` as the lower bound. This forces the SQL condition to effectively become `ValidEndDate == DateTime.MaxValue`, ensuring only active records are fetched.
+
 #### Case Mapping
 
 | Mode | User Input | `QueryMaxStartDate` Calculation | `QueryMinEndDate` Calculation | Resulting SQL Condition (Simplified) |
 |---|---|---|---|---|
-| **Default (Active)** | N/A | `DateTime.MaxValue` | `DateTime.MaxValue.AddTicks(-1)` | `EndDate > MaxValue - 1` (i.e., `EndDate == MaxValue`) |
+| **Default (Active)** | N/A | `DateTime.MaxValue` | `DateTime.MaxValue.AddTicks(-1)` | `EndDate > MaxValue - 1` (i.e., `EndDate == Magic Date`) |
 | **AsOf** | `X` | `X` | `X` | `StartDate <= X AND EndDate > X` |
 | **AnyTimeIn** | `S`, `E` | `E.AddTicks(-1)` | `S` | `StartDate < E AND EndDate > S` |
 | **Throughout** | `S`, `E` | `S` | `E.AddTicks(-1)` | `StartDate <= S AND EndDate >= E` |
