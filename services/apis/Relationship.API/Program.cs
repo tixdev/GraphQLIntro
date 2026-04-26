@@ -17,6 +17,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDbContext<RelationshipContext>((sp, options) =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+           .AddInterceptors(new TemporalDbInterceptor())
            .AddInterceptors(new MetricsDbCommandInterceptor(sp.GetRequiredService<TestMetrics>())),
     ServiceLifetime.Transient);
 

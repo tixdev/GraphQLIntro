@@ -4,8 +4,11 @@ using Shared.Temporal;
 
 namespace Person.API.Data;
 
-public class PersonContext(DbContextOptions<PersonContext> options, ITemporalContext temporalContext) : DbContext(options)
+public class PersonContext(DbContextOptions<PersonContext> options, ITemporalContext temporalContext) 
+    : DbContext(options)
 {
+    public ITemporalContext TemporalContext => temporalContext;
+
     public DbSet<Models.Person> Person { get; set; }
     public DbSet<PersonDetail> PersonDetail { get; set; }
     public DbSet<PersonDetailSensibleData> PersonDetailSensibleData { get; set; }
@@ -132,31 +135,27 @@ public class PersonContext(DbContextOptions<PersonContext> options, ITemporalCon
                 .HasForeignKey(p => p.PersonID);
         });
 
-        // Apply Global Query Filter for Temporal Entities dynamically
+        // Applicazione dinamica del Global Query Filter universale
         foreach (var entityType in modelBuilder.Model.GetEntityTypes())
         {
             if (typeof(ITemporalEntity).IsAssignableFrom(entityType.ClrType))
             {
-                var method = typeof(PersonContext).GetMethod(nameof(SetTemporalFilter), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-                if (method != null)
-                {
-                    method.MakeGenericMethod(entityType.ClrType).Invoke(this, new object[] { modelBuilder });
-                }
+                var method = typeof(PersonContext)
+                    .GetMethod(nameof(ApplyTemporalFilter), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
+                    .MakeGenericMethod(entityType.ClrType);
+                    
+                method.Invoke(this, new object[] { modelBuilder });
             }
         }
     }
 
-    private void SetTemporalFilter<TEntity>(ModelBuilder modelBuilder) where TEntity : class, ITemporalEntity
+    private void ApplyTemporalFilter<TEntity>(ModelBuilder modelBuilder) where TEntity : class, ITemporalEntity
     {
+        // EF Core parametrizzerà questi MemberAccess in runtime
         modelBuilder.Entity<TEntity>().HasQueryFilter(e =>
-            temporalContext.Mode == TemporalFilterMode.All ||
-            (temporalContext.Mode == TemporalFilterMode.AsOf 
-                && e.ValidStartDate <= temporalContext.CurrentAsOfDate 
-                && e.ValidEndDate >= temporalContext.CurrentAsOfDate) ||
-            (temporalContext.Mode == TemporalFilterMode.ActiveBetween 
-                && temporalContext.IsRangeStartProvided 
-                && e.ValidStartDate <= temporalContext.SafeRangeEnd 
-                && e.ValidEndDate >= temporalContext.SafeRangeStart)
-        );
+            e.ValidStartDate <= TemporalContext.QueryMaxStartDate &&
+            e.ValidEndDate > TemporalContext.QueryMinEndDate);
     }
 }
+
+

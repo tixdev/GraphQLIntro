@@ -2,7 +2,8 @@ namespace Shared.Temporal;
 
 public enum TemporalFilterMode
 {
+    All,
     AsOf,
-    ActiveBetween,
-    All
+    AnyTimeIn,
+    Throughout
 }

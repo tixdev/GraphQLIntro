@@ -8,6 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddScoped<ITemporalContext, TemporalContext>();
 
+builder.Services.AddSingleton<MetricsDbCommandInterceptor>();
 builder.Services.AddSingleton<TestMetrics>();
 builder.Services.AddApiServiceOpenTelemetry("Person.API");
 
@@ -16,9 +17,16 @@ builder.Services.AddCors(options =>
         policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
 
 builder.Services.AddDbContext<PersonContext>((sp, options) =>
+{
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
-           .AddInterceptors(new MetricsDbCommandInterceptor(sp.GetRequiredService<TestMetrics>())),
-    ServiceLifetime.Transient);
+           .AddInterceptors(sp.GetRequiredService<MetricsDbCommandInterceptor>());
+
+    if (builder.Environment.IsDevelopment())
+    {
+        options.EnableSensitiveDataLogging();
+        //     .LogTo(Console.WriteLine, Microsoft.Extensions.Logging.LogLevel.Information);
+    }
+}, ServiceLifetime.Transient);
 
 builder.Services.AddPersonGraphQL();
 

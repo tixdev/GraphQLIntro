@@ -22,8 +22,8 @@ public static class OpenTelemetryExtensions
                     .AddHttpClientInstrumentation()
                     //.AddHotChocolateInstrumentation()
                     .AddEntityFrameworkCoreInstrumentation(options => options.SetDbStatementForText = true)
-                    .AddOtlpExporter()
-                    .AddConsoleExporter();
+                    .AddOtlpExporter();
+                //.AddConsoleExporter();
             })
             .WithMetrics(metrics =>
             {
@@ -31,8 +31,8 @@ public static class OpenTelemetryExtensions
                     .SetResourceBuilder(resourceBuilder)
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
-                    .AddOtlpExporter()
-                    .AddConsoleExporter();
+                    .AddOtlpExporter();
+                //.AddConsoleExporter();
             });
 
         return services;
