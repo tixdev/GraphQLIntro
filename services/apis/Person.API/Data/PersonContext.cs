@@ -135,26 +135,8 @@ public class PersonContext(DbContextOptions<PersonContext> options, ITemporalCon
                 .HasForeignKey(p => p.PersonID);
         });
 
-        // Applicazione dinamica del Global Query Filter universale
-        foreach (var entityType in modelBuilder.Model.GetEntityTypes())
-        {
-            if (typeof(ITemporalEntity).IsAssignableFrom(entityType.ClrType))
-            {
-                var method = typeof(PersonContext)
-                    .GetMethod(nameof(ApplyTemporalFilter), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)!
-                    .MakeGenericMethod(entityType.ClrType);
-                    
-                method.Invoke(this, new object[] { modelBuilder });
-            }
-        }
-    }
-
-    private void ApplyTemporalFilter<TEntity>(ModelBuilder modelBuilder) where TEntity : class, ITemporalEntity
-    {
-        // EF Core parametrizzerà questi MemberAccess in runtime
-        modelBuilder.Entity<TEntity>().HasQueryFilter(e =>
-            e.ValidStartDate <= TemporalContext.QueryMaxStartDate &&
-            e.ValidEndDate > TemporalContext.QueryMinEndDate);
+        // Centralized application of the universal Global Query Filter
+        modelBuilder.ApplyTemporalFilters(TemporalContext);
     }
 }
 

@@ -1,11 +1,17 @@
 using Microsoft.EntityFrameworkCore;
 using Plausibility.API.Models;
+using Shared.Temporal;
 
 namespace Plausibility.API.Data;
 
 public class PlausibilityDbContext : DbContext
 {
-    public PlausibilityDbContext(DbContextOptions<PlausibilityDbContext> options) : base(options) { }
+    public ITemporalContext TemporalContext { get; }
+
+    public PlausibilityDbContext(DbContextOptions<PlausibilityDbContext> options, ITemporalContext temporalContext) : base(options) 
+    { 
+        TemporalContext = temporalContext;
+    }
 
     public DbSet<EmployeesRangeNumber> EmployeesRangeNumbers { get; set; } = null!;
     public DbSet<EmployeesRangeNumberTranslation> EmployeesRangeNumberTranslations { get; set; } = null!;
@@ -69,6 +75,9 @@ public class PlausibilityDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+        
+        // Centralized application of the universal Global Query Filter
+        modelBuilder.ApplyTemporalFilters(TemporalContext);
         
         modelBuilder.Entity<EmployeesRangeNumber>()
             .HasMany(e => e.Translations)

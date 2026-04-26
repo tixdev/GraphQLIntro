@@ -15,6 +15,20 @@ modelBuilder.Entity<TEntity>().HasQueryFilter(e =>
     e.ValidEndDate > TemporalContext.QueryMinEndDate);
 ```
 
+### Support for Nullable End Dates
+
+For entities that use a `NULL` value to represent an open-ended (active) record, we introduced the `ITemporalNullableEntity` interface, where `ValidEndDate` is `DateTime?`.
+The filtering logic applies the null-coalescing operator `??` to mathematically map `NULL` back to the Magic Date before comparison:
+
+```csharp
+// Inside PlausibilityDbContext.OnModelCreating
+modelBuilder.Entity<TEntity>().HasQueryFilter(e =>
+    e.ValidStartDate <= TemporalContext.QueryMaxStartDate &&
+    (e.ValidEndDate ?? DateTime.MaxValue) > TemporalContext.QueryMinEndDate);
+```
+
+EF Core securely translates `??` into a native `COALESCE` or `ISNULL` at the SQL level, preserving the mathematical bounding logic without introducing `OR` clauses.
+
 This approach allows EF Core to generate the SQL execution plan **only once**, cache it, and pass `@p0` and `@p1` as simple parameters at runtime, thereby maintaining maximum compilation performance.
 
 ---

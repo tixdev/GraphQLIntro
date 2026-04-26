@@ -4,14 +4,18 @@ using Shared.Temporal;
 
 namespace Relationship.API.Data;
 
-public class RelationshipContext(DbContextOptions<RelationshipContext> options) : DbContext(options)
+public class RelationshipContext(DbContextOptions<RelationshipContext> options, ITemporalContext temporalContext) : DbContext(options)
 {
+    public ITemporalContext TemporalContext => temporalContext;
+
     public DbSet<Models.Relationship> Relationships { get; set; }
     public DbSet<RelationshipToPerson> RelationshipToPersons { get; set; }
     public DbSet<RelationshipName> RelationshipNames { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.ApplyTemporalFilters(TemporalContext);
+
         modelBuilder.Entity<Models.Relationship>(entity =>
         {
             entity.HasKey(e => e.RelationshipID);
