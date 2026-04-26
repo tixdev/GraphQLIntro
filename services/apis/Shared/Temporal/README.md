@@ -1,57 +1,57 @@
-# Gestione dei Filtri Temporali (Temporal Filtering)
+# Temporal Filtering Management
 
-Questo documento illustra l'architettura adottata per l'implementazione del filtraggio temporale basato sulle intestazioni HTTP (Headers) nelle API GraphQL del progetto.
+This document illustrates the architecture adopted for implementing temporal filtering based on HTTP headers across the project's GraphQL APIs.
 
-## Architettura: Global Query Filters
+## Architecture: Global Query Filters
 
-Il dominio richiede che entità storicizzate (come `Person`, `LegalPerson`, ecc.) vengano filtrate in base a coordinate temporali passate tramite header HTTP (`x-temporal-mode`, `x-temporal-range-start`, `x-temporal-range-end`).
+The business domain requires that historical entities (such as `PersonName`, `LegalPerson`, `NaturalPerson`, etc.) be filtered based on temporal coordinates passed via HTTP headers (`x-temporal-mode`, `x-temporal-range-start`, `x-temporal-range-end`).
 
-La soluzione si basa sull'uso dei **Global Query Filters** nativi di EF Core (`HasQueryFilter`). Viene registrato dinamicamente un filtro su tutte le entità che implementano l'interfaccia `ITemporalEntity` tramite reflection, senza dover modificare a mano ogni singola configurazione nel `DbContext`.
+The solution relies on EF Core's native **Global Query Filters** (`HasQueryFilter`). A filter is dynamically registered via reflection on all entities implementing the `ITemporalEntity` interface, eliminating the need to manually modify each configuration within the `DbContext`.
 
 ```csharp
-// In PersonContext.OnModelCreating
+// Inside PersonContext.OnModelCreating
 modelBuilder.Entity<TEntity>().HasQueryFilter(e =>
     e.ValidStartDate <= TemporalContext.QueryMaxStartDate &&
     e.ValidEndDate > TemporalContext.QueryMinEndDate);
 ```
 
-Questo approccio permette a EF Core di generare il piano di esecuzione **una sola volta**, cacharlo, e passargli a runtime `@p0` e `@p1` come semplici parametri, mantenendo le performance di compilazione al massimo livello.
+This approach allows EF Core to generate the SQL execution plan **only once**, cache it, and pass `@p0` and `@p1` as simple parameters at runtime, thereby maintaining maximum compilation performance.
 
 ---
 
-## Il "Trucco Matematico" per le Performance SQL
+## The "Mathematical Trick" for SQL Performance
 
-Una sfida posta dai Global Query Filters era la complessità logica dei 4 scenari temporali:
-- **AsOf**: Trova i record validi in un istante specifico.
-- **AnyTimeIn**: Trova i record che si accavallano con un periodo (Start/End).
-- **Throughout**: Trova i record che coprono interamente un periodo (Start/End).
-- **All**: Nessun filtro (restituisci tutta la storia).
-- **Default (Nessun header)**: Restituisci solo i record "Attivi" oggi.
+A significant challenge posed by Global Query Filters was the logical complexity of the 4 temporal scenarios:
+- **AsOf**: Find records valid at a specific instant.
+- **AnyTimeIn**: Find records that overlap with a period (Start/End).
+- **Throughout**: Find records that entirely cover a period (Start/End).
+- **All**: No filter (return the entire history).
+- **Default (No headers)**: Return only "Active" records today.
 
-Se avessimo implementato queste condizioni in un unico Global Filter usando molti `OR` dipendenti da uno switch (`@Mode = 1 OR @Mode = 2...`), SQL Server avrebbe sofferto di **Parameter Sniffing**, disabilitando la possibilità di sfruttare gli indici sulle date e riducendo le query a dei lenti *Table Scans*.
+If we had implemented these conditions within a single Global Filter using multiple `OR` clauses dependent on a switch (`@Mode = 1 OR @Mode = 2...`), SQL Server would have suffered from **Parameter Sniffing**. This would have disabled the query optimizer's ability to utilize indexes on the dates, degrading the queries into slow *Table Scans*.
 
-### Semplificazione Universale (No-ORs)
+### Universal Simplification (No-ORs)
 
-La soluzione adottata è un trucco matematico che riconduce TUTTI e 4 i casi logici a **una singola condizione universale** di intersezione (Bounding Box):
+The adopted solution uses a mathematical trick that reduces ALL 4 logical cases down to a **single universal condition** (Bounding Box intersection):
 
 ```sql
 WHERE ValidStartDate <= @QueryMaxStartDate AND ValidEndDate > @QueryMinEndDate
 ```
 
-In `TemporalContext.cs`, calcoliamo i confini ottimali (`QueryMaxStartDate` e `QueryMinEndDate`) in C# basandoci sulla modalità richiesta, garantendo a SQL Server un'istruzione di una semplicità estrema e perfettamente indicizzabile.
+In `TemporalContext.cs`, we calculate the optimal boundaries (`QueryMaxStartDate` and `QueryMinEndDate`) in C# based on the requested mode. This guarantees an extremely simple and perfectly indexable statement for SQL Server.
 
-#### Mappatura dei Casi
+#### Case Mapping
 
-| Mode | Input Utente | Calcolo `QueryMaxStartDate` | Calcolo `QueryMinEndDate` | Condizione SQL Risultante (Semplificata) |
+| Mode | User Input | `QueryMaxStartDate` Calculation | `QueryMinEndDate` Calculation | Resulting SQL Condition (Simplified) |
 |---|---|---|---|---|
-| **Default (Active)** | N/A | `DateTime.MaxValue` | `DateTime.MaxValue.AddTicks(-1)` | `EndDate > MaxValue - 1` (cioè `EndDate == MaxValue`) |
+| **Default (Active)** | N/A | `DateTime.MaxValue` | `DateTime.MaxValue.AddTicks(-1)` | `EndDate > MaxValue - 1` (i.e., `EndDate == MaxValue`) |
 | **AsOf** | `X` | `X` | `X` | `StartDate <= X AND EndDate > X` |
 | **AnyTimeIn** | `S`, `E` | `E.AddTicks(-1)` | `S` | `StartDate < E AND EndDate > S` |
 | **Throughout** | `S`, `E` | `S` | `E.AddTicks(-1)` | `StartDate <= S AND EndDate >= E` |
-| **All** | N/A | `DateTime.MaxValue` | `DateTime.MinValue` | `StartDate <= Max AND EndDate > Min` (Sempre vera) |
+| **All** | N/A | `DateTime.MaxValue` | `DateTime.MinValue` | `StartDate <= Max AND EndDate > Min` (Always true) |
 
-### Benefici
+### Benefits
 
-1. **Zero Ricompilazioni C#**: EF Core genera un solo Service Provider e non butta mai via la cache.
-2. **Miglior Execution Plan in SQL Server**: Nessun operatore `OR`, la query sfrutta nativamente l'indice multicolonna (B-Tree) su `(ValidStartDate, ValidEndDate)`. Nessun rischio di Parameter Sniffing perché la forma della query non cambia.
-3. **Astrazione Trasparente**: Chi scrive i DataLoader GraphQL non deve ricordarsi di aggiungere clausole `.Where()` o `TagWith()`. Finché l'entità estende `ITemporalEntity`, viene filtrata in totale sicurezza.
+1. **Zero C# Recompilations**: EF Core generates a single Service Provider and never flushes the internal cache.
+2. **Best SQL Server Execution Plan**: Without any `OR` operators, the query natively exploits the multi-column B-Tree index on `(ValidStartDate, ValidEndDate)`. There is zero risk of Parameter Sniffing because the shape of the query never changes.
+3. **Transparent Abstraction**: Developers writing GraphQL DataLoaders don't need to remember to add `.Where()` or `TagWith()` clauses. As long as the entity extends `ITemporalEntity`, it is filtered completely securely and automatically.
