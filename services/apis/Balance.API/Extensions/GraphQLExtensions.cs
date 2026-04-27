@@ -21,7 +21,7 @@ public static class GraphQLExtensions
             .AddFiltering()
             .AddSorting()
             .AddInstrumentation()
-            .InitializeOnStartup(warmup: async (executor, ct) => { /* Add warmup logic here if needed */ });
+            .AddWarmupTask(async (executor, ct) => { /* Add warmup logic here if needed */ });
 
         return services;
     }

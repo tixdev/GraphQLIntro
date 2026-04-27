@@ -19,7 +19,7 @@ public static class GraphQLExtensions
             .AddSorting()
             .AddInstrumentation()
             .AddHttpRequestInterceptor<TemporalHttpRequestInterceptor>()
-            .InitializeOnStartup(warmup: async (executor, ct) =>
+            .AddWarmupTask(async (executor, ct) =>
             {
                 var result = await executor.ExecuteAsync(@"
                     query Warmup {
@@ -30,7 +30,7 @@ public static class GraphQLExtensions
                         }
                     }", ct);
 
-                if (result is IOperationResult { Errors: { Count: > 0 } errors })
+                if (result is OperationResult { Errors: { Count: > 0 } errors })
                 {
                     var errorMessages = string.Join(", ", errors.Select(e => e.Message));
                     throw new Exception($"[Warmup Failed] GraphQL errors: {errorMessages}");

@@ -7,12 +7,12 @@
     <PackageVersion Include="Bogus" Version="35.6.5" />
     
     <!-- HotChocolate Packages -->
-    <PackageVersion Include="HotChocolate.ApolloFederation" Version="15.1.12" />
-    <PackageVersion Include="HotChocolate.AspNetCore" Version="15.1.12" />
-    <PackageVersion Include="HotChocolate.Data.EntityFramework" Version="15.1.12" />
-    <PackageVersion Include="HotChocolate.Types" Version="15.1.12" />
-    <PackageVersion Include="HotChocolate.Types.OffsetPagination" Version="15.1.12" />
-    <PackageVersion Include="HotChocolate.Diagnostics" Version="15.1.12" />
+    <PackageVersion Include="HotChocolate.ApolloFederation" Version="16.0.0-rc.1.42" />
+    <PackageVersion Include="HotChocolate.AspNetCore" Version="16.0.0-rc.1.42" />
+    <PackageVersion Include="HotChocolate.Data.EntityFramework" Version="16.0.0-rc.1.42" />
+    <PackageVersion Include="HotChocolate.Types" Version="16.0.0-rc.1.42" />
+    <PackageVersion Include="HotChocolate.Types.OffsetPagination" Version="16.0.0-rc.1.42" />
+    <PackageVersion Include="HotChocolate.Diagnostics" Version="16.0.0-rc.1.42" />
     
     <!-- OpenTelemetry Packages -->
     <PackageVersion Include="OpenTelemetry" Version="1.11.1" />

@@ -5,7 +5,7 @@ using Shared.Temporal;
 namespace Person.API.Data;
 
 public class PersonContext(DbContextOptions<PersonContext> options, ITemporalContext temporalContext) 
-    : DbContext(options)
+    : DbContext(options), ITemporalDbContext
 {
     public ITemporalContext TemporalContext => temporalContext;
 
@@ -135,8 +135,8 @@ public class PersonContext(DbContextOptions<PersonContext> options, ITemporalCon
                 .HasForeignKey(p => p.PersonID);
         });
 
-        // Centralized application of the universal Global Query Filter
-        modelBuilder.ApplyTemporalFilters(TemporalContext);
+        // Centralized application of the universal Global Query Filter (Dynamic version for HC 16)
+        modelBuilder.ApplyTemporalFilters<PersonContext>(this);
     }
 }
 

@@ -71,7 +71,7 @@ Per mantenere il codice pulito e omogeneo, **tutti i microservizi DEVONO** utili
 Invece di chiamare ripetutamente `.AddTypeExtension<...>()` manuali:
 1. Crea/assicurati che esista il file `Extensions/AutoScaffoldExtensions.cs` contenente il metodo di estensione `AddAutoScaffoldedTypes()`.
 2. Chiama `.AddAutoScaffoldedTypes()` sulla configurazione GraphQL Server (di solito subito dopo la registrazione della query).
-3. **Requisito Obbligatorio**: Aggiungi SEMPRE la chiamata `.InitializeOnStartup()` alla fine della catena di configurazione di HotChocolate. Questo permette di pre-caricare e validare lo schema al momento dell'avvio del pod, evitando che la prima richiesta GraphQL subisca penalità di latenza o vada in timeout. Opzionalmente, è consigliabile includere una query di *warmup*.
+3. **Requisito Obbligatorio**: In HotChocolate 16, l'inizializzazione dello schema è abilitata di default ("Eager Initialization"). Tuttavia, è obbligatorio aggiungere SEMPRE la chiamata `.AddWarmupTask(...)` alla fine della catena di configurazione per eseguire una query di warmup. Questo assicura che lo schema sia validato e le cache popolate al momento dell'avvio del pod, evitando che la prima richiesta subisca penalità di latenza. Questa pratica sostituisce la precedente chiamata a `.InitializeOnStartup()`.
 
 Questa convenzione garantisce che nessun tipo configurato o aggiornato venga per errore escluso dal grafo federato e che l'avvio a freddo sia rapido.
 
