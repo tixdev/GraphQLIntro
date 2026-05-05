@@ -10,3 +10,61 @@ services:
     environment:
       - DOTNET_DASHBOARD_UNSECURED_ALLOW_ANONYMOUS=true
       - ASPIRE_DASHBOARD_OTLP_PRIMARY_API_KEY= # Empty to allow anonymous OTLP
+
+  sqlserver:
+    image: mcr.microsoft.com/azure-sql-edge:latest    
+    environment:
+      - SA_PASSWORD=Pass@word
+      - ACCEPT_EULA=Y
+    volumes:
+      - /Users/tizianocrisci/sources/data/db:/var/opt/mssql/backup
+    ports:
+      - "1433:1433"
+
+  sqlserver-init:
+    image: alpine:latest
+    depends_on:
+      - sqlserver
+    environment:
+      - SA_PASSWORD=Pass@word
+    command:
+      - /bin/sh
+      - -c
+      - |
+        apk add --no-cache curl
+        # Scarica go-sqlcmd per Linux ARM64 (dato che siamo su Mac) o AMD64 a seconda dell'architettura
+        arch=$$(uname -m)
+        if [ "$$arch" = "aarch64" ]; then
+          curl -L -o go-sqlcmd.tar.bz2 "https://github.com/microsoft/go-sqlcmd/releases/download/v1.8.1/sqlcmd-linux-arm64.tar.bz2"
+        else
+          curl -L -o go-sqlcmd.tar.bz2 "https://github.com/microsoft/go-sqlcmd/releases/download/v1.8.1/sqlcmd-linux-amd64.tar.bz2"
+        fi
+        tar -xjf go-sqlcmd.tar.bz2
+        chmod +x sqlcmd
+        mv sqlcmd /usr/local/bin/
+
+        echo "Waiting for MS SQL to be available ⏳"
+        /usr/local/bin/sqlcmd --trust-server-certificate -l 30 -S sqlserver -U sa -P $$SA_PASSWORD -Q "SET NOCOUNT ON SELECT 'SQL UP' , @@servername"
+        is_up=$$?
+        while [ $$is_up -ne 0 ] ; do
+          echo -e $$(date)
+          /usr/local/bin/sqlcmd --trust-server-certificate -l 30 -S sqlserver -U sa -P $$SA_PASSWORD -Q "SET NOCOUNT ON SELECT 'SQL UP' , @@servername"
+          is_up=$$?
+          sleep 5
+        done
+
+        echo "Restoring database..."
+
+        /usr/local/bin/sqlcmd --trust-server-certificate -l 30 -S sqlserver -U sa -P $$SA_PASSWORD -Q "        
+        RESTORE DATABASE [Dynacos]
+        FROM DISK = '/var/opt/mssql/backup/DynacosCH03_202412121220.bak'
+        WITH
+          MOVE 'Dynacos_SYS01' TO '/var/opt/mssql/data/Dynacos_SYS01.mdf',
+          MOVE 'Dynacos_DATA01' TO '/var/opt/mssql/data/Dynacos_DATA01.ndf',
+          MOVE 'Dynacos_INDX01' TO '/var/opt/mssql/data/Dynacos_INDX01.ndf',
+          MOVE 'Dynacos_LOG01' TO '/var/opt/mssql/data/Dynacos_LOG01.ldf',
+          REPLACE,
+          STATS=1;
+        "         
+
+        echo "Restore completed"

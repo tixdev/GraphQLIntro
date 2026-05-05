@@ -4,7 +4,7 @@ using Shared.Temporal;
 
 namespace Person.API.Data;
 
-public class PersonContext(DbContextOptions<PersonContext> options, ITemporalContext temporalContext) 
+public class PersonContext(DbContextOptions<PersonContext> options, ITemporalContext temporalContext)
     : DbContext(options), ITemporalDbContext
 {
     public ITemporalContext TemporalContext => temporalContext;
@@ -21,6 +21,7 @@ public class PersonContext(DbContextOptions<PersonContext> options, ITemporalCon
     public DbSet<GroupPersonSensibleData> GroupPersonSensibleData { get; set; }
     public DbSet<PersonOnlineService> PersonOnlineService { get; set; }
     public DbSet<PersonName> PersonName { get; set; }
+    public DbSet<PersonAlternativeCode> PersonAlternativeCode { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -132,6 +133,15 @@ public class PersonContext(DbContextOptions<PersonContext> options, ITemporalCon
             e.ToTable("PersonName", "Person");
             e.HasKey(p => p.PersonNameID);
             e.HasOne(p => p.Person).WithMany(p => p.PersonName)
+                .HasForeignKey(p => p.PersonID);
+        });
+
+        // PersonAlternativeCode — 1:N with Person
+        modelBuilder.Entity<PersonAlternativeCode>(e =>
+        {
+            e.ToTable("PersonAlternativeCode", "Person");
+            e.HasKey(p => p.PersonAlternativeCodeID);
+            e.HasOne(p => p.Person).WithMany(p => p.PersonAlternativeCode)
                 .HasForeignKey(p => p.PersonID);
         });
 

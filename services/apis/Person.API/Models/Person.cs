@@ -23,4 +23,5 @@ public class Person
     public GroupPerson? GroupPerson { get; set; }
     public PersonOnlineService? PersonOnlineService { get; set; }
     public ICollection<PersonName> PersonName { get; set; } = new List<PersonName>();
+    public ICollection<PersonAlternativeCode> PersonAlternativeCode { get; set; } = new List<PersonAlternativeCode>();
 }

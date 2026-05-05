@@ -845,14 +845,16 @@ type CollectionSegmentInfo
   hasPreviousPage: Boolean!
 }
 
-"""The `DateTime` scalar represents an ISO-8601 compliant date time type."""
+"""
+The `DateTime` scalar type represents a date and time with time zone offset information.
+"""
 scalar DateTime
   @join__type(graph: ASSET)
   @join__type(graph: PERSON)
   @join__type(graph: PLAUSIBILITY)
   @join__type(graph: PRODUCT)
   @join__type(graph: RELATIONSHIP)
-  @specifiedBy(url: "https://www.graphql-scalars.com/date-time")
+  @specifiedBy(url: "https://scalars.graphql.org/chillicream/date-time.html")
 
 input DateTimeOperationFilterInput
   @join__type(graph: ASSET)
@@ -875,10 +877,13 @@ input DateTimeOperationFilterInput
   nlte: DateTime
 }
 
-"""The `Decimal` scalar type represents a decimal floating-point number."""
+"""
+The `Decimal` scalar type represents a decimal floating-point number with high precision.
+"""
 scalar Decimal
   @join__type(graph: ASSET)
   @join__type(graph: BALANCE)
+  @specifiedBy(url: "https://scalars.graphql.org/chillicream/decimal.html")
 
 input DecimalOperationFilterInput
   @join__type(graph: ASSET)
@@ -1620,6 +1625,15 @@ input ListFilterInputTypeOfPersonalityTranslationFilterInput
   any: Boolean
 }
 
+input ListFilterInputTypeOfPersonAlternativeCodeFilterInput
+  @join__type(graph: PERSON)
+{
+  all: PersonAlternativeCodeFilterInput
+  none: PersonAlternativeCodeFilterInput
+  some: PersonAlternativeCodeFilterInput
+  any: Boolean
+}
+
 input ListFilterInputTypeOfPersonCodingTypeTranslationFilterInput
   @join__type(graph: PLAUSIBILITY)
 {
@@ -1936,11 +1950,12 @@ input ListFilterInputTypeOfRelationshipTypeTranslationFilterInput
 }
 
 """
-The `LocalDate` scalar type represents a ISO date string, represented as UTF-8 character sequences YYYY-MM-DD. The scalar follows the specification defined in RFC3339
+The `LocalDate` scalar type represents a date without time or time zone information.
 """
 scalar LocalDate
   @join__type(graph: ASSET)
   @join__type(graph: PERSON)
+  @specifiedBy(url: "https://scalars.graphql.org/chillicream/local-date.html")
 
 input LocalDateOperationFilterInput
   @join__type(graph: ASSET)
@@ -1960,12 +1975,11 @@ input LocalDateOperationFilterInput
   nlte: LocalDate
 }
 
-"""
-The `Long` scalar type represents non-fractional signed whole 64-bit numeric values. Long can represent values between -(2^63) and 2^63 - 1.
-"""
+"""The `Long` scalar type represents a signed 64-bit integer."""
 scalar Long
   @join__type(graph: ASSET)
   @join__type(graph: PERSON)
+  @specifiedBy(url: "https://scalars.graphql.org/chillicream/long.html")
 
 input LongOperationFilterInput
   @join__type(graph: ASSET)
@@ -2469,6 +2483,7 @@ type Person
   groupPerson: GroupPerson @join__field(graph: PERSON)
   personDetail: PersonDetail @join__field(graph: PERSON)
   personName(skip: Int, take: Int): PersonNameCollectionSegment @join__field(graph: PERSON)
+  personAlternativeCode(where: PersonAlternativeCodeFilterInput): [PersonAlternativeCode!]! @join__field(graph: PERSON)
   personNumber: String! @join__field(graph: PERSON)
   isMigrated: Boolean! @join__field(graph: PERSON)
   groupBankID: Int! @join__field(graph: PERSON)
@@ -2633,6 +2648,36 @@ input PersonalityTranslationFilterInput
   noteDescription: StringOperationFilterInput
   validStartDate: DateTimeOperationFilterInput
   validEndDate: DateTimeOperationFilterInput
+}
+
+type PersonAlternativeCode
+  @join__type(graph: PERSON)
+{
+  personAlternativeCodeID: Int!
+  personID: Int!
+  pltPersonAlternativeCodeTypeID: Int!
+  alternativeCodeDescription: String!
+  validStartDate: DateTime!
+  validEndDate: DateTime!
+  groupBankID: Int!
+  caseID: Long
+  person: Person!
+}
+
+input PersonAlternativeCodeFilterInput
+  @join__type(graph: PERSON)
+{
+  and: [PersonAlternativeCodeFilterInput!]
+  or: [PersonAlternativeCodeFilterInput!]
+  personAlternativeCodeID: IntOperationFilterInput
+  personID: IntOperationFilterInput
+  pltPersonAlternativeCodeTypeID: IntOperationFilterInput
+  alternativeCodeDescription: StringOperationFilterInput
+  validStartDate: DateTimeOperationFilterInput
+  validEndDate: DateTimeOperationFilterInput
+  groupBankID: IntOperationFilterInput
+  caseID: LongOperationFilterInput
+  person: PersonFilterInput
 }
 
 type PersonCodingType
@@ -2908,6 +2953,7 @@ input PersonFilterInput
   groupPerson: GroupPersonFilterInput
   personOnlineService: PersonOnlineServiceFilterInput
   personName: ListFilterInputTypeOfPersonNameFilterInput
+  personAlternativeCode: ListFilterInputTypeOfPersonAlternativeCodeFilterInput
 }
 
 type PersonInternalType
@@ -3105,7 +3151,6 @@ input PersonNameFilterInput
   caseID: LongOperationFilterInput
   validStartDate: DateTimeOperationFilterInput
   validEndDate: DateTimeOperationFilterInput
-  person: PersonFilterInput
 }
 
 type PersonNameType
