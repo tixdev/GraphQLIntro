@@ -14,4 +14,5 @@ public class EmployeesRangeNumber
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<EmployeesRangeNumberTranslation> Translations { get; set; } = new List<EmployeesRangeNumberTranslation>();}
+    public ICollection<EmployeesRangeNumberTranslation> Translations { get; set; } = new List<EmployeesRangeNumberTranslation>();
+}

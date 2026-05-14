@@ -22,10 +22,10 @@ public class GatewayTests : IAsyncLifetime
 
     private readonly Dictionary<string, string> _subgraphs = new()
     {
-        ["person"]       = "http://localhost:5011",
+        ["person"] = "http://localhost:5011",
         ["relationship"] = "http://localhost:5012",
-        ["asset"]        = "http://localhost:5013",
-        ["balance"]      = "http://localhost:5014"
+        ["asset"] = "http://localhost:5013",
+        ["balance"] = "http://localhost:5014"
     };
 
     public GatewayTests(Xunit.Abstractions.ITestOutputHelper output)
@@ -83,10 +83,10 @@ public class GatewayTests : IAsyncLifetime
   }
 }
 ";
-        
+
         var json = await ExecuteQueryAsync(query);
         var telemetry = await FetchAllMetricsAsync();
-        
+
         _output.WriteLine("=== TELEMETRY RESULTS ===");
         foreach (var (api, metrics) in telemetry)
         {
@@ -99,12 +99,12 @@ public class GatewayTests : IAsyncLifetime
             }
             _output.WriteLine("-------------------------");
         }
-        
+
         Assert.DoesNotContain("\"errors\"", json);
-        
+
         Assert.Equal(1, telemetry["person"].GraphQLRequests);
         Assert.Equal(1, telemetry["relationship"].GraphQLRequests);
-        
+
         Assert.True(telemetry["person"].SqlQueries <= 2,
             $"PERSON N+1 detected: {telemetry["person"].SqlQueries} queries (expected ≤2). SQL:\n{string.Join("\n---\n", telemetry["person"].SqlStatements)}");
 
@@ -130,7 +130,7 @@ public class GatewayTests : IAsyncLifetime
         var telemetry = await FetchAllMetricsAsync();
 
         _output.WriteLine("=== TELEMETRY RESULTS (Simple Person Query) ===");
-        
+
         Assert.DoesNotContain("\"errors\"", json);
 
         foreach (var (api, metrics) in telemetry)
@@ -144,7 +144,7 @@ public class GatewayTests : IAsyncLifetime
             }
             _output.WriteLine("-------------------------");
         }
-        
+
         Assert.True(telemetry["person"].GraphQLRequests >= 1, "Person.API should receive at least 1 request");
         Assert.Equal(0, telemetry["relationship"].GraphQLRequests);
         Assert.Equal(0, telemetry["asset"].GraphQLRequests);

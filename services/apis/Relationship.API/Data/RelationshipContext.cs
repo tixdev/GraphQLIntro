@@ -19,7 +19,7 @@ public class RelationshipContext(DbContextOptions<RelationshipContext> options, 
         modelBuilder.Entity<Models.Relationship>(entity =>
         {
             entity.HasKey(e => e.RelationshipID);
-            
+
             entity.HasOne(e => e.Name)
                 .WithOne(e => e.Relationship)
                 .HasForeignKey<RelationshipName>(e => e.RelationshipID);
@@ -28,7 +28,7 @@ public class RelationshipContext(DbContextOptions<RelationshipContext> options, 
         modelBuilder.Entity<RelationshipToPerson>(entity =>
         {
             entity.HasKey(e => e.RelationshipToPersonID);
-            
+
             entity.HasOne(e => e.Relationship)
                 .WithMany(e => e.RelationshipToPersons)
                 .HasForeignKey(e => e.RelationshipID);

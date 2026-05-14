@@ -8,11 +8,11 @@ public class Relationship
 {
     [Key]
     public int RelationshipID { get; set; }
-    
+
     public int Number { get; set; }
-    
+
     public int PltRelationshipTypeID { get; set; }
-    
+
     public int GroupBankID { get; set; }
 
     // Navigation

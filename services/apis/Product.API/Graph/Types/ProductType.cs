@@ -23,12 +23,12 @@ public class ProductType : ObjectType<Models.Product>
             .IsProjected(false)
             .ResolveWith<Resolvers.ProductResolvers>(r => r.GetProductDescriptionAsync(default!, default!, default!))
             .Type<ListType<ProductDescriptionType>>();
-            
+
         descriptor.Field(t => t.ProductDetail)
             .IsProjected(false)
             .ResolveWith<Resolvers.ProductResolvers>(r => r.GetProductDetailAsync(default!, default!, default!))
             .Type<ListType<ProductDetailType>>();
-            
+
         descriptor.Field(t => t.ProductToProductProduct)
             .IsProjected(false)
             .ResolveWith<Resolvers.ProductResolvers>(r => r.GetProductToProductAsync(default!, default!, default!))

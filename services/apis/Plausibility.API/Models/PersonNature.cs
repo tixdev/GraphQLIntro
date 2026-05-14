@@ -14,4 +14,5 @@ public class PersonNature
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<PersonNatureTranslation> Translations { get; set; } = new List<PersonNatureTranslation>();}
+    public ICollection<PersonNatureTranslation> Translations { get; set; } = new List<PersonNatureTranslation>();
+}

@@ -14,12 +14,12 @@ builder.Services.AddCors(options =>
     options.AddDefaultPolicy(policy =>
         policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()));
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
     ?? "Server=localhost,1433;Database=Dynacos;User Id=sa;Password=Pass@word;TrustServerCertificate=True;";
 
 builder.Services.AddDbContext<ProductDbContext>((sp, options) =>
     options.UseSqlServer(connectionString)
-           .AddInterceptors(new MetricsDbCommandInterceptor(sp.GetRequiredService<TestMetrics>())), 
+           .AddInterceptors(new MetricsDbCommandInterceptor(sp.GetRequiredService<TestMetrics>())),
     ServiceLifetime.Transient);
 
 builder.Services.AddGraphQLServices(builder.Configuration);

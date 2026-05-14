@@ -14,4 +14,5 @@ public class PersonOrganizationType
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<PersonOrganizationTypeTranslation> Translations { get; set; } = new List<PersonOrganizationTypeTranslation>();}
+    public ICollection<PersonOrganizationTypeTranslation> Translations { get; set; } = new List<PersonOrganizationTypeTranslation>();
+}

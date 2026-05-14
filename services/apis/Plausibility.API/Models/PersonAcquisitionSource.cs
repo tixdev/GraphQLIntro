@@ -14,4 +14,5 @@ public class PersonAcquisitionSource
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<PersonAcquisitionSourceTranslation> Translations { get; set; } = new List<PersonAcquisitionSourceTranslation>();}
+    public ICollection<PersonAcquisitionSourceTranslation> Translations { get; set; } = new List<PersonAcquisitionSourceTranslation>();
+}

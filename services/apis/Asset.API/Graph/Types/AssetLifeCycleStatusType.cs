@@ -13,7 +13,7 @@ public class AssetLifeCycleStatusType : ObjectType<AssetModel>
                 var parent = ctx.Parent<AssetModel>();
                 return new PltAssetStatusRef { AssetStatusID = parent.PltAssetStatusID };
             });
-        
+
         descriptor.Field("assetStatusReason")
             .Resolve(ctx =>
             {

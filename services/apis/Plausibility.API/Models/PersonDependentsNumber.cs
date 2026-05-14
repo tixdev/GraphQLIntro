@@ -14,4 +14,5 @@ public class PersonDependentsNumber
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<PersonDependentsNumberTranslation> Translations { get; set; } = new List<PersonDependentsNumberTranslation>();}
+    public ICollection<PersonDependentsNumberTranslation> Translations { get; set; } = new List<PersonDependentsNumberTranslation>();
+}

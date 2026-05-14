@@ -14,4 +14,5 @@ public class PersonProfession
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<PersonProfessionTranslation> Translations { get; set; } = new List<PersonProfessionTranslation>();}
+    public ICollection<PersonProfessionTranslation> Translations { get; set; } = new List<PersonProfessionTranslation>();
+}

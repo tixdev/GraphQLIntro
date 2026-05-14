@@ -9,7 +9,7 @@ public class RelationshipToPersonPlausibilityExtensions
     public PersonToRelationshipRoleFederationStub? GetPersonToRelationshipRole([Parent] RelationshipToPerson model)
         => model.PltPersonToRelationshipRoleID != 0
             ? new PersonToRelationshipRoleFederationStub
-                { PersonToRelationshipRoleID = model.PltPersonToRelationshipRoleID }
+            { PersonToRelationshipRoleID = model.PltPersonToRelationshipRoleID }
             : null;
 }
 

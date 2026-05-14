@@ -14,4 +14,5 @@ public class NationAlpha2
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<NationAlpha2Translation> Translations { get; set; } = new List<NationAlpha2Translation>();}
+    public ICollection<NationAlpha2Translation> Translations { get; set; } = new List<NationAlpha2Translation>();
+}

@@ -21,7 +21,7 @@ public class TemporalHttpRequestInterceptor : DefaultHttpRequestInterceptor
         {
             temporalContext.Mode = parsedMode;
         }
-        
+
         if (context.Request.Headers.TryGetValue(_rangeStartHeaderKey, out var startValue) &&
             DateTime.TryParse(startValue, out var parsedStart))
         {
@@ -33,7 +33,7 @@ public class TemporalHttpRequestInterceptor : DefaultHttpRequestInterceptor
         {
             temporalContext.RangeEnd = ParseAndConvertDate(parsedEnd);
         }
-        
+
         if (temporalContext.RangeEnd.HasValue)
         {
             if (!temporalContext.RangeStart.HasValue)

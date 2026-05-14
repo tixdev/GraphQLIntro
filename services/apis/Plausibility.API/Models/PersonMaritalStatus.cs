@@ -14,4 +14,5 @@ public class PersonMaritalStatus
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<PersonMaritalStatusTranslation> Translations { get; set; } = new List<PersonMaritalStatusTranslation>();}
+    public ICollection<PersonMaritalStatusTranslation> Translations { get; set; } = new List<PersonMaritalStatusTranslation>();
+}

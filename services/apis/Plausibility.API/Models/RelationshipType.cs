@@ -14,4 +14,5 @@ public class RelationshipType
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<RelationshipTypeTranslation> Translations { get; set; } = new List<RelationshipTypeTranslation>();}
+    public ICollection<RelationshipTypeTranslation> Translations { get; set; } = new List<RelationshipTypeTranslation>();
+}

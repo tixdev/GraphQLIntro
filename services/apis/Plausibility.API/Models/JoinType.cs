@@ -14,4 +14,5 @@ public class JoinType
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<JoinTypeTranslation> Translations { get; set; } = new List<JoinTypeTranslation>();}
+    public ICollection<JoinTypeTranslation> Translations { get; set; } = new List<JoinTypeTranslation>();
+}

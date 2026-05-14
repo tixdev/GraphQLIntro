@@ -14,4 +14,5 @@ public class PersonCodingType
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<PersonCodingTypeTranslation> Translations { get; set; } = new List<PersonCodingTypeTranslation>();}
+    public ICollection<PersonCodingTypeTranslation> Translations { get; set; } = new List<PersonCodingTypeTranslation>();
+}

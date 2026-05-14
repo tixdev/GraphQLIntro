@@ -20,7 +20,7 @@ public static class TemporalModelBuilderExtensions
                 var method = typeof(TemporalModelBuilderExtensions)
                     .GetMethod(nameof(ApplyTemporalFilter), BindingFlags.NonPublic | BindingFlags.Static)!
                     .MakeGenericMethod(entityType.ClrType);
-                    
+
                 method.Invoke(null, new object[] { modelBuilder, temporalContext });
             }
             else if (typeof(ITemporalNullableEntity).IsAssignableFrom(entityType.ClrType))
@@ -28,7 +28,7 @@ public static class TemporalModelBuilderExtensions
                 var method = typeof(TemporalModelBuilderExtensions)
                     .GetMethod(nameof(ApplyNullableTemporalFilter), BindingFlags.NonPublic | BindingFlags.Static)!
                     .MakeGenericMethod(entityType.ClrType);
-                    
+
                 method.Invoke(null, new object[] { modelBuilder, temporalContext });
             }
         }
@@ -48,7 +48,7 @@ public static class TemporalModelBuilderExtensions
                 var method = typeof(TemporalModelBuilderExtensions)
                     .GetMethod(nameof(ApplyTemporalFilterDynamic), BindingFlags.NonPublic | BindingFlags.Static)!
                     .MakeGenericMethod(entityType.ClrType, typeof(TContext));
-                    
+
                 method.Invoke(null, new object[] { modelBuilder, context });
             }
             else if (typeof(ITemporalNullableEntity).IsAssignableFrom(entityType.ClrType))
@@ -56,13 +56,13 @@ public static class TemporalModelBuilderExtensions
                 var method = typeof(TemporalModelBuilderExtensions)
                     .GetMethod(nameof(ApplyNullableTemporalFilterDynamic), BindingFlags.NonPublic | BindingFlags.Static)!
                     .MakeGenericMethod(entityType.ClrType, typeof(TContext));
-                    
+
                 method.Invoke(null, new object[] { modelBuilder, context });
             }
         }
     }
 
-    private static void ApplyTemporalFilter<TEntity>(ModelBuilder modelBuilder, ITemporalContext temporalContext) 
+    private static void ApplyTemporalFilter<TEntity>(ModelBuilder modelBuilder, ITemporalContext temporalContext)
         where TEntity : class, ITemporalEntity
     {
         modelBuilder.Entity<TEntity>().HasQueryFilter(e =>
@@ -70,7 +70,7 @@ public static class TemporalModelBuilderExtensions
             e.ValidEndDate > temporalContext.QueryMinEndDate);
     }
 
-    private static void ApplyTemporalFilterDynamic<TEntity, TContext>(ModelBuilder modelBuilder, TContext context) 
+    private static void ApplyTemporalFilterDynamic<TEntity, TContext>(ModelBuilder modelBuilder, TContext context)
         where TEntity : class, ITemporalEntity
         where TContext : DbContext, ITemporalDbContext
     {
@@ -81,7 +81,7 @@ public static class TemporalModelBuilderExtensions
             e.ValidEndDate > context.TemporalContext.QueryMinEndDate);
     }
 
-    private static void ApplyNullableTemporalFilter<TEntity>(ModelBuilder modelBuilder, ITemporalContext temporalContext) 
+    private static void ApplyNullableTemporalFilter<TEntity>(ModelBuilder modelBuilder, ITemporalContext temporalContext)
         where TEntity : class, ITemporalNullableEntity
     {
         modelBuilder.Entity<TEntity>().HasQueryFilter(e =>
@@ -89,7 +89,7 @@ public static class TemporalModelBuilderExtensions
             (e.ValidEndDate ?? DateTime.MaxValue) > temporalContext.QueryMinEndDate);
     }
 
-    private static void ApplyNullableTemporalFilterDynamic<TEntity, TContext>(ModelBuilder modelBuilder, TContext context) 
+    private static void ApplyNullableTemporalFilterDynamic<TEntity, TContext>(ModelBuilder modelBuilder, TContext context)
         where TEntity : class, ITemporalNullableEntity
         where TContext : DbContext, ITemporalDbContext
     {

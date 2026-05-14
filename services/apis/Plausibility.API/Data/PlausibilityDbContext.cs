@@ -8,8 +8,8 @@ public class PlausibilityDbContext : DbContext
 {
     public ITemporalContext TemporalContext { get; }
 
-    public PlausibilityDbContext(DbContextOptions<PlausibilityDbContext> options, ITemporalContext temporalContext) : base(options) 
-    { 
+    public PlausibilityDbContext(DbContextOptions<PlausibilityDbContext> options, ITemporalContext temporalContext) : base(options)
+    {
         TemporalContext = temporalContext;
     }
 
@@ -75,95 +75,95 @@ public class PlausibilityDbContext : DbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
-        
+
         // Centralized application of the universal Global Query Filter
         modelBuilder.ApplyTemporalFilters(TemporalContext);
-        
+
         modelBuilder.Entity<EmployeesRangeNumber>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.EmployeesRangeNumberID);
-        
+
         modelBuilder.Entity<GenderCode>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.GenderCodeID);
-        
+
         modelBuilder.Entity<JoinType>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.JoinTypeID);
-        
+
         modelBuilder.Entity<MaritalRegime>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.MaritalRegimeID);
-        
+
         modelBuilder.Entity<NationAlpha2>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.NationAlpha2ID);
-        
+
         modelBuilder.Entity<Noga>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.NogaID);
-        
+
         modelBuilder.Entity<Pep>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.PepID);
-        
+
         modelBuilder.Entity<PersonAcquisitionSource>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.PersonAcquisitionSourceID);
-        
+
         modelBuilder.Entity<Personality>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.PersonalityID);
-        
+
         modelBuilder.Entity<PersonCodingType>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.PersonCodingTypeID);
-        
+
         modelBuilder.Entity<PersonDependentsNumber>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.PersonDependentsNumberID);
-        
+
         modelBuilder.Entity<PersonInternalType>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.PersonInternalTypeID);
-        
+
         modelBuilder.Entity<PersonMaritalStatus>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.PersonMaritalStatusID);
-        
+
         modelBuilder.Entity<PersonNature>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.PersonNatureID);
-        
+
         modelBuilder.Entity<PersonOrganizationType>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.PersonOrganizationTypeID);
-        
+
         modelBuilder.Entity<PersonProfession>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.PersonProfessionID);
-        
+
         modelBuilder.Entity<PersonToRelationshipRole>()
             .HasMany(e => e.Translations)
             .WithOne()
             .HasForeignKey(e => e.PersonToRelationshipRoleID);
-        
+
         modelBuilder.Entity<RelationshipType>()
             .HasMany(e => e.Translations)
             .WithOne()

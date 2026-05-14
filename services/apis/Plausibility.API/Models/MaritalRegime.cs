@@ -14,4 +14,5 @@ public class MaritalRegime
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<MaritalRegimeTranslation> Translations { get; set; } = new List<MaritalRegimeTranslation>();}
+    public ICollection<MaritalRegimeTranslation> Translations { get; set; } = new List<MaritalRegimeTranslation>();
+}

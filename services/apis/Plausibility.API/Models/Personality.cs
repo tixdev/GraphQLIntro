@@ -14,4 +14,5 @@ public class Personality
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<PersonalityTranslation> Translations { get; set; } = new List<PersonalityTranslation>();}
+    public ICollection<PersonalityTranslation> Translations { get; set; } = new List<PersonalityTranslation>();
+}

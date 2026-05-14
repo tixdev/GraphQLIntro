@@ -14,4 +14,5 @@ public class Pep
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<PepTranslation> Translations { get; set; } = new List<PepTranslation>();}
+    public ICollection<PepTranslation> Translations { get; set; } = new List<PepTranslation>();
+}

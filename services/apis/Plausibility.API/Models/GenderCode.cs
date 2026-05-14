@@ -14,4 +14,5 @@ public class GenderCode
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<GenderCodeTranslation> Translations { get; set; } = new List<GenderCodeTranslation>();}
+    public ICollection<GenderCodeTranslation> Translations { get; set; } = new List<GenderCodeTranslation>();
+}

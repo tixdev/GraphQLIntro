@@ -2483,7 +2483,7 @@ type Person
   groupPerson: GroupPerson @join__field(graph: PERSON)
   personDetail: PersonDetail @join__field(graph: PERSON)
   personName(skip: Int, take: Int): PersonNameCollectionSegment @join__field(graph: PERSON)
-  personAlternativeCode(where: PersonAlternativeCodeFilterInput): [PersonAlternativeCode!]! @join__field(graph: PERSON)
+  personAlternativeCode(skip: Int, take: Int, where: PersonAlternativeCodeFilterInput): PersonAlternativeCodeCollectionSegment @join__field(graph: PERSON)
   personNumber: String! @join__field(graph: PERSON)
   isMigrated: Boolean! @join__field(graph: PERSON)
   groupBankID: Int! @join__field(graph: PERSON)
@@ -2662,6 +2662,17 @@ type PersonAlternativeCode
   groupBankID: Int!
   caseID: Long
   person: Person!
+}
+
+"""A segment of a collection."""
+type PersonAlternativeCodeCollectionSegment
+  @join__type(graph: PERSON)
+{
+  """Information to aid in pagination."""
+  pageInfo: CollectionSegmentInfo!
+
+  """A flattened list of the items."""
+  items: [PersonAlternativeCode!]
 }
 
 input PersonAlternativeCodeFilterInput

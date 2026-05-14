@@ -14,4 +14,5 @@ public class PersonToRelationshipRole
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<PersonToRelationshipRoleTranslation> Translations { get; set; } = new List<PersonToRelationshipRoleTranslation>();}
+    public ICollection<PersonToRelationshipRoleTranslation> Translations { get; set; } = new List<PersonToRelationshipRoleTranslation>();
+}

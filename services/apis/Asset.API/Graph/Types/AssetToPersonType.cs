@@ -13,7 +13,7 @@ public class AssetToPersonType : ObjectType<AssetModel>
                 var parent = ctx.Parent<AssetModel>();
                 return new PltAssetToPersonLinkRef { AssetToPersonLinkID = parent.PltAssetToPersonLinkID };
             });
-        
+
         descriptor.Field("powerOfSignature")
             .Resolve(ctx =>
             {

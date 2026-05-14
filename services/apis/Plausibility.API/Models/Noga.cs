@@ -14,4 +14,5 @@ public class Noga
     public string Code { get; set; } = null!;
     public string Description { get; set; } = null!;
 
-    public ICollection<NogaTranslation> Translations { get; set; } = new List<NogaTranslation>();}
+    public ICollection<NogaTranslation> Translations { get; set; } = new List<NogaTranslation>();
+}

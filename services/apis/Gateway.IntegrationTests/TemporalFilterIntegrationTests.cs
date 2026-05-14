@@ -48,10 +48,10 @@ public class TemporalFilterIntegrationTests : IAsyncLifetime
     private void CheckDatesActivelyBetween(JsonNode? personTypeNode, DateTime rangeStart, DateTime rangeEnd)
     {
         if (personTypeNode == null) return;
-        
+
         var startStr = personTypeNode["validStartDate"]?.GetValue<string>();
         var endStr = personTypeNode["validEndDate"]?.GetValue<string>();
-        
+
         if (DateTime.TryParse(startStr, out var validStart) && DateTime.TryParse(endStr, out var validEnd))
         {
             Assert.True(validStart <= rangeEnd, $"ValidStartDate {validStart:O} should be <= RangeEnd {rangeEnd:O}");
@@ -62,10 +62,10 @@ public class TemporalFilterIntegrationTests : IAsyncLifetime
     private void CheckDatesAsOf(JsonNode? personTypeNode, DateTime asOfDate)
     {
         if (personTypeNode == null) return;
-        
+
         var startStr = personTypeNode["validStartDate"]?.GetValue<string>();
         var endStr = personTypeNode["validEndDate"]?.GetValue<string>();
-        
+
         if (DateTime.TryParse(startStr, out var validStart) && DateTime.TryParse(endStr, out var validEnd))
         {
             // Adding a small margin since test initialization might differ by milliseconds from the server evaluation
@@ -88,11 +88,11 @@ public class TemporalFilterIntegrationTests : IAsyncLifetime
                 } 
             } 
         }";
-        
+
         var json = await ExecuteQueryWithHeadersAsync(query);
         _output.WriteLine(json);
         Assert.DoesNotContain("\"errors\"", json);
-        
+
         var parsed = JsonNode.Parse(json);
         var items = parsed?["data"]?["person"]?["items"]?.AsArray();
         Assert.NotNull(items);
@@ -107,7 +107,7 @@ public class TemporalFilterIntegrationTests : IAsyncLifetime
             CheckDatesAsOf(item?["naturalPerson"], today);
         }
     }
-    
+
     [Fact(DisplayName = "Temporal: ActiveBetween returns dates coherent with range")]
     public async Task Temporal_ActiveBetweenMode_DatesShouldBeCoherent()
     {
@@ -132,11 +132,11 @@ public class TemporalFilterIntegrationTests : IAsyncLifetime
             { "x-temporal-range-start", "2020-01-01T00:00:00" },
             { "x-temporal-range-end", "2025-12-31T23:59:59" }
         };
-        
+
         var json = await ExecuteQueryWithHeadersAsync(query, headers);
         _output.WriteLine(json);
         Assert.DoesNotContain("\"errors\"", json);
-        
+
         var parsed = JsonNode.Parse(json);
         var items = parsed?["data"]?["person"]?["items"]?.AsArray();
         Assert.NotNull(items);
@@ -159,7 +159,7 @@ public class TemporalFilterIntegrationTests : IAsyncLifetime
         var json = await ExecuteQueryWithHeadersAsync(query, headers);
         Assert.Contains("\"errors\"", json);
     }
-    
+
     [Fact(DisplayName = "Temporal: Validation throws error if End is before Start")]
     public async Task Temporal_HeaderValidation_EndBeforeStart_ShouldThrow()
     {
@@ -186,7 +186,7 @@ public class TemporalFilterIntegrationTests : IAsyncLifetime
         var json = await ExecuteQueryWithHeadersAsync(query);
         Assert.DoesNotContain("\"errors\"", json);
     }
-    
+
     [Fact(DisplayName = "Temporal: ActiveBetween on 010000663 in 2012 should not return 2013 InternalPerson")]
     public async Task Temporal_ActiveBetweenMode_SpecificPersonDoesNotReturnFutureEntities()
     {
@@ -212,16 +212,16 @@ public class TemporalFilterIntegrationTests : IAsyncLifetime
             { "x-temporal-range-start", "2012-01-01T00:00:00" },
             { "x-temporal-range-end", "2013-01-01T00:00:00" }
         };
-        
+
         var json = await ExecuteQueryWithHeadersAsync(query, headers);
         _output.WriteLine(json);
         Assert.DoesNotContain("\"errors\"", json);
-        
+
         var parsed = JsonNode.Parse(json);
         var items = parsed?["data"]?["person"]?["items"]?.AsArray();
         Assert.NotNull(items);
         Assert.NotEmpty(items);
-        
+
         // InternalPerson started in April 2013, so for range [Jan 2012, Jan 2013] it MUST be null.
         var internalPersonNode = items[0]?["internalPerson"];
         Assert.Null(internalPersonNode);
