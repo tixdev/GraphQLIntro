@@ -1,7 +1,10 @@
+using HotChocolate.Types;
+using HotChocolate.Data;
 using HotChocolate.ApolloFederation.Types;
 using HotChocolate.ApolloFederation.Resolvers;
 using Person.API.Graph.DataLoaders;
 using Person.API.Graph.Resolvers;
+using Person.API.Models;
 using PersonModel = Person.API.Models.Person;
 
 namespace Person.API.Graph.Types;
@@ -41,7 +44,15 @@ public class PersonType : ObjectType<PersonModel>
             .IsProjected(false);
 
         descriptor.Field(t => t.PersonAlternativeCode)
-            .UseFiltering();
+            .UseOffsetPaging(options: new HotChocolate.Types.Pagination.PagingOptions 
+            { 
+                DefaultPageSize = 10, 
+                MaxPageSize = 200, 
+                IncludeTotalCount = true 
+            })
+            .UseFiltering<PersonAlternativeCode>()
+            .ResolveWith<PersonResolvers>(r => r.GetPersonAlternativeCodeAsync(default!, default!, default!))
+            .IsProjected(false);
     }
 
     [ReferenceResolver]

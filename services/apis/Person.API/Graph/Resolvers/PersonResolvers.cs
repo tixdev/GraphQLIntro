@@ -1,3 +1,6 @@
+using HotChocolate;
+using HotChocolate.Data;
+using HotChocolate.Data.Filters.Expressions;
 using HotChocolate.Resolvers;
 using Person.API.Graph.DataLoaders;
 using PersonModel = Person.API.Models.Person;
@@ -37,5 +40,21 @@ public class PersonResolvers
     public async Task<PersonDetail?> GetPersonDetailAsync([Parent] PersonModel person, PersonDetailByPersonIdDataLoader dataLoader)
     {
         return await dataLoader.LoadAsync(person.PersonID);
+    }
+
+    public async Task<IQueryable<PersonAlternativeCode>> GetPersonAlternativeCodeAsync(
+        [HotChocolate.Parent] PersonModel person, 
+        PersonAlternativeCodeByPersonIdDataLoader dataLoader,
+        IResolverContext context)
+    {
+        var results = await dataLoader.LoadAsync(person.PersonID);
+        var items = (results ?? Array.Empty<PersonAlternativeCode>()).AsQueryable();
+        
+        // Workaround HC16: SkipFiltering viene impostato a true prima del resolver
+        // (probabilmente dal paging handler). Lo resettiamo per permettere al middleware
+        // di applicare correttamente il filtro nella fase Apply.
+        context.SetLocalState(QueryableFilterProvider.SkipFilteringKey, false);
+        
+        return items;
     }
 }

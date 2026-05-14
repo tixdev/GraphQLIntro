@@ -16,3 +16,4 @@ apollo-gateway/supergraph.graphql
 *.sln.docstates
 router
 graphql-platform-16.0.0-rc.1.42
+graphql-platform-16.0.2
